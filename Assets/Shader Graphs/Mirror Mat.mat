@@ -1,0 +1,192 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6612067224600259556
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 11
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mirror Mat
+  m_Shader: {fileID: -6465566751694194690, guid: b914c06d1d0315f468a2d21bc06228ea, type: 3}
+  m_ShaderKeywords: _ENABLE_FOG_ON_TRANSPARENT _SURFACE_TYPE_TRANSPARENT
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    MotionVector: User
+    RenderType: Transparent
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  - TransparentDepthPostpass
+  - TransparentBackface
+  - RayTracingPrepass
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Fresnel_Material:
+        m_Texture: {fileID: 2800000, guid: 23341d624d5dfbc4fa7fb21315d387cb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Normal:
+        m_Texture: {fileID: 2800000, guid: d6840f77873948aeba2cdce3985ccf47, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Surface_Detail_Normal_A:
+        m_Texture: {fileID: 2800000, guid: 23341d624d5dfbc4fa7fb21315d387cb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Surface_Detail_Normal_B:
+        m_Texture: {fileID: 2800000, guid: 60dbb2705fe20114ebfeec784a84e8d8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture:
+        m_Texture: {fileID: 2800000, guid: b02349a070aada849bee278f873e6b7d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Wave_Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 23341d624d5dfbc4fa7fb21315d387cb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MotionTex:
+        m_Texture: {fileID: 2800000, guid: 23341d624d5dfbc4fa7fb21315d387cb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0.2, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - A_Scale_Height: 100
+    - A_Scale_Width: 100
+    - B_Scale_Height: 100
+    - B_Scale_Width: 100
+    - Bump_Strength: 0.47
+    - Deep_Depth: -2.9
+    - Depth: 1
+    - Depth_Blend: 1
+    - Depth_Strength: 0.032
+    - Details_A: 0.1
+    - Details_B: 0.1
+    - Edge_Fresnel_Power: 3.07
+    - Edge_Offset: 1.32
+    - Edge_Sharpness: 0.394
+    - Edge_Transparency: 1
+    - Floating_Scale: 5
+    - Floating_Speed: 1
+    - Fresnel_Effect_Power: 0
+    - Fresnel_Effect_Scale: 0.771
+    - Fresnel_Power: 1
+    - Fresnel_Size: 1.11
+    - Fresnel_Strength: 1.39
+    - Glow_Intensity: 0.014
+    - Glow_Intensity_Soft_Shift: 1
+    - Max_Transparency: 0
+    - Metallic: 0
+    - Opacity: 0.91
+    - Reflection_Power: 1
+    - Reflection_Strength: 0.752
+    - Reflective_Strength_Smoothness: 0.95
+    - Refraction: 0.366
+    - Refraction_Bumping: 0
+    - Refraction_Emission: 1
+    - Refraction_Strength: -0.026
+    - Refraction_Strength_Normals: 0.738
+    - Smoohness: 1
+    - Smooth: 1
+    - Surface_Strength: 0.541
+    - Transparency: 0
+    - Wave_Scale: 10
+    - Wave_Speed: 0.1
+    - Y_Displacement: 0.02
+    - _AddPrecomputedVelocity: 0
+    - _AlphaCutoffEnable: 0
+    - _AlphaDstBlend: 10
+    - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
+    - _AlphaToMaskInspectorValue: 0
+    - _BlendMode: 0
+    - _CullMode: 2
+    - _CullModeForward: 2
+    - _DepthOffsetEnable: 0
+    - _DoubleSidedEnable: 0
+    - _DoubleSidedNormalMode: 0
+    - _DstBlend: 10
+    - _EnableBlendModePreserveSpecularLighting: 0
+    - _EnableFogOnTransparent: 1
+    - _MotionAmount: 0.039
+    - _OpaqueCullMode: 2
+    - _RayTracing: 0
+    - _ReceivesSSR: 1
+    - _ReceivesSSRTransparent: 1
+    - _RefractionModel: 0
+    - _RenderQueueType: 4
+    - _RequireSplitLighting: 0
+    - _SrcBlend: 1
+    - _StencilRef: 0
+    - _StencilRefDepth: 8
+    - _StencilRefDistortionVec: 4
+    - _StencilRefGBuffer: 10
+    - _StencilRefMV: 40
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDistortionVec: 4
+    - _StencilWriteMaskGBuffer: 14
+    - _StencilWriteMaskMV: 40
+    - _SupportDecals: 1
+    - _SurfaceType: 1
+    - _TransparentBackfaceEnable: 0
+    - _TransparentCullMode: 2
+    - _TransparentDepthPostpassEnable: 0
+    - _TransparentDepthPrepassEnable: 0
+    - _TransparentSortPriority: 0
+    - _TransparentWritingMotionVec: 0
+    - _TransparentZWrite: 1
+    - _UseShadowThreshold: 0
+    - _ZTestDepthEqualForOpaque: 4
+    - _ZTestGBuffer: 4
+    - _ZTestTransparent: 4
+    - _ZWrite: 1
+    m_Colors:
+    - Base_Color: {r: 0, g: 0.009803922, b: 0.04411765, a: 1}
+    - Deep_Color: {r: 0.0866322, g: 0.24906385, b: 0.29245278, a: 1}
+    - Details_A_Speed: {r: 0.3, g: 0, b: 0, a: 0}
+    - Details_B_Speed: {r: 0.05, g: 0, b: 0, a: 0}
+    - Edge_Emission: {r: 0.90509063, g: 0.933384, b: 2.1132073, a: 1}
+    - Foam: {r: 0.024510464, g: 0.14904362, b: 0.4811321, a: 1}
+    - Fresnel_Color: {r: 173.23227, g: 0, b: 274.37408, a: 1}
+    - Glow_Color: {r: 1, g: 1, b: 1, a: 0}
+    - Metallic: {r: 1, g: 1, b: 1, a: 1}
+    - Refraction_Normals_Denstity: {r: 0, g: 1, b: 0, a: 0}
+    - Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Color: {r: 0.1596297, g: 0.3112202, b: 0.5566038, a: 1}
+    - _DoubleSidedConstants: {r: -1, g: -1, b: -1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
