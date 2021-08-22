@@ -1,0 +1,10 @@
+newmtl Door_Red_Mat
+map_Kd -o 0 0 -s 1 1 Door_red.png
+Kd 1 1 1
+d 1
+
+newmtl Knob_Mat
+map_Kd -o 0 0 -s 1 1 Knob.png
+Kd 1 1 1
+d 1
+

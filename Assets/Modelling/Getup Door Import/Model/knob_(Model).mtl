@@ -1,0 +1,5 @@
+newmtl Knob_Mat
+map_Kd -o 0 0 -s 1 1 Knob.png
+Kd 1 1 1
+d 1
+
