@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,49 +53,9 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\ScreenSpaceReflectionModelEditor.cs" />
     <Compile Include="Assets\Editor\WalkingSoundsEffectorInspectorEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\DepthOfFieldModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\BloomModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PostProcessingMonitor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\ColorGradingModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\FogModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\ChromaticAberrationEditor.cs" />
     <Compile Include="Assets\Editor\SnapToGroundEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Attributes\PostProcessingModelEditorAttribute.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Utils\FxStyles.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Utils\EditorResources.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PostProcessingModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Monitors\ParadeMonitor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Utils\CurveEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\Environment\#NVJOB Assets\Dynamic Sky (For Demo)\Editor\NVDSkyDemoMaterials.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Utils\ReflectionUtils.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\AmbientOcclusionModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Monitors\WaveformMonitor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Utils\EditorGUIHelper.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PostProcessingBehaviourEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\BuiltinDebugViewsEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\#NVJOB Water Shaders V2\Editor\NVWaterMaterials.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Monitors\VectorscopeMonitor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\EyeAdaptationModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Monitors\HistogramMonitor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\DefaultPostFxModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\MotionBlurModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PropertyDrawers\TrackballGroupDrawer.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PostProcessingInspector.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PostProcessingFactory.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\AntialiasingModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PropertyDrawers\MinDrawer.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\VignetteModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\UserLutModelEditor.cs" />
     <Compile Include="Assets\Editor\PostProcessingEditorHeatViewFX.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\GrainModelEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\Models\DitheringModelEditor.cs" />
-    <Compile Include="Assets\Samples\High Definition RP\11.0.0\Procedural Sky\Editor\ProceduralSky\ProceduralSkyEditor.cs" />
-    <Compile Include="Assets\#NVJOB Water Shaders V2\Example Scenes\PostProcessing\Editor\PropertyDrawers\GetSetDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AssetStoreTools\Editor\AssetStoreTools.dll" />
@@ -346,9 +306,6 @@
     </Reference>
     <Reference Include="log4netPlastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.7.1\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CognitiveServices.Speech.csharp">
-      <HintPath>Assets\SpeechSDK\Plugins\x86_64\Microsoft.CognitiveServices.Speech.csharp.dll</HintPath>
     </Reference>
     <Reference Include="clipper_library">
       <HintPath>Library\PackageCache\com.unity.cinemachine@2.7.4\Runtime\ThirdParty\clipper_library.dll</HintPath>
