@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: HDRenderPipelineAsset
   m_EditorClassIdentifier: 
   m_RenderPipelineResources: {fileID: 11400000, guid: 3ce144cff5783da45aa5d4fdc2da14b7, type: 2}
-  m_RenderPipelineRayTracingResources: {fileID: 0}
-  m_DefaultVolumeProfile: {fileID: 11400000, guid: c90778ccce9bee642b84557fc1e4f196, type: 2}
+  m_RenderPipelineRayTracingResources: {fileID: 11400000, guid: ba6e7f30e5cffc249a8bf7ee5756c196, type: 2}
+  m_DefaultVolumeProfile: {fileID: 0}
   m_LensAttenuation: 0
-  m_DefaultLookDevProfile: {fileID: 11400000, guid: 84d3ca5ab586f5e45a705599c1f47dbc, type: 2}
+  m_DefaultLookDevProfile: {fileID: 0}
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
       data1: 72198262773251951
@@ -110,7 +110,7 @@ MonoBehaviour:
     supportTerrainHole: 0
     supportProbeVolume: 0
     supportRayTracing: 1
-    supportedRayTracingMode: 3
+    supportedRayTracingMode: 1
     probeVolumeSettings:
       atlasResolution: 128
       atlasOctahedralDepthResolution: 2048
@@ -299,8 +299,8 @@ MonoBehaviour:
   m_DefaultMaterialQualityLevel: 4
   diffusionProfileSettings: {fileID: 0}
   diffusionProfileSettingsList:
-  - {fileID: 11400000, guid: 7259a5ad1acfc08428db35e398b99461, type: 2}
-  - {fileID: 11400000, guid: 187e6b733f031b94c96ec0af6b4d9578, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   beforeTransparentCustomPostProcesses: []
   beforeTAACustomPostProcesses: []
   beforePostProcessCustomPostProcesses: []

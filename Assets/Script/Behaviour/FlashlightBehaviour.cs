@@ -184,7 +184,7 @@ namespace Assets.Script.Behaviour
 								var player = this.FindComponentAroundRadiusOf<PlayerBehaviour>(radius: 2);
 								ShowTextInWorld(player, "Aufheben");
 						}
-						else
+						else if (textInWorld is { })
 						{
 								// hide: not FallenEnd or In Use or Timeout touched
 								textInWorld.enabled = false;

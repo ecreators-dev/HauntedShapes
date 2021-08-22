@@ -3,10 +3,12 @@ using System.Collections;
 using System.IO;
 
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 
 namespace Assets.Script.Behaviour.PanormaScreenshot
 {
+		/// <summary>
+		/// Rundum Screenshot 360
+		/// </summary>
 		public class Panorama360 : MonoBehaviour
 		{
 				public Camera sourceCamera;

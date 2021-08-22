@@ -29,6 +29,9 @@ namespace Assets.Door
 #if UNITY_EDITOR
 				private void OnDrawGizmos()
 				{
+						if (exitTransform == null)
+								return;
+
 						// remarks: remember to enble Gizmos to see this!
 						Handles.color = Color.green;
 						Handles.DrawLine(exitTransform.position, transform.position);

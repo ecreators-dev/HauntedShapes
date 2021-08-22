@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7dbaa7175bb760642812e6880d7b6ca1, type: 2}
+  - {fileID: 2100000, guid: 2f71d15ae6fd7394c983120f3110da88, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -980,7 +980,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 460
+  m_VersionIndex: 466
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1046,7 +1046,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6d5dadd8f5397ba4db300711977da7f9, type: 2}
+  - {fileID: 2100000, guid: ab3fdc4c6ab064e4ca40c8e94ff627af, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6052,7 +6052,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 124
+  m_VersionIndex: 130
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6148,7 +6148,7 @@ Light:
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 1.05e-43, y: -529.7168, z: 6.14e-43, w: 3.8e-44}
   m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!114 &6578682946351267860
@@ -6215,7 +6215,7 @@ MonoBehaviour:
   m_EvsmBlurPasses: 0
   m_LightlayersMask: 1
   m_LinkShadowLayers: 1
-  m_ShadowNearPlane: 0.1
+  m_ShadowNearPlane: 0.0001
   m_BlockerSampleCount: 24
   m_FilterSampleCount: 16
   m_MinFilterSize: 0.1
@@ -6238,7 +6238,7 @@ MonoBehaviour:
   m_PenumbraTint: 0
   m_NormalBias: 0.75
   m_SlopeBias: 0.5
-  m_ShadowUpdateMode: 2
+  m_ShadowUpdateMode: 0
   m_AlwaysDrawDynamicShadows: 0
   m_UpdateShadowOnLightMovement: 0
   m_CachedShadowTranslationThreshold: 0.01
@@ -6287,7 +6287,6 @@ GameObject:
   - component: {fileID: 6578682946963451622}
   - component: {fileID: 4726864082374653376}
   - component: {fileID: 3811473726350225445}
-  - component: {fileID: 9181518932761275016}
   m_Layer: 0
   m_Name: Kerze
   m_TagString: Untagged
@@ -6320,10 +6319,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6578682946963451621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d95f5636f7dac9459bb347282bace06, type: 3}
+  m_Script: {fileID: 11500000, guid: 0dc785ada3575bc41a6f7e324e5314dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightParent: {fileID: 3797876825636350234}
+  lightOnOff: {fileID: 3797876825636350234}
 --- !u!95 &6578682946963451622
 Animator:
   serializedVersion: 3
@@ -6334,7 +6333,7 @@ Animator:
   m_GameObject: {fileID: 6578682946963451621}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 00d7cb6c35ba55f4eb8acf5607001efc, type: 2}
+  m_Controller: {fileID: 9100000, guid: 527c6585f4d086549ad5fc6a0fc2127b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -6372,19 +6371,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &9181518932761275016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6578682946963451621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a55623847ec28c44daaeab943d119419, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  snapToGroundActive: 0
 --- !u!1 &7994781315661343515
 GameObject:
   m_ObjectHideFlags: 0
@@ -8482,7 +8468,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2926
+  m_VersionIndex: 2932
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -8537,7 +8523,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bd050c5526995624a87d798c5fbbccdf, type: 2}
+  - {fileID: 2100000, guid: 9e042d2235198d2438a844adf0baea03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

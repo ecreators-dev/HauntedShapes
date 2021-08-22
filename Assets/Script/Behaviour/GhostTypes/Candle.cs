@@ -7,7 +7,7 @@ namespace Assets.Script.Behaviour.GhostTypes
 		[RequireComponent(typeof(Rigidbody))]
 		public class Candle : MonoBehaviour, IPforteTrigger, IToggleInteractable
 		{
-				public Transform lightParent;
+				[SerializeField] private Transform lightOnOff;
 
 				public PforteTriggerTypeEnum TriggerType => PforteTriggerTypeEnum.KERZE;
 
@@ -32,12 +32,12 @@ namespace Assets.Script.Behaviour.GhostTypes
 
 				public void ToggleOff()
 				{
-						lightParent.gameObject.SetActive(false);
+						lightOnOff.gameObject.SetActive(false);
 				}
 
 				public void ToggleOn()
 				{
-						lightParent.gameObject.SetActive(true);
+						lightOnOff.gameObject.SetActive(true);
 				}
 
 				public void TouchClickUpdate()

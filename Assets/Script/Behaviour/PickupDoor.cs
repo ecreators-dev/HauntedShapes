@@ -1,3 +1,6 @@
+using Assets.Script.Behaviour;
+using Assets.Script.Model;
+
 using System;
 
 using UnityEngine;
@@ -5,7 +8,7 @@ using UnityEngine;
 namespace HauntedShapes.Doors
 {
 		[RequireComponent(typeof(Animator))]
-		public class PickupDoor : MonoBehaviour
+		public class PickupDoor : MonoBehaviour, IInteractible
 		{
 				private Animator animator;
 
@@ -17,6 +20,10 @@ namespace HauntedShapes.Doors
 				
 				private bool getup;
 				private bool open;
+
+				public bool IsPickable { get; }
+				public string GameObjectName => this.GetGameObjectName();
+				public string ImplementationTypeName => this.GetImplementationTypeName();
 
 				private void Awake()
 				{
@@ -67,6 +74,26 @@ namespace HauntedShapes.Doors
 						animator.SetTrigger(openName);
 
 						SetDoorCooliderEnabled(false);
+				}
+
+				public void TouchClickUpdate()
+				{
+						
+				}
+
+				public void TouchOverUpdate()
+				{
+						
+				}
+
+				public void Drop()
+				{
+						
+				}
+
+				public void OnPickup(PlayerBehaviour player)
+				{
+						
 				}
 		}
 }

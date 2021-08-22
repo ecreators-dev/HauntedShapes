@@ -47,7 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onOffGameObjects: []
   onOffMaterials: []
-  onOffLights: []
+  onOffLights:
+  - {fileID: 4120420081381755737}
 --- !u!1 &447789493130343993
 GameObject:
   m_ObjectHideFlags: 0
