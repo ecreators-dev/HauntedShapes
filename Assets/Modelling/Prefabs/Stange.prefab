@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1728223191783029073}
   - component: {fileID: 1327921671663660289}
-  - component: {fileID: 8163109090600745489}
   - component: {fileID: 549889994403751926}
-  - component: {fileID: 6733663636332250244}
   - component: {fileID: 2525565695841281201}
+  - component: {fileID: 5929051501879773171}
   m_Layer: 0
   m_Name: Stange
   m_TagString: Untagged
@@ -492,32 +491,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!114 &8163109090600745489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195846883328575413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ca002da428252441b92f28d83c8a65f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Shape:
-    id: 0
-  m_Size: {x: 0.07012558, y: 2.380641, z: 0.16664052}
-  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
-  m_PivotLocation: 1
-  m_PivotPosition: {x: 0, y: 0, z: 0}
-  m_UnmodifiedMeshVersion: 440
-  m_ShapeBox:
-    m_Center: {x: 0.035062015, y: 1.1903205, z: 0.08332041}
-    m_Extent: {x: 0.03506279, y: 1.1903205, z: 0.08332026}
-  references:
-    version: 1
-    00000000:
-      type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
 --- !u!23 &549889994403751926
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -538,7 +511,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ce4477e14162d5e4d8302acb759754dd, type: 2}
+  - {fileID: 2100000, guid: cb22e6daff6aca14caafae2b7623946e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -560,14 +533,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &6733663636332250244
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195846883328575413}
-  m_Mesh: {fileID: 0}
 --- !u!64 &2525565695841281201
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -581,4 +546,12 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!33 &5929051501879773171
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195846883328575413}
   m_Mesh: {fileID: 0}

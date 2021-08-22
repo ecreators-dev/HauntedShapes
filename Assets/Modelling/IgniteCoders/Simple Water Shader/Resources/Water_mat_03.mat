@@ -8,12 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Water_mat_03
-  m_Shader: {fileID: -6465566751694194690, guid: 8a5036518bd56fb4fbe6890577d15de5, type: 3}
-  m_ShaderKeywords: _MATERIAL_AFFECTS_ALBEDO _MATERIAL_AFFECTS_MASKMAP _MATERIAL_AFFECTS_NORMAL
+  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
+  m_ShaderKeywords: _DISABLE_SSR_TRANSPARENT _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2225
   stringTagMap: {}
   disabledShaderPasses:
   - TransparentDepthPrepass
@@ -279,6 +279,7 @@ Material:
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
+    - _RenderQueueType: 1
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 0.5
     - _SmoothnessRemapMin: 0
@@ -290,10 +291,12 @@ Material:
     - _SrcBlend: 1
     - _StencilRef: 0
     - _StencilRefDepth: 8
+    - _StencilRefDistortionVec: 4
     - _StencilRefGBuffer: 10
     - _StencilRefMV: 40
     - _StencilWriteMask: 6
     - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDistortionVec: 4
     - _StencilWriteMaskGBuffer: 14
     - _StencilWriteMaskMV: 40
     - _SubsurfaceMask: 1
@@ -322,6 +325,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Color_36218622185947c6a5ae36366d8e21d8: {r: 0.1367034, g: 0.37735847, b: 0.35042173, a: 1}
+    - Color_640d45b08dee4513b0b0f1da3a4fdf03: {r: 1, g: 1, b: 1, a: 0}
     - Color_93e06cd551a5449091bcde90b46765a0: {r: 0.21740827, g: 0.5849056, b: 0.5037244, a: 0.49803922}
     - Color_DF96D22A: {r: 0.15437876, g: 0.46226418, b: 0.3162566, a: 0.99607843}
     - Vector2_4351ac2be1d74054986ec5378db9d578: {r: 4, g: 4, b: 0, a: 0}

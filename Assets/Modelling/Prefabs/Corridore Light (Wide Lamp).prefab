@@ -42,15 +42,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 419791361939598589}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9038e598dac882c478184ed1b1229f98, type: 3}
+  m_Script: {fileID: 11500000, guid: e17c251bb1c7e214fa0e5a0121301a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onOffGameObjects: []
-  onOffMaterials:
-  - renderer: {fileID: 4907348633551273596}
-    offMaterial: {fileID: 2100000, guid: 85c97838a828a6b47aef5cd58e922997, type: 2}
-  onOffLights:
-  - {fileID: 4120420081381755737}
+  onOffMaterials: []
+  onOffLights: []
 --- !u!1 &447789493130343993
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +325,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3dd2cf49dd943594ab1880b2c9e9f7de, type: 2}
+  - {fileID: 2100000, guid: 4fa75b6f6ad13da4ea97f6e8ab5e9e9f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
