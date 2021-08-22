@@ -1,0 +1,675 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7543784003737456406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7543784003737456407}
+  - component: {fileID: 2297464949712894002}
+  - component: {fileID: 632416586194295244}
+  - component: {fileID: 7195242426561094499}
+  m_Layer: 0
+  m_Name: GhostBox (Service, Plugin) Per Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7543784003737456407
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543784003737456406}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4017547638631520175}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &2297464949712894002
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543784003737456406}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 0
+  MaxDistance: 16
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &632416586194295244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543784003737456406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80cb09622f6b687438ee7dcba8464f49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: 0.75
+  quality: 15
+  voices:
+  - de-DE-KatjaNeural
+  - de-DE-ConradNeural
+  - de-DE-HeddaRUS
+  - de-DE-Stefan
+  voiceIndex: 1
+  rateOffsetPercentage: -20
+  pitchOffsetPercentage: -15
+--- !u!114 &7195242426561094499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543784003737456406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d1f0fb782487342900cb4583845648, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voiceMaker: {fileID: 632416586194295244}
+  triggers:
+  - triggers:
+    - text: wo bist du
+    - text: bist du bei mir
+    - text: bist du hier
+    - text: bist du dort
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventWoBistDu
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: bist du vor oder hinter mir
+    - text: vor oder hinter
+    - text: richtung
+    - text: welche richtung
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventVorOderHinterMir
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: wie weit
+    - text: bist du weit
+    - text: bist du nah
+    - text: "komme ich dir n\xE4her"
+    - text: komme ich dir auf die schliche
+    - text: wo bist du genau
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventWieWeitGenau
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: oben oder unten
+    - text: "\xFCber oder unter mir"
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventObenOderUnten
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: geist wo versteckst du dich
+    - text: geist wo steckst du
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventUmfassendeOrtsangabe
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: "wie hei\xDFt du"
+    - text: wie ist dein name
+    - text: wer bist du
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayGhostName
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: wie alt bist du
+    - text: bist du alt
+    - text: bist du jung
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayGhostAge
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: wie alt bist du wirklich
+    - text: dein alter
+    - text: wann bist du geboren
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayGhostExactAge
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: mann oder frau
+    - text: bist du ein mensch
+    - text: bist du ein junge
+    - text: bist du eine frau
+    - text: "bist du ein m\xE4dchen"
+    - text: bist du ein mann
+    - text: bist du ein opa
+    - text: bist du eine oma
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayGhostGender
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: wie bist du gestorben
+    - text: warum bist du tot
+    - text: wer hat dich ermordet
+    - text: "wei\xDF du dass du tot bist"
+    - text: "wei\xDF du da\xDF du tot bist"
+    - text: "bist du ein m\xF6rder"
+    - text: bist du ein opfer
+    - text: kann ich dir helfen
+    - text: brauchst du hilfe
+    - text: "wer hat dich get\xF6tet"
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayDeathType
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: "bist du gut oder b\xF6se"
+    - text: bist du gut drauf
+    - text: hast du gute laune
+    - text: wie ist deine stimmung
+    - text: bist du einsam
+    - text: bist du traurig
+    - text: bist du verzweifelt
+    - text: bist du sauer
+    - text: bist du aggressiv
+    - text: "bist du w\xFCtend"
+    - text: bist du gut
+    - text: "bist du b\xF6se"
+    - text: wie geht es dir
+    - text: wie gehts dir
+    - text: wie geht's dir
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayMood
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: "wie hei\xDFt deine mutter"
+    - text: wer ist deine mutter
+    - text: wie ist der name deiner mutter
+    - text: hast du eine mutter
+    - text: kennst du deine mutter
+    - text: wer ist deine mutti
+    - text: "wie hei\xDFt deine mama"
+    - text: "wie hei\xDFt deine mami"
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayGhostMotherName
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: "wie hei\xDFt dein vater"
+    - text: wer ist dein vater
+    - text: wie ist der name deines vaters
+    - text: hast du einen vater
+    - text: kennst du deinen vater
+    - text: "wie hei\xDFt dein papa"
+    - text: wer ist dein papa
+    - text: "wie hei\xDFt dein vati"
+    - text: "wie he\xDFt dein papi"
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayGhostFatherName
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: wann ist dein geburtstag
+    - text: wann bist du geboren
+    - text: wann hast du geburtstag
+    - text: wann war dein geburtstag
+    - text: wann wurdest du geboren
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayDateOfBirth
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: wann bist du gestorben
+    - text: "wann wurdest du get\xF6tet"
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayDateOfDeath
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: wie ist dein sternzeichen
+    - text: was ist dein sternzeichen
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSaySternzeichen
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggers:
+    - text: hast du geschwister
+    - text: "hast du br\xFCder"
+    - text: hast du schwestern
+    - text: wieviele geschwister
+    - text: "wie hei\xDFen deine geschwister"
+    - text: bist du einzelkind
+    - text: warst du einzelkind
+    - text: wer sind deine geschwister
+    - text: hattest du geschwister
+    - text: "hattest du br\xFCder"
+    - text: hast du eine schwester
+    - text: hattest du eine schwester
+    - text: hast einen bruder
+    - text: hattest du einen bruder
+    - text: "wie hei\xDFt dein bruder"
+    - text: "wie hei\xDFt deine schwester"
+    actions:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: Assets.Script.Behaviour.GhostboxEntity, Assembly-CSharp
+          m_MethodName: EventSayGeschwister
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  shopData:
+    name: Ghostbox
+    price: 15
+    sellPrice: 10
+    description: "Die Geisterbox ist ein machtvolles Instrument f\xFCr jeden J\xE4ger
+      des Paranormalen. Es erlaubt die Kommunikation mit einer nahen Entit\xE4t."
+    canToggleOnOff: 1
+    toggleLimit: 5
+    shopImage: {fileID: 0}
+  canToggleOnOff: 1
+  runAsToggledOn: 0
+  uselessToggleLimit: 5
+  displayText: {fileID: 4337925749042552479}
+  displayFrequency: {fileID: 9178660162248558891}
+  onlineSprite: {fileID: 21300000, guid: 1b40f1463b643604c8ad6254987833fd, type: 3}
+  offlineSprite: {fileID: 21300000, guid: 861a2055cf714ad4f824ea48751c1b62, type: 3}
+  displayRenderer: {fileID: 6594429199476693602}
+  displayFaceLight: {fileID: 7097441235701207130}
+  buttonLightOn: {fileID: 8168694829913944438}
+  whiteSmokeSoundLoop: {fileID: 2437933233512340282}
+  bodyGravity: {fileID: 8367467285701221081}
+--- !u!1001 &7888788305403884963
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7543784003737456407}
+    m_Modifications:
+    - target: {fileID: 557580151260892766, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_Name
+      value: Ghostbox (Model 3D, RB)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.6552243
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.61449814
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.8281226
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.16679057
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.021491027
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9776756
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.12597387
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5556360063188598708, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+    - {fileID: 2626398835430134434, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+    - {fileID: 3016374963076574374, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+--- !u!4 &4017547638631520175 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6538005515300889100, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &8367467285701221081 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 1830057953189097338, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &2437933233512340282 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5525877646673964697, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &8168694829913944438 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 2028752342707176661, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &7097441235701207130 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 1082471508237133305, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &6594429199476693602 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3962751239583641537, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9178660162248558891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1304845302913596552, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4337925749042552479 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5857480343454034748, guid: 65e2305fedae1e542a604c63f4c6c257, type: 3}
+  m_PrefabInstance: {fileID: 7888788305403884963}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
