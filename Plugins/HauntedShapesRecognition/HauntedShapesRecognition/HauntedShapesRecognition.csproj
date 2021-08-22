@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <UserSecretsId>0b73502a-72ee-4ac2-9d9d-387dd6c1228a</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Win32.Registry">
+      <HintPath>..\..\..\..\..\..\..\Users\bfroh\.nuget\packages\microsoft.win32.registry\4.0.0\runtimes\win\lib\netstandard1.3\Microsoft.Win32.Registry.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.5f1\Editor\Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.5f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.5f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Cognitive.Speech">
+      <HintPath>..\..\..\..\..\..\..\Users\bfroh\.nuget\packages\xamarin.cognitive.speech\1.0.2\lib\netstandard2.0\Xamarin.Cognitive.Speech.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
