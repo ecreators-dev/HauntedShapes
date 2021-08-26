@@ -5,7 +5,7 @@ namespace Assets.Script.Model
 		public interface IInteractible : IMonoBehaviour
 		{
 				/// <summary>
-				/// Defines weather this item can be pick up by player
+				/// Defines if this item can be pick up by player
 				/// </summary>
 				bool IsPickable { get; }
 

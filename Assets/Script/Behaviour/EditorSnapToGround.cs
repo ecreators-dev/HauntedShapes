@@ -15,11 +15,11 @@ namespace Assets.Editor
 				{
 						if (snapToGroundActive)
 						{
-								GroundTransform(transform);
+								GroundTransform(transform, 0.0f);
 						}
 				}
 
-				public static void GroundTransform(Transform selfTransform)
+				public static void GroundTransform(Transform selfTransform, float yOffsetUp = 0f)
 				{
 						Vector3 lowerUp = selfTransform.position + Vector3.up * 0.25f;
 						RaycastHit[] hits = Physics.RaycastAll(lowerUp, Vector3.down, 10f);
@@ -28,7 +28,7 @@ namespace Assets.Editor
 								if (IsSelf(selfTransform, hit))
 										continue;
 
-								selfTransform.position = hit.point;
+								selfTransform.position = hit.point + new Vector3(0, yOffsetUp, 0);
 						}
 
 						if (hits.Any() is false)

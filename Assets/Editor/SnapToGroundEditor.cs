@@ -6,7 +6,7 @@ namespace Assets.Editor
 {
 		public class SnapToGroundEditor : EditorSnapToGround
 		{
-				[MenuItem("Game/Move Selection to ground (Strg + g) %g")]
+				[MenuItem("Game/Auswahl auf Boden stellen (Strg + g) %g (" + nameof(SnapToGroundEditor) + ")")]
 				public static void GroundAllInSelection()
 				{
 						foreach (Transform selfTransform in Selection.transforms)

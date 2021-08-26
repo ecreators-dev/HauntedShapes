@@ -1,8 +1,6 @@
 using Assets.Script.Behaviour;
 using Assets.Script.Model;
 
-using System;
-
 using UnityEngine;
 
 namespace HauntedShapes.Doors
