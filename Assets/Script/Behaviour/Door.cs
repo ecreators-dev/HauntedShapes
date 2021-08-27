@@ -11,7 +11,9 @@ namespace Assets.Script.Behaviour
 		[ExecuteAlways]
 		public class Door : Interactible
 		{
-				[Tooltip("Sets an angle to open")]
+				[Tooltip("Sets an angle on close")]
+				[SerializeField] private float closeYAngle = 0;
+				[Tooltip("Sets an angle on open")]
 				[SerializeField] private float openYAngle = -90;
 				[Tooltip("Can be opened?")]
 				[SerializeField] private bool unlocked = true;
@@ -19,8 +21,12 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private float openSpeed = 4;
 				[Tooltip("Init open status")]
 				[SerializeField] private bool currentlyOpen = false;
+				
+				[Header("Preview (Editor)")]
+				[SerializeField] private Color previewColor = new Color(1, 1, 0.3f, 0.2f);
+				[Min(0)]
+				[SerializeField] private float doorLength = 1.4f;
 
-				private float initAngle;
 				private float toAngle;
 				private bool lastOpen;
 				private bool changedInFrame;
@@ -36,8 +42,6 @@ namespace Assets.Script.Behaviour
 
 				private void Start()
 				{
-						initAngle = Transform.eulerAngles.y;
-
 						if (currentlyOpen)
 						{
 								Open();
@@ -74,11 +78,24 @@ namespace Assets.Script.Behaviour
 				{
 						// toggle
 						currentlyOpen = false;
-						toAngle = initAngle;
+						toAngle = closeYAngle;
 						Debug.Log("Door close event");
 				}
 
 #if UNITY_EDITOR
+
+				private void OnDrawGizmos()
+				{
+						Handles.color = previewColor;
+						float angle = openYAngle - closeYAngle;
+						float range = Mathf.Abs(angle);
+						Vector3 normal = Quaternion.Euler(0, 90, 0) * Transform.parent.forward;
+						Handles.DrawSolidArc(Transform.position, Transform.up,
+								normal,
+								range, // degrees
+								doorLength);
+				}
+
 				private void OnValidate()
 				{
 						if (currentlyOpen != lastOpen)
@@ -96,7 +113,7 @@ namespace Assets.Script.Behaviour
 								{
 										Debug.Log("Change Door Status");
 										changedInFrame = !changedInFrame;
-										
+
 										if (currentlyOpen)
 										{
 												Open();

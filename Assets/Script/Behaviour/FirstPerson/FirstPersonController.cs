@@ -9,33 +9,34 @@ namespace Assets.Script.Behaviour.FirstPerson
 		[RequireComponent(typeof(Rigidbody))]
 		public class FirstPersonController : MonoBehaviour
 		{
-				public Camera cam;
-				public Transform body;
+				[SerializeField] private Camera cam;
 
-				[SerializeField]
-				private float mouseSensity = 30;
-
-				[SerializeField]
+				[Range(1,30)]
+				[SerializeField] private float mouseSensity = 30;
 				[Range(0, 200)]
-				private float fieldOfView = 65;
+				[SerializeField] private float fieldOfView = 65;
 
-				[SerializeField]
-				private float moveSpeed = 7;
+				[SerializeField] private float moveSpeed = 7;
+				
 				private Vector3 startingRotation;
-				private Rigidbody rigidBody;
 				private bool stopCamera;
 				private IInputControls controls;
 				private Vector3 oldMousePosition;
 				private bool useOldInputSystem;
 
+				private Transform Transform { get; set; }
+				private Rigidbody RigidBody { get; set; }
+
 				public IInputControls Input => controls ??= this.InputControls();
+				
 				private bool RequireOldInputSystem => Input.IsEnabled is false;
 
 				private void Awake()
 				{
-						startingRotation = body.localRotation.eulerAngles;
-						rigidBody = GetComponent<Rigidbody>();
-						rigidBody.useGravity = false;
+						Transform = transform;
+						startingRotation = Transform.localRotation.eulerAngles;
+						RigidBody = GetComponent<Rigidbody>();
+						RigidBody.useGravity = false;
 				}
 
 #if UNITY_EDITOR
@@ -112,25 +113,25 @@ namespace Assets.Script.Behaviour.FirstPerson
 						float vertical = Input.Vertical;
 						if (vertical > 0)
 						{
-								rigidBody.MovePosition(transform.position + transform.forward.normalized * moveSpeed * Time.deltaTime);
+								RigidBody.MovePosition(transform.position + transform.forward.normalized * moveSpeed * Time.deltaTime);
 						}
 						else if (vertical < 0)
 						{
-								rigidBody.MovePosition(transform.position + transform.forward.normalized * -moveSpeed * Time.deltaTime);
+								RigidBody.MovePosition(transform.position + transform.forward.normalized * -moveSpeed * Time.deltaTime);
 						}
 
 						float horizontal = Input.Horizonal;
 						if (horizontal < 0)
 						{
-								rigidBody.MovePosition(transform.position + transform.right.normalized * -moveSpeed * Time.deltaTime);
+								RigidBody.MovePosition(transform.position + transform.right.normalized * -moveSpeed * Time.deltaTime);
 						}
 						else if (horizontal > 0)
 						{
-								rigidBody.MovePosition(transform.position + transform.right.normalized * moveSpeed * Time.deltaTime);
+								RigidBody.MovePosition(transform.position + transform.right.normalized * moveSpeed * Time.deltaTime);
 						}
 
 						// slow down fast
-						rigidBody.velocity = Vector3.Lerp(rigidBody.velocity, Vector3.zero, Time.deltaTime * 0.2f);
+						RigidBody.velocity = Vector3.Lerp(RigidBody.velocity, Vector3.zero, Time.deltaTime * 0.2f);
 				}
 
 				private void RotateCamera()
@@ -166,7 +167,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 						LimitTilting();
 
-						body.rotation = Quaternion.Euler(startingRotation.y, startingRotation.x, 0);
+						Transform.rotation = Quaternion.Euler(startingRotation.y, startingRotation.x, 0);
 				}
 
 				private void LimitTilting()
