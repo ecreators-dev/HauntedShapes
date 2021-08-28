@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace Assets.Script.Components
 {
@@ -17,6 +19,20 @@ namespace Assets.Script.Components
 								return;
 						}
 						AudioSource.PlayClipAtPoint(audio, transform.position, volume);
+				}
+
+				public void StartTriggerAnimation(Animator animator)
+				{
+						if (animator is { })
+						{
+								animator.SetTrigger(triggerName);
+						}
+				}
+
+				public void Play(Transform target, Animator animator)
+				{
+						PlayAudio(target);
+						StartTriggerAnimation(animator);
 				}
 		}
 }

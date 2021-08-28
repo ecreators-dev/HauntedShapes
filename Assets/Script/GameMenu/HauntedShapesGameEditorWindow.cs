@@ -3,6 +3,7 @@ using Assets.Script.Controller;
 using Assets.Script.Model;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEditor;
@@ -14,11 +15,15 @@ namespace Assets.Script.GameMenu
 #if UNITY_EDITOR
 		public class HauntedShapesGameEditorWindow : EditorWindow
 		{
+				private Vector2 camerasScrollPosition;
+				private bool viewsCanBeSynchronized;
+				private Camera activeLinkedCamera;
+				private SceneViewCameraAlignmentEditMode viewsSyncComponent;
 				private bool cameraLinked;
-				private MonoBehaviour targetObject;
-				private SceneViewCameraAlignmentEditMode linkedCameraScript;
+
 				private bool interactiblesFoldout = true;
 				private Vector2 interactiblesScrollPositions;
+				private bool cameraListFoldoutStatus;
 
 				[MenuItem("Game/Haunted Shapes Game Editor Settings ...")]
 				public static void Init()
@@ -30,10 +35,33 @@ namespace Assets.Script.GameMenu
 
 				void OnGUI()
 				{
-						targetObject = (MonoBehaviour)EditorGUILayout.ObjectField("Camera Player", targetObject, typeof(PlayerBehaviour), allowSceneObjects: true);
+						EditorGUILayout.ObjectField("Script", this, typeof(HauntedShapesGameEditorWindow), allowSceneObjects: true);
+
 						OnGUI_CameraSettings();
+
+						HorizonalLine();
+
 						OnGUI_Crosshair();
+
+						HorizonalLine();
+
 						OnGUI_Interactibles();
+
+						GUILayout.FlexibleSpace();
+				}
+
+				private void HorizonalLine()
+				{
+						EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
+				}
+
+				private static void TryRemoveComponent<T>(GameObject gameObject)
+						where T : Component
+				{
+						if (gameObject.TryGetComponent(out T linkerScript))
+						{
+								DestroyImmediate(linkerScript);
+						}
 				}
 
 				private void OnGUI_Crosshair()
@@ -77,52 +105,135 @@ namespace Assets.Script.GameMenu
 				{
 						GUILayout.Label("Kamera Einstellungen", EditorStyles.boldLabel);
 
-						bool oldStatus = cameraLinked;
-						if (targetObject != null && targetObject.gameObject != null && targetObject.TryGetComponent(out SceneViewCameraAlignmentEditMode component))
-						{
-								cameraLinked = component.IsUpdating();
-								linkedCameraScript = component;
-						}
-						cameraLinked = EditorGUILayout.Toggle("Scene/Camera Live View", cameraLinked);
-						if (oldStatus != cameraLinked)
-						{
-								if (cameraLinked)
-								{
-										if (targetObject is { } && targetObject.gameObject == null)
-										{
-												Debug.Log($"{nameof(HauntedShapesGameEditorWindow)}: reset Player Camera (to null)");
-												targetObject = null;
-										}
+						Camera[] cameras = FindObjectsOfType<Camera>();
+						EditorGUILayout.LabelField($"Kameras in Scene: {cameras.Length}");
 
-										targetObject ??= FindObjectsOfType<PlayerBehaviour>().FirstOrDefault();
-										if (targetObject is { })
+						EditorGUI.indentLevel++;
+						cameraListFoldoutStatus = EditorGUILayout.Foldout(cameraListFoldoutStatus, "Auswahl sync Kameras (Scene)", true);
+						EditorGUI.indentLevel--;
+
+						if (cameraListFoldoutStatus)
+						{
+								ShowScrollArea(ref camerasScrollPosition, () =>
+								{
+										viewsCanBeSynchronized = false;
+										foreach (Camera cam in cameras)
 										{
-												EditorGUIUtility.PingObject(targetObject);
-												TryAddLiveLinkSceneViewComponent(out var linker);
-												linker.AlignWithViewLive();
-												linkedCameraScript = linker;
+												ShowCameraWithCheckBox(cam, cameras);
+										}
+								});
+						}
+
+						EditorGUI.indentLevel++;
+						ShowSelectedCameraObject();
+
+						ShowSynchronizingStatusCheckBox();
+						EditorGUI.indentLevel--;
+						
+						//-- Local Functions -------------------------------------------
+
+						void ShowCameraWithCheckBox(Camera listItemCam, IEnumerable<Camera> allCameras)
+						{
+								EditorGUILayout.BeginHorizontal();
+
+								// checked status. camera is active linked
+								bool cameraWasActive = activeLinkedCamera != null && listItemCam == activeLinkedCamera;
+								EditorGUILayout.ObjectField(listItemCam, typeof(Camera), true);
+								bool cameraIsActive = EditorGUILayout.Toggle("Verwenden", cameraWasActive);
+								// check status changed
+								if (cameraWasActive != cameraIsActive)
+								{
+										Debug.Log($"{cameraIsActive}");
+										// changed to link now:
+										if (cameraIsActive)
+										{
+												viewsCanBeSynchronized = true;
+												activeLinkedCamera = listItemCam;
+												TryAddComponentIfNotPresent(listItemCam.gameObject, out viewsSyncComponent);
+
+												// if old was linked?! then link again (TODO)
+												if (cameraLinked)
+												{
+														viewsSyncComponent.StartSynchronizing();
+												}
+										}
+										// always: only a single camera can be selected!
+										// if unchoose the current camera, then the selected must be null!
+										else
+										{
+												RemoveScriptFromOthers<Camera, SceneViewCameraAlignmentEditMode>(allCameras, listItemCam);
+												TryRemoveComponent<SceneViewCameraAlignmentEditMode>(listItemCam.gameObject);
+												activeLinkedCamera = null;
+												viewsCanBeSynchronized = false;
+												cameraLinked = false;
 										}
 								}
-								else if (linkedCameraScript is { })
+
+								EditorGUILayout.EndHorizontal();
+						}
+				}
+
+				private void ShowSelectedCameraObject()
+				{
+						GUI.enabled = false;
+						EditorGUILayout.ObjectField("Sync-View-Kamera", activeLinkedCamera, typeof(Camera), allowSceneObjects: true);
+						GUI.enabled = true;
+				}
+
+				private static void RemoveScriptFromOthers<T, C>(IEnumerable<T> others, T keep)
+						where T : Component
+						where C : Component
+				{
+						// remove from others:
+						foreach (T camera in others.SkipWhile(c => c == keep))
+						{
+								TryRemoveComponent<C>(keep.gameObject);
+						}
+				}
+
+				private void ShowSynchronizingStatusCheckBox()
+				{
+						bool oldStatus = cameraLinked;
+						cameraLinked = EditorGUILayout.Toggle("Scene/Game Sync", cameraLinked, GUILayout.ExpandWidth(true));
+						if (oldStatus != cameraLinked)
+						{
+								// sync now:
+								if (cameraLinked)
 								{
-										linkedCameraScript.Unlink();
-										Debug.Log("Scene View/Camera: Link Live disabled");
+										viewsSyncComponent.StartSynchronizing();
+										Debug.Log("Synchronizing Scene/Game View: running");
+								}
+								else if (viewsSyncComponent is { })
+								{
+										viewsSyncComponent.StopSynchronizing();
+										Debug.Log("Synchronizing Scene/Game View: stopped");
 								}
 						}
 				}
 
-				private void TryAddLiveLinkSceneViewComponent(out SceneViewCameraAlignmentEditMode linker)
+				private static void ShowScrollArea(ref Vector2 scrollPosition, Action content)
 				{
-						if (targetObject.gameObject == null)
+						scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+						EditorGUI.indentLevel++;
+						content.Invoke();
+						EditorGUI.indentLevel--;
+						EditorGUILayout.EndScrollView();
+				}
+
+				private static bool TryAddComponentIfNotPresent<C>(GameObject target, out C add)
+						where C : Component
+				{
+						if (target == null)
 						{
-								linker = null;
-								return;
+								add = null;
+								return false;
 						}
 
-						if (targetObject.TryGetComponent(out linker) is false)
+						if (target.TryGetComponent(out add) is false)
 						{
-								linker = targetObject.gameObject.AddComponent<SceneViewCameraAlignmentEditMode>();
+								add = target.AddComponent<C>();
 						}
+						return true;
 				}
 		}
 #endif

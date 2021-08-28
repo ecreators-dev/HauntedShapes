@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
-		public class GhostboxEntity : MonoBehaviour, IEquipment
+		public class GhostboxEntity : Equipment
 		{
 				private const double MINIMAL_DISTANCE = 1.5;
 				private static readonly Dictionary<float, string> wordDistanceMeters = new Dictionary<float, string>
@@ -25,15 +25,10 @@ namespace Assets.Script.Behaviour
 						[5] = "Fern",
 				};
 
-				public event Action<IEquipment> LetFallEvent;
-				public event Action<IEquipment> UselessEvent;
-
 				public VoiceMaker voiceMaker;
 				public List<GhostBoxTrigger> triggers;
-				[SerializeField] private ShopData shopData = new ShopData();
-				[SerializeField] private bool canToggleOnOff = true;
+				[SerializeField] private bool canToggleOff = true;
 				[SerializeField] private bool runAsToggledOn = false;
-				[SerializeField] private int uselessToggleLimit = 5;
 				[SerializeField] private TMP_Text displayText;
 				[SerializeField] private TMP_Text displayFrequency;
 				[SerializeField] private Sprite onlineSprite;
@@ -42,7 +37,7 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private Light displayFaceLight;
 				[SerializeField] private Light buttonLightOn;
 				[SerializeField] private AudioSource whiteSmokeSoundLoop;
-				[SerializeField] private Rigidbody bodyGravity;
+				[SerializeField] private Rigidbody RigidBody;
 
 				private readonly Queue<string> recognizedTextQueue = new Queue<string>();
 				private readonly Queue<string> sayQueue = new Queue<string>();
@@ -52,38 +47,21 @@ namespace Assets.Script.Behaviour
 				private PlayerBehaviour owner;
 				private PlayerBehaviour user;
 				private float toggleTimestamp;
-				private int toggleCounter;
 				private Coroutine freqCo;
 				private string activeText;
 				[Header("UI 3D")]
-				[SerializeField]
-				private TMP_Text textInWorld;
 				private PlayerBehaviour textInWorldTarget;
 
-				public float Price => shopData.price;
-				public float SellPrice => shopData.sellPrice;
 				public PlayerBehaviour OwnedByPlayer => owner;
-				public PlayerBehaviour InUseOfPlayer => user;
-				public bool IsUseless { get; private set; }
+
+				public bool IsUseless => IsBroken;
+
 				public bool IsPowered => isActivated && IsUseless is false;
-				public bool CanToggleOnOff => canToggleOnOff;
-				public string Name => shopData.name;
-				public bool IsEquipped => transform.parent != null;
 
-				public void Drop()
-				{
-						bodyGravity.useGravity = true;
-						LetFallEvent?.Invoke(this);
-				}
-
-				public void NoFall()
-				{
-						bodyGravity.useGravity = false;
-				}
+				public bool CanToggleOnOff => canToggleOff;
 
 				private void Awake()
 				{
-						NoFall();
 						voiceMaker.PlayReadyEvent += OnChangeTextToSpeak;
 				}
 
@@ -94,18 +72,15 @@ namespace Assets.Script.Behaviour
 
 				private void Start()
 				{
-						canToggleOnOff = shopData.canToggleOnOff;
-						uselessToggleLimit = shopData.toggleLimit;
+						canToggleOff = ShopInfo.CanToggleOff;
 						if (runAsToggledOn)
 						{
 								isActivated = true;
 						}
 				}
 
-				private void Update()
+				protected override void Update()
 				{
-						UpdateTextInWorldLookAtPlayer();
-
 						UpdateVisual();
 
 						recognizer ??= this.GetVoiceRecognizer();
@@ -121,15 +96,6 @@ namespace Assets.Script.Behaviour
 								{
 										// toggle off
 										isActivated = false;
-										toggleCounter -= 2;
-										toggleCounter = Mathf.Max(0, toggleCounter);
-
-										// automatisch zurücknehmen, ab 50% Abkühlphase:
-										if (toggleCounter <= 0.5f * uselessToggleLimit)
-										{
-												// kann wieder aktiviert werden
-												IsUseless = false;
-										}
 								}
 						}
 
@@ -184,23 +150,6 @@ namespace Assets.Script.Behaviour
 						{
 								string sayText = sayQueue.Dequeue();
 								Say(sayText);
-						}
-				}
-
-				private void UpdateTextInWorldLookAtPlayer()
-				{
-						if (IsTextInWorldActive)
-						{
-								PlayerBehaviour player = textInWorldTarget;
-								if (player is { })
-								{
-										textInWorld.transform.LookAt(player.transform, player.transform.up);
-								}
-								else
-								{
-										textInWorld.text = null;
-										textInWorld.enabled = false;
-								}
 						}
 				}
 
@@ -1022,142 +971,45 @@ namespace Assets.Script.Behaviour
 						return Mathf.Round(number * shift) / shift;
 				}
 
-				public void OnEquip(PlayerBehaviour player)
+				protected override void OnEquip()
 				{
-						if (user is null)
-						{
-								user = player;
-								if (player.ActiveEquipment is GhostboxEntity gbe)
-								{
-										if (gbe != this)
-										{
-												Debug.LogError("Not in Hand");
-												return;
-										}
-								}
-								else
-								{
-										Debug.LogError("Not in Hand");
-										return;
-								}
-
-								StartCoroutine(MoveToHand());
-
-								IEnumerator MoveToHand()
-								{
-										yield return new WaitForEndOfFrame();
-
-										while (IsHand() is false)
-										{
-												transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * 10);
-												transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * 10);
-												yield return null;
-										}
-
-										transform.localPosition = Vector3.zero;
-										transform.rotation = Quaternion.identity;
-
-										bool IsHand()
-										{
-												return (Vector3.zero - transform.localPosition).magnitude <= 0.1f;
-										}
-								}
-						}
 				}
 
-				public void OnUnequip(PlayerBehaviour player)
+				protected override void OnInvectory()
 				{
-						if (IsInUseOfPlayer(player))
-						{
-								user = null;
-						}
 				}
 
-				private bool IsInUseOfPlayer(PlayerBehaviour player) => user.GetInstanceID() == player.GetInstanceID();
-
-				public void PowerUp(PlayerBehaviour player)
+				protected override void OnPickedUp()
 				{
-						if (IsInUseOfPlayer(player))
-						{
-								if (IsUseless)
-								{
-										canToggleOnOff = true;
-								}
-						}
 				}
 
-				public void ToggleOn(PlayerBehaviour player)
+				protected override void PerformDrop()
 				{
-						if (IsInUseOfPlayer(player))
-						{
-								if (canToggleOnOff && isActivated is false)
-								{
-										if (toggleCounter >= uselessToggleLimit)
-										{
-												IsUseless = true;
-												UselessEvent?.Invoke(this);
-										}
-										else
-										{
-												isActivated = true;
-
-												// wer zwischen An- und Ausschalten 15 Sekunden wartet, erhöht nicht den
-												// Nutzloszähler
-												if (Time.timeSinceLevelLoad - toggleTimestamp < 15)
-												{
-														toggleCounter++;
-												}
-												toggleTimestamp = Time.timeSinceLevelLoad;
-										}
-								}
-						}
 				}
 
-				public void ToggleOff(PlayerBehaviour player)
+				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						if (IsInUseOfPlayer(player))
-						{
-								if (canToggleOnOff && isActivated)
-								{
-										isActivated = false;
-
-										// wer nach 15 sekunden das Gerät ausschaltet verlängert den Schutz vor Ausfall
-										if (toggleCounter > 0 && Time.timeSinceLevelLoad - toggleTimestamp >= 15)
-										{
-												toggleCounter--;
-												toggleTimestamp = Time.timeSinceLevelLoad;
-										}
-								}
-						}
+						return IsTakenByPlayer is false;
 				}
 
-				public void Sell(PlayerBehaviour player)
+				public override void Interact(PlayerBehaviour sender)
 				{
-						player.GiveMoney(SellPrice);
-						owner = null;
+
 				}
 
-				public void Buy(PlayerBehaviour player)
+				protected override void OnHuntStart()
 				{
-						if (player.TakeMoney(Price))
-						{
-								owner = player;
-						}
+
 				}
 
-				private bool IsTextInWorldActive => textInWorld is { } && textInWorld.enabled;
-
-				public string GameObjectName => this.GetGameObjectName();
-				public string ImplementationTypeName => this.GetImplementationTypeName();
-
-				public void ShowTextInWorld(PlayerBehaviour sender, string text)
+				protected override void OnHuntStop()
 				{
-						if (textInWorld is { })
-						{
-								textInWorld.text = text;
-								textInWorld.enabled = !string.IsNullOrEmpty(text);
-								textInWorldTarget = IsTextInWorldActive is false ? null : sender;
-						}
+						// nothing yet
+				}
+
+				protected override void OnOwnerOwnedEquipment()
+				{
+						// nothing yet
 				}
 		}
 }

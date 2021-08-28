@@ -1,11 +1,6 @@
-﻿using Assets.Script.Controller;
+﻿using Assets.Script.Behaviour;
+using Assets.Script.Controller;
 using Assets.Script.Model;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -15,6 +10,8 @@ namespace Assets
 		{
 				private static bool wasNotInstanced;
 				private static bool wasDisabled;
+
+				public static bool InHunt => HuntingStateBean.Instance?.InHunt ?? false;
 
 				public static IGameController GetGameController(this Behaviour _) => GameControllerSingleton.Instance;
 				public static IVoiceRecognition GetVoiceRecognizer(this Behaviour _) => VoiceRecognitionSingleton.Instance;
@@ -37,7 +34,7 @@ namespace Assets
 								instance.Enable();
 								Debug.LogWarning($"{nameof(InputControlManagerSingleton)} not yet enabled! Now enabled.");
 						}
-						else if(wasDisabled || wasNotInstanced)
+						else if (wasDisabled || wasNotInstanced)
 						{
 								Debug.LogWarning($"{nameof(InputControlManagerSingleton)} ready!");
 								wasDisabled = false;

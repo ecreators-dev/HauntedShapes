@@ -18,16 +18,15 @@ namespace Assets.Script.Controller
 		{
 				public static IGameController Instance { get; private set; }
 
-				[SerializeField]
 				[Tooltip("Musik im Hintergrund, wenn das Spiel startet")]
-				private AudioSource musicStartGameSource;
-				private float musicStartGameVolume;
+				[SerializeField] private AudioSource musicStartGameSource;
 
-				[SerializeField]
-				private FadeUIElement blackscreenUI;
+				[SerializeField] private FadeUIElement blackscreenUI;
+				[SerializeField] private ShopSingleton shop;
 
 				public IAudioFader AudioFader { get; private set; }
 
+				private float musicStartGameVolume;
 				private bool fadeAmbientStartMusic;
 				private bool backgroundMusicInPlayingInLoop;
 				private bool blackscreenFading;

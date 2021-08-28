@@ -1,4 +1,6 @@
-﻿namespace Assets.Script.Model
+﻿using Assets.Script.Behaviour;
+
+namespace Assets.Script.Model
 {
 		public interface IGameController
 		{

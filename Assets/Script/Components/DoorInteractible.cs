@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Script.Behaviour;
+
+using UnityEngine;
 
 namespace Assets.Script.Components
 {
@@ -15,7 +17,7 @@ namespace Assets.Script.Components
 				/// An interaction call from a player
 				/// </summary>
 				/// <param name="ignored"></param>
-				public override void Interact(GameObject ignored)
+				public override void Interact(PlayerBehaviour ignored)
 				{
 						// called from "protected"
 						if (ignored is { })
@@ -64,10 +66,20 @@ namespace Assets.Script.Components
 						}
 				}
 
-				public override bool CanInteract(GameObject sender)
+				public override bool CanInteract(PlayerBehaviour sender)
 				{
 						// player only!
-						return sender.CompareTag("Player");
+						return sender is { };
+				}
+
+				protected override void OnHuntStart()
+				{
+						// nothing - but exits (another script)
+				}
+
+				protected override void OnHuntStop()
+				{
+						// nothing
 				}
 		}
 }

@@ -1,10 +1,9 @@
 using Assets.Script.Behaviour.GhostTypes;
+using Assets.Script.Components;
 using Assets.Script.Model;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 using UnityEditor;
 
@@ -30,69 +29,179 @@ namespace Assets.Script.Behaviour
 				public MoodType mood;
 				public AgeType ageType;
 				public bool reserectable = true;
+				public int level;
+				public long levelExpirience;
 
 				private GhostEntity ghostType;
 				private bool isDead;
 
-				[SerializeField]
-				private Transform equipmentHolder;
+				[SerializeField] private Transform equipmentHolder;
+				[SerializeField] private Transform pickupHolder;
+				[SerializeField] private Camera playerCam;
+				[SerializeField] private AudioSource playerAudioSource3d;
+				[SerializeField] private AudioClip[] silentHurtClipsRandom;
+				[SerializeField] private LayerMask interactibleDoorMask;
+				[SerializeField] private InventoryBehaviour inventory;
 
-				[SerializeField]
-				private Camera playerCam;
-
-				[SerializeField]
-				private AudioSource playerAudioSource3d;
-
-				[SerializeField]
-				private AudioClip[] silentHurtClipsRandom;
-
-				private float money;
-				private IEquipment activeEquipment;
+				private float money = 0;
+				private Equipment activeEquipment;
 				private float toggleTimeout;
 				private bool toggle;
 				private AudioClip stepSoundClip;
+				private bool mouseDown;
 
 				public Camera Cam => playerCam;
 
-				public IEquipment ActiveEquipment
+				private Transform Transform { get; set; }
+
+				public Equipment ActiveEquipment => activeEquipment;
+
+				private void Awake()
 				{
-						get => activeEquipment ??= FetchEquipment();
-						private set => activeEquipment = value;
+						Transform = transform;
 				}
 
 				private void Start()
 				{
-						FetchEquipment();
-						OnEquip_EquipmentStart();
+						FindEquipmentInEquipmentHolder();
+				}
+
+				public bool CheckCanBuy(ShopParameters equipmentInfo, uint quantity = 1)
+				{
+						return money >= equipmentInfo.Cost * quantity;
 				}
 
 				/// <summary>
-				/// Remark: Do not call <see cref="ActiveEquipment"/> because of recursion
+				/// Counts the quantity for this item to buy, depends to the <see cref="money"/> 
+				/// and <see cref="ShopParameters.cost"/>
 				/// </summary>
-				private IEquipment FetchEquipment()
+				public int CountMaximumForMoney(ShopParameters item)
 				{
-						foreach (Transform item in equipmentHolder.transform)
+						return Mathf.FloorToInt(money / item.Cost);
+				}
+
+				public int CountOwnedEquipment(ShopParameters item) => inventory.Count(item);
+
+				public void SellOne(Equipment ownedEquipment)
+				{
+						// item must be owned by this player
+						// inventory contains this equipment
+						if (ownedEquipment.Owner == this)
 						{
-								IEquipment old = activeEquipment;
-								activeEquipment = item.GetComponent<IEquipment>();
-								if (old is { })
+								if (inventory.Count(ownedEquipment.ShopInfo) > 0)
 								{
-										old.UselessEvent -= OnUselessEquipment;
+										inventory.Take(ownedEquipment.ShopInfo, 1);
+										float sellPrice = ownedEquipment.ShopInfo.SellPrice * 1;
+										money += sellPrice;
+										Debug.Log($"Sold {1} x {ownedEquipment.ShopInfo.DisplayName} for {sellPrice}");
+										OnEquipmentSold(ownedEquipment.ShopInfo);
 								}
-								if (activeEquipment is { })
-								{
-										activeEquipment.UselessEvent += OnUselessEquipment;
-								}
-								break;
 						}
-						return activeEquipment;
+				}
+
+				private void OnEquipmentSold(ShopParameters shopInfo)
+				{
+						throw new NotImplementedException();
+				}
+
+				public void TakeEquipment(PlayerBehaviour diedPlayer)
+				{
+						if (diedPlayer.isDead)
+						{
+								var oneItem = inventory.GetRandomEquipment();
+								if (oneItem is { } && inventory.CheckCanPutAll(oneItem.ShopInfo, 1))
+								{
+										PutEquipment(oneItem);
+								}
+						}
+				}
+
+				/// <summary>
+				/// You can put one item into your inventory
+				/// </summary>
+				public bool PutEquipment(Equipment equipmentWithoutOwner)
+				{
+						// an equipment within the world and without owned by someone
+						// this may happen, if a player dies. Other players can pickup
+						// his equipments to sell it in the shop
+						// therefore the living player must pickup the died player
+						if (equipmentWithoutOwner.Owner == null)
+						{
+								int remaining = inventory.PutAllEquipment(equipmentWithoutOwner.ShopInfo, 1);
+								if (remaining > 0)
+								{
+										Debug.Log($"Not enought space in inventory: {equipmentWithoutOwner.ShopInfo.DisplayName}");
+								}
+								else
+								{
+										// valid!
+										return true;
+								}
+						}
+						return false;
+				}
+
+				public void Buy(ShopParameters shopItem, uint quantity = 1)
+				{
+						if (CheckCanBuy(shopItem, quantity))
+						{
+								float oldMoney = money;
+								money -= shopItem.Cost * quantity;
+								int remaining = inventory.PutAllEquipment(shopItem, quantity);
+								if (remaining > 0)
+								{
+										money += remaining * shopItem.Cost;
+								}
+								Debug.Log($"Bought {quantity - remaining} items for {oldMoney - money}: {shopItem.DisplayName}");
+						}
+						else
+						{
+								Debug.Log($"Not enough money!");
+						}
+				}
+
+				private void FindEquipmentInEquipmentHolder()
+				{
+						activeEquipment = equipmentHolder.GetComponentInChildren<Equipment>();
+						activeEquipment.OnPlayer_EquippedToHand(this);
+				}
+
+				[CalledByEquipmentBehaviour]
+				public void OnEquipment_Broken(Equipment equipment)
+				{
+						// broken can only be called (logically), if it was active
+						// what will the player do on this event case?
+						// - starting a cool down?
+						// - show a text?
+						// - mark as broken?
+				}
+
+				/// <summary>
+				/// Call this from an equipment AFTER it was fixed from being broken
+				/// </summary>
+				[CalledByEquipmentBehaviour]
+				public void OnEquipment_Fixed(Equipment equipment)
+				{
+						// wanna play a sound?s
 				}
 
 				private void Update()
 				{
 						HandleHuntToggleDebug();
-						HandleClickObject();
+						HandleClickCrosshair();
 						HandleEquipmentToggleButton();
+						HandleEquipmentDropButton();
+				}
+
+				/// <summary>
+				/// Handles only to drop the actual equipment
+				/// </summary>
+				private void HandleEquipmentDropButton()
+				{
+						if (activeEquipment is { } && this.InputControls().PlayerDropEquipment)
+						{
+								DropEquipment();
+						}
 				}
 
 				private void HandleHuntToggleDebug()
@@ -114,21 +223,14 @@ namespace Assets.Script.Behaviour
 				private void HandleEquipmentToggleButton()
 				{
 						IInputControls keyboardKeys = this.InputControls();
-						IEquipment equipment = ActiveEquipment;
+						Equipment equipment = activeEquipment;
 						if (equipment is null)
 						{
-								FetchEquipment();
+								// no equipment - everything is fine
+								return;
 						}
 
 						// try to toggle on/off held equipment
-						/*
-						 Way To go: player is not able to toggle during timeout or if not released after last toggle
-						            player can toggle if not hold key and if not in timeout (toggle time / key on-time)
-						 Player press key -> timeout reached -> key was released -> toggle ON/OFF
-						 Player hold key -> timeout is running or key was not released -> nothing
-						 if Timeout > 0 Timeout ran out
-						 Player release key -> key was released = true
-						 */
 						if (keyboardKeys.PlayerToggleEquipmentOnOff)
 						{
 								if (toggleTimeout <= 0 && toggle is false)
@@ -139,7 +241,7 @@ namespace Assets.Script.Behaviour
 										if (equipment is { })
 										{
 												Debug.Log($"Triggered by Keyboard Hotkey: {nameof(keyboardKeys.PlayerToggleEquipmentOnOff)}");
-												OnEquipmentToggleButton();
+												DoInteractWithEquipment();
 										}
 										else
 										{
@@ -159,104 +261,81 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				public void PickUp(IInteractible item)
+				public void InteractWith(Interactible any)
 				{
-						if (item is Component cmp)
+						if (any.CanInteract(this))
 						{
-								// Handle: is already in hand of any player?
-								if (item.IsPickable)
-								{
-										OnPickUp_HandleActivePickupItem(item);
-
-										Transform parent = GetPickupTransfrom();
-										// TODO - TEST: 2nd parameter: move to local position zero?
-										cmp.transform.SetParent(parent, true);
-										
-										// event: disable gravity for example!
-										item.OnPickup(this);
-
-										Debug.Log($"Item pickup: {cmp.gameObject.name}");
-								}
-								else
-								{
-										Debug.LogWarning($"Cannot pickup item: {cmp.gameObject.name}. Already pickup!");
-								}
+								any.Interact(this);
+								Debug.Log($"Item interaction: {any.gameObject.name}");
+						}
+						else
+						{
+								Debug.LogWarning($"Cannot interact with item: {any.gameObject.name}. Already Used!");
 						}
 				}
 
-				private void OnPickUp_HandleActivePickupItem(IInteractible item)
+				public void PickUp(PickupItem item)
 				{
-						Transform parent = GetPickupTransfrom();
-						Transform pickupActive = parent.childCount > 0 ? parent.GetChild(0) : default;
-						if (pickupActive != null)
+						// Handle: is already in hand of any player?
+						if (item.CanInteract(this))
 						{
-								var active = pickupActive.GetComponent<IInteractible>();
+								OnPickUp_HandleActivePickupItem(item);
+								Debug.Log($"Item pickup: {item.gameObject.name}");
+						}
+						else
+						{
+								Debug.LogWarning($"Cannot pickup item: {item.gameObject.name}. Already pickup!");
+						}
+				}
+
+				private void OnPickUp_HandleActivePickupItem(Interactible item)
+				{
+						Transform parent = pickupHolder;
+						PickupItem active = parent.GetComponentInChildren<PickupItem>();
+						if (active != null)
+						{
 								if (active != null && item != active)
 								{
 										// player can only carry one item at the same time!
-										active.Drop();
+										DropItem(active);
 								}
 						}
 				}
 
-				[SerializeField] private LayerMask interactibleDoorMask;
+				private void DropItem(PickupItem item)
+				{
+						item.DropItem(this);
+				}
 
-				private void HandleClickObject()
+				private void HandleClickCrosshair()
 				{
 						const float maxDistance = 2.25f; // war 2.25
 
-						InteractionEnum equipmentAction = ClickInteractible(maxDistance, out IEquipment equipment);
+						InteractionEnum equipmentAction = ClickInteractible(maxDistance, out Equipment equipment);
 						HandleEquipmentInteraction(equipmentAction, equipment);
 
 						// prio for equipment picking
 						if (equipmentAction != InteractionEnum.CLICKED_ACTIVE)
 						{
-								InteractionEnum interactibleAction = ClickInteractible(maxDistance, out IInteractible worldInteractible);
+								InteractionEnum interactibleAction = ClickInteractible(maxDistance, out Interactible worldInteractible);
 								HandleInteractibleInteraction(interactibleAction, worldInteractible);
 						}
 
 						return;
-						/*
-						if (TryClickObject(out IInteractable worldInteractible, out bool hover, maxDistance, out var hit, out var farHit))
-						{
-								worldInteractible.TouchClickUpdate();
-						}
-						else if (hover)
-						{
-								worldInteractible.TouchOverUpdate();
-						}
-
-						if (TryClickObject(hit, farHit, out IEquipment equipment, out hover))
-						{
-								Equip(equipment);
-						}
-						else if (hover)
-						{
-								if (farHit is null)
-								{
-										equipment.ShowTextInWorld(this, "Zu weit");
-								}
-								else if (hit.HasValue)
-								{
-										equipment.ShowTextInWorld(this, "Aufheben");
-								}
-						}*/
 				}
 
-				private void HandleEquipmentInteraction(InteractionEnum result, IEquipment equipment)
+				private void HandleEquipmentInteraction(InteractionEnum result, Equipment equipment)
 				{
 						switch (result)
 						{
 								case InteractionEnum.NONE:
 										break;
 								case InteractionEnum.HOVER_ACTIVE:
-										equipment.ShowTextInWorld(this, "Aufheben");
 										break;
 								case InteractionEnum.CLICKED_ACTIVE:
 										Equip(equipment);
 										break;
 								case InteractionEnum.CLICKED_TOO_FAR:
-										equipment.ShowTextInWorld(this, "Zu weit");
 										break;
 								case InteractionEnum.HOVER_TOO_FAR:
 										break;
@@ -265,21 +344,17 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void HandleInteractibleInteraction(InteractionEnum result, IInteractible worldInteractible)
+				private void HandleInteractibleInteraction(InteractionEnum result, Interactible worldInteractible)
 				{
 						switch (result)
 						{
 								case InteractionEnum.NONE:
 										break;
 								case InteractionEnum.HOVER_ACTIVE:
-										worldInteractible.TouchOverUpdate();
 										break;
 								case InteractionEnum.CLICKED_ACTIVE:
-										worldInteractible.TouchClickUpdate();
-										Debug.Log($"Object clicked! {worldInteractible.GameObjectName}");
 										break;
 								case InteractionEnum.CLICKED_TOO_FAR:
-										Debug.Log($"Object close, but still too far! {worldInteractible.GameObjectName}");
 										break;
 								case InteractionEnum.HOVER_TOO_FAR:
 										break;
@@ -289,16 +364,17 @@ namespace Assets.Script.Behaviour
 				}
 
 				private InteractionEnum ClickInteractible<T>(float maxDistance, out T instance)
-						where T : IMonoBehaviour
+						where T : Interactible
 				{
-						if (Mouse.current.leftButton.isPressed)
+						mouseDown = Mouse.current.leftButton.isPressed;
+						if (mouseDown)
 						{
 								float nearByDistance = maxDistance + maxDistance * 0.5f;
 								if (CrosshairShoot(transform.position, maxDistance, out var inRangeHit, out Vector3 target))
 								{
 										if (inRangeHit.collider is { } && inRangeHit.collider.GetComponent<T>() is Component you)
 										{
-												Debug.Log("Clicked Object: " + you.gameObject.name);
+												Debug.Log($"Clicked Object: {you.gameObject.name} - IN RANGE: {inRangeHit.distance} m");
 												instance = you is T t ? t : default;
 												return InteractionEnum.CLICKED_ACTIVE;
 										}
@@ -307,12 +383,11 @@ namespace Assets.Script.Behaviour
 								{
 										if (inRangeHit.collider is { } && inRangeHit.collider.GetComponent<T>() is Component you)
 										{
-												Debug.Log("Clicked Object: " + you.gameObject.name);
+												Debug.Log($"Clicked Object: {you.gameObject.name} - TOO FAR: {inRangeHit.distance} m");
 												instance = you is T t ? t : default;
 												return InteractionEnum.CLICKED_ACTIVE;
 										}
 								}
-
 						}
 						else if (CrosshairShoot(transform.position, maxDistance, out var inRangeHit, out var target))
 						{
@@ -366,73 +441,49 @@ namespace Assets.Script.Behaviour
 						EditorGUILayout.HelpBox("Hunt Fx On/Off = H", MessageType.Info);
 						EditorGUILayout.HelpBox("Mouse On/Off = Backspace", MessageType.Info);
 				}
-#endif
 
-				private void OnEquip_EquipmentStart()
+				private void OnDrawGizmos()
+				{
+						if (Application.isPlaying)
+						{
+								if (mouseDown)
+								{
+										Ray forward = new Ray(Camera.current.transform.position, Camera.current.transform.forward);
+										if (Physics.Raycast(forward, out var hit, 20))
+										{
+												Vector3 hitPos = hit.point;
+												Handles.color = Color.yellow;
+												Handles.DrawLine(forward.origin, hitPos);
+
+												Handles.color = Color.white;
+												Handles.Label(hitPos, $"{Vector3.Distance(forward.origin, hitPos)} m");
+										}
+								}
+						}
+				}
+#endif
+				public void Equip(Equipment item)
+				{
+						activeEquipment = item;
+						item.transform.SetParent(Transform, false);
+				}
+
+				[ContextMenu("Drop equipped item")]
+				public void DropEquipment()
 				{
 						if (activeEquipment is { })
 						{
-								// event: what does item to on equip? toggle off may be?
-								activeEquipment.OnEquip(this);
-
-								activeEquipment.LetFallEvent -= OnEquipmentFallOffHand;
-								activeEquipment.LetFallEvent += OnEquipmentFallOffHand;
-
-								activeEquipment.UselessEvent -= OnUselessEquipment;
-								activeEquipment.UselessEvent += OnUselessEquipment;
+								// important! let fall
+								activeEquipment.DropItem(this);
+								
+								// important! unset reference
+								activeEquipment = null;
 						}
 				}
 
-				public void Equip(IEquipment item)
+				private void OnUselessEquipment(Equipment obj)
 				{
-						if (item is Component cmp)
-						{
-								if (item != activeEquipment)
-								{
-										Debug.Log($"Equip item: {cmp.gameObject.name}");
-										item.NoFall();
-
-										// make new tool active
-										OnEquip_HandleActiveEquipment();
-
-										// accept new tool and carry with player
-										activeEquipment = item;
-										cmp.transform.SetParent(equipmentHolder);
-
-										// start on equip
-										OnEquip_EquipmentStart();
-								}
-								else
-								{
-										Debug.LogError($"Cannot equip item: {cmp.gameObject.name}");
-								}
-						}
-				}
-
-				private void OnEquip_HandleActiveEquipment()
-				{
-						// TODO drop or hide in inventory
-						// TODO animation
-
-						bool forTestOnly = true;
-						if (forTestOnly)
-						{
-								DropActiveEquipment();
-						}
-				}
-
-				[ContextMenu("Drop Equipped Item")]
-				public void DropActiveEquipment()
-				{
-						if (ActiveEquipment is { })
-						{
-								ActiveEquipment.Drop();
-						}
-				}
-
-				private void OnUselessEquipment(IEquipment obj)
-				{
-						if (ReferenceEquals(obj, ActiveEquipment))
+						if (obj == activeEquipment)
 						{
 								if (silentHurtClipsRandom.Length > 0)
 								{
@@ -459,30 +510,17 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void OnEquipmentFallOffHand(IEquipment obj)
-				{
-						if (obj == ActiveEquipment)
-						{
-								var behaviour = (MonoBehaviour)ActiveEquipment;
-								behaviour.transform.SetParent(null); // do not move with player anymore
-
-								ActiveEquipment.LetFallEvent -= OnEquipmentFallOffHand;
-								ActiveEquipment.UselessEvent -= OnUselessEquipment;
-								ActiveEquipment = null;
-						}
-				}
-
 				[ContextMenu("Toggle On | Off")]
-				public void OnEquipmentToggleButton()
+				public void DoInteractWithEquipment()
 				{
-						IEquipment equipment = ActiveEquipment;
+						Interactible equipment = activeEquipment;
 						if (equipment is null)
+						{
+								Debug.Log("There's no equipment recognized. Nothing to interact.");
 								return;
+						}
 
-						if (equipment.IsPowered)
-								equipment.ToggleOff(this);
-						else
-								equipment.ToggleOn(this);
+						equipment.Interact(this);
 				}
 
 				public void Die()
@@ -505,27 +543,6 @@ namespace Assets.Script.Behaviour
 								// das geht nur einmal bei einem Ritual
 								reserectable = false;
 						}
-				}
-
-				public void GiveMoney(float money)
-				{
-						this.money += Mathf.Abs(money);
-				}
-
-				public bool TakeMoney(float price)
-				{
-						price = Mathf.Abs(price);
-						if (price <= this.money)
-						{
-								this.money -= price;
-								return true;
-						}
-						return false;
-				}
-
-				public Transform GetPickupTransfrom()
-				{
-						return this.equipmentHolder;
 				}
 
 				public void SetStepSound(AudioClip clip)

@@ -46,6 +46,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "EquipmentDrop",
+                    "type": "Button",
+                    "id": "bfd09ad3-e785-4050-9099-0e11fb5e8674",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "HuntToggle (Debug)",
                     "type": "Button",
                     "id": "55fba300-6b61-4a38-97fc-8ac581f64d9f",
@@ -162,6 +170,17 @@
                     "processors": "",
                     "groups": "Debug;Classic",
                     "action": "HuntToggle (Debug)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "29f23c65-4b6c-43e3-993a-5dc97e7d1b82",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Classic;Debug",
+                    "action": "EquipmentDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

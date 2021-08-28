@@ -38,6 +38,8 @@ namespace Assets
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
 
+				public bool PlayerDropEquipment => inputActions.Player.EquipmentDrop.triggered;
+
 				private void Awake()
 				{
 						if (Instance is null)
@@ -140,17 +142,12 @@ namespace Assets
 				public bool EditorStopCamera => inputActions.Player.EditorStopRotateCamera.triggered;
 
 				public bool IsEnabled { get; private set; }
-				public bool PlayerToggleEquipmentOnOff
-				{
-						get
-						{
-								// check this frame pressed
-								bool triggered = inputActions.Player.EquipmentToggle.ReadValue<bool>();
-								//triggered = inputActions.Player.EquipmentToggle.triggered;
-								return triggered;
-						}
-				}
+
+				public bool PlayerToggleEquipmentOnOff => inputActions.Player.EquipmentToggle.ReadValue<bool>();
+				
+				public bool PlayerDropEquipment => inputActions.Player.EquipmentDrop.triggered;
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
+
 		}
 }

@@ -61,9 +61,6 @@
     <Compile Include="Assets\Editor\SnapToGroundEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\AssetStoreTools\Editor\AssetStoreTools.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.1.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -308,7 +305,7 @@
       <HintPath>Assets\Script\DLL\NameGenerator\RandomNameGeneratorLibrary.dll</HintPath>
     </Reference>
     <Reference Include="AssetStoreTools">
-      <HintPath>Assets\AssetStoreTools\Editor\AssetStoreTools.dll</HintPath>
+      <HintPath>Assets\Plugins\AssetStoreTools\Editor\AssetStoreTools.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.6.1\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>

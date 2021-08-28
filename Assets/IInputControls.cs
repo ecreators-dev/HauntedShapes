@@ -13,6 +13,9 @@ public interface IInputControls
 		bool EditorStopCamera { get; }
 
 		bool PlayerToggleEquipmentOnOff { get; }
+
+		bool PlayerDropEquipment { get; }
+
 		bool DebugHuntToggleOnOff { get; }
 
 		bool IsEnabled { get; }

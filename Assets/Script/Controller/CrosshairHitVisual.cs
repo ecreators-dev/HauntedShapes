@@ -1,3 +1,4 @@
+using Assets.Script.Components;
 using Assets.Script.Model;
 
 using UnityEngine;
@@ -32,11 +33,12 @@ namespace Assets.Script.Behaviour
 
 						// HOVER: show near items with hand visible! (c)
 						hoveredHit = false;
-						(bool match, IEquipment item, Component cmp) equipment = default;
-						(bool match, IInteractible item, Component cmp) item = default;
+						Equipment equipment = default;
+						PickupItem item = default;
+						Interactible any = default;
 						if (!Mouse.current.leftButton.isPressed)
 						{
-								HandleHover(camera, out equipment, out item);
+								HandleHover(camera, out equipment, out item, out any);
 						}
 
 						// CLICK:
@@ -44,39 +46,37 @@ namespace Assets.Script.Behaviour
 						{
 								// a) clicked near (match)
 								// b) clicked far (hover) - hand with arraow up (shows one step further to pickup)
-								HandleClicked(camera, equipment, item);
+								HandleClickedComponentInWorld(camera, equipment, item, any);
 						}
 
 						image.enabled = hoveredHit;
 				}
 
-				private void HandleHover(Transform camera, out (bool match, IEquipment item, Component cmp) equipment,
-						out (bool match, IInteractible item, Component cmp) item)
+				private void HandleHover(Transform camera, out Equipment equipment,
+						out PickupItem item, out Interactible any)
 				{
 						equipment = default;
 						item = default;
+						any = default;
 
 						// condition! 1st: match any, 2nd: match only types
 						hoveredHit = Physics.Raycast(camera.position, camera.forward, out RaycastHit clickInRange, hitDistance)
-								&& IsHit(out equipment, out item, clickInRange);
+								&& IsHit(out equipment, out item, out any, clickInRange);
 
-						static bool IsHit(out (bool isEquipment, IEquipment item, Component cmp) equipment,
-								out (bool isAny, IInteractible item, Component cmp) item,
+						static bool IsHit(out Equipment equipment,
+								out PickupItem item,
+								out Interactible any,
 								RaycastHit clickInRange)
 						{
-								bool match = false;
-								equipment = default;
 								item = default;
+								any = default;
+								bool match = false;
 
 								// hover only if not in hand!
-								if (IsEquimentHit(clickInRange, out IEquipment tool, out Component euipmentComponent) && tool.IsEquipped is false)
+								if (IsEquimentHit(clickInRange, out equipment)
+										|| IsPickupItemHit(clickInRange, out item)
+										|| IsInteractibleHit(clickInRange, out any))
 								{
-										equipment = (true, tool, euipmentComponent);
-										match = true;
-								}
-								if (IsInteractibleHit(clickInRange, out IInteractible interactible, out Component anyInteractible) && interactible.IsPickable)
-								{
-										item = (true, interactible, anyInteractible);
 										match = true;
 								}
 								return match;
@@ -86,22 +86,33 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// Called when MouseLeft down = pressed!
 				///
-				private void HandleClicked(Transform camera, (bool match, IEquipment item, Component cmp) equipment, (bool match, IInteractible item, Component cmp) item)
+				private void HandleClickedComponentInWorld(Transform camera,
+						Equipment equipment,
+						PickupItem item,
+						Interactible any)
 				{
 						// out of range (hitDistanceFar), but in near reange AND clicked
 						// hovered and clicked in range:
 						if (hoveredHit)
 						{
+								// current player who is playing the game active
 								var player = Camera.current.transform.GetComponentInParent<PlayerBehaviour>();
 								if (player != null)
 								{
-										if (equipment.match)
+										if (equipment is { })
 										{
-												player.Equip(equipment.item);
+												// for example: take a flashlight
+												player.Equip(equipment);
 										}
-										else if (item.match)
+										else if (item is { })
 										{
-												player.PickUp(item.item);
+												// for example: pick up a photo
+												player.PickUp(item);
+										}
+										else if (any is { })
+										{
+												// for example: open a door
+												player.InteractWith(any);
 										}
 								}
 								else
@@ -112,38 +123,40 @@ namespace Assets.Script.Behaviour
 						// clicked and not hovered: check if in near range!
 						else if (Physics.Raycast(camera.position, camera.forward, out RaycastHit clickOutOfRange, hitDistanceFar))
 						{
-								Component cmp;
-								if (IsEquimentHit(clickOutOfRange, out IEquipment tool, out cmp) && tool.IsEquipped is false)
+								if (IsEquimentHit(clickOutOfRange, out Equipment tool))
 								{
-										// TODO condition!
-										Debug.Log($"{cmp.gameObject.name} clicked OUT OF RANGE, is Euipment");
+										Debug.Log($"{tool.gameObject.name} clicked OUT OF RANGE, is Euipment");
 								}
-								else if (IsInteractibleHit(clickOutOfRange, out IInteractible pickup, out cmp) && pickup.IsPickable)
+								else if (IsPickupItemHit(clickOutOfRange, out PickupItem pickup))
 								{
-										Debug.Log($"{cmp.gameObject.name} clicked  OUT OF RANGE, is Interactible");
+										Debug.Log($"{pickup.gameObject.name} clicked  OUT OF RANGE, is PickupItem");
+								}
+								else if (IsInteractibleHit(clickOutOfRange, out Interactible interact))
+								{
+										Debug.Log($"{interact.gameObject.name} clicked  OUT OF RANGE, is Interactible");
 								}
 						}
 				}
 
-				private static bool IsInteractibleHit(RaycastHit clickOutOfRange, out IInteractible interactible, out Component cmp)
+				private static bool IsInteractibleHit(RaycastHit clickOutOfRange, out Interactible interactible)
 				{
-						return IsTargetType(clickOutOfRange, out interactible, out cmp);
+						return IsTargetType(clickOutOfRange, out interactible);
 				}
 
-				private static bool IsEquimentHit(RaycastHit clickOutOfRange, out IEquipment tool, out Component cmp)
+				private static bool IsPickupItemHit(RaycastHit clickOutOfRange, out PickupItem item)
 				{
-						return IsTargetType(clickOutOfRange, out tool, out cmp);
+						return IsTargetType(clickOutOfRange, out item);
 				}
 
-				private static bool IsTargetType<T>(RaycastHit clickInRange, out T target, out Component component)
+				private static bool IsEquimentHit(RaycastHit clickOutOfRange, out Equipment tool)
 				{
-						if (clickInRange.collider.TryGetComponent(out target) && target is Component cmp)
-						{
-								component = cmp;
-								return true;
-						}
-						component = null;
-						return false;
+						return IsTargetType(clickOutOfRange, out tool);
+				}
+
+				private static bool IsTargetType<T>(RaycastHit clickInRange, out T target)
+						where T : Component
+				{
+						return clickInRange.collider.TryGetComponent(out target);
 				}
 		}
 }

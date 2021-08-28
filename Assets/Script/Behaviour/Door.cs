@@ -21,7 +21,7 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private float openSpeed = 4;
 				[Tooltip("Init open status")]
 				[SerializeField] private bool currentlyOpen = false;
-				
+
 				[Header("Preview (Editor)")]
 				[SerializeField] private Color previewColor = new Color(1, 1, 0.3f, 0.2f);
 				[Min(0)]
@@ -146,13 +146,13 @@ namespace Assets.Script.Behaviour
 								Time.deltaTime * Mathf.Abs(openSpeed));
 				}
 
-				public override bool CanInteract(GameObject sender)
+				public override bool CanInteract(PlayerBehaviour sender)
 				{
 						// always to open and close
 						return unlocked;
 				}
 
-				public override void Interact(GameObject sender)
+				public override void Interact(PlayerBehaviour sender)
 				{
 						if (IsOpened)
 						{
@@ -162,6 +162,16 @@ namespace Assets.Script.Behaviour
 						{
 								Open();
 						}
+				}
+
+				protected override void OnHuntStart()
+				{
+						// nothing
+				}
+
+				protected override void OnHuntStop()
+				{
+						// nothing
 				}
 		}
 }

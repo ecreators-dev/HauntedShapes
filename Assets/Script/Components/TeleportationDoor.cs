@@ -1,4 +1,6 @@
 ﻿
+using Assets.Script.Behaviour;
+
 using UnityEngine;
 
 namespace Assets.Script.Components
@@ -71,7 +73,7 @@ namespace Assets.Script.Components
 						}
 				}
 
-				public override void Interact(GameObject sender)
+				public override void Interact(PlayerBehaviour sender)
 				{
 						// ONE WAY open! Means:
 						// can get up, when closed

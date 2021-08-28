@@ -59,6 +59,14 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""EquipmentDrop"",
+                    ""type"": ""Button"",
+                    ""id"": ""bfd09ad3-e785-4050-9099-0e11fb5e8674"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""HuntToggle (Debug)"",
                     ""type"": ""Button"",
                     ""id"": ""55fba300-6b61-4a38-97fc-8ac581f64d9f"",
@@ -177,6 +185,17 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""action"": ""HuntToggle (Debug)"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29f23c65-4b6c-43e3-993a-5dc97e7d1b82"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic;Debug"",
+                    ""action"": ""EquipmentDrop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -223,6 +242,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         m_Player_ExitGame = m_Player.FindAction("Exit Game", throwIfNotFound: true);
         m_Player_EditorStopRotateCamera = m_Player.FindAction("Editor Stop Rotate Camera", throwIfNotFound: true);
         m_Player_EquipmentToggle = m_Player.FindAction("EquipmentToggle", throwIfNotFound: true);
+        m_Player_EquipmentDrop = m_Player.FindAction("EquipmentDrop", throwIfNotFound: true);
         m_Player_HuntToggleDebug = m_Player.FindAction("HuntToggle (Debug)", throwIfNotFound: true);
     }
 
@@ -278,6 +298,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_ExitGame;
     private readonly InputAction m_Player_EditorStopRotateCamera;
     private readonly InputAction m_Player_EquipmentToggle;
+    private readonly InputAction m_Player_EquipmentDrop;
     private readonly InputAction m_Player_HuntToggleDebug;
     public struct PlayerActions
     {
@@ -288,6 +309,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         public InputAction @ExitGame => m_Wrapper.m_Player_ExitGame;
         public InputAction @EditorStopRotateCamera => m_Wrapper.m_Player_EditorStopRotateCamera;
         public InputAction @EquipmentToggle => m_Wrapper.m_Player_EquipmentToggle;
+        public InputAction @EquipmentDrop => m_Wrapper.m_Player_EquipmentDrop;
         public InputAction @HuntToggleDebug => m_Wrapper.m_Player_HuntToggleDebug;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -313,6 +335,9 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @EquipmentToggle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
                 @EquipmentToggle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
                 @EquipmentToggle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
+                @EquipmentDrop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentDrop;
+                @EquipmentDrop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentDrop;
+                @EquipmentDrop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentDrop;
                 @HuntToggleDebug.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
                 @HuntToggleDebug.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
                 @HuntToggleDebug.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
@@ -335,6 +360,9 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @EquipmentToggle.started += instance.OnEquipmentToggle;
                 @EquipmentToggle.performed += instance.OnEquipmentToggle;
                 @EquipmentToggle.canceled += instance.OnEquipmentToggle;
+                @EquipmentDrop.started += instance.OnEquipmentDrop;
+                @EquipmentDrop.performed += instance.OnEquipmentDrop;
+                @EquipmentDrop.canceled += instance.OnEquipmentDrop;
                 @HuntToggleDebug.started += instance.OnHuntToggleDebug;
                 @HuntToggleDebug.performed += instance.OnHuntToggleDebug;
                 @HuntToggleDebug.canceled += instance.OnHuntToggleDebug;
@@ -367,6 +395,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         void OnExitGame(InputAction.CallbackContext context);
         void OnEditorStopRotateCamera(InputAction.CallbackContext context);
         void OnEquipmentToggle(InputAction.CallbackContext context);
+        void OnEquipmentDrop(InputAction.CallbackContext context);
         void OnHuntToggleDebug(InputAction.CallbackContext context);
     }
 }

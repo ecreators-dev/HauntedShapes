@@ -46,9 +46,9 @@ namespace Assets.Script.Controller
 						AlignWithSceneView(sceneCamera);
 				}
 
-				public void Unlink() => update = false;
+				public void StopSynchronizing() => update = false;
 
-				public void AlignWithViewLive() => update = true;
+				public void StartSynchronizing() => update = true;
 
 				private void AlignWithSceneView(Camera sceneCamera)
 				{
