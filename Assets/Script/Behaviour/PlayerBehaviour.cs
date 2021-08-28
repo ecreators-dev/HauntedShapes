@@ -163,7 +163,7 @@ namespace Assets.Script.Behaviour
 				private void FindEquipmentInEquipmentHolder()
 				{
 						activeEquipment = equipmentHolder.GetComponentInChildren<Equipment>();
-						activeEquipment.OnPlayer_EquippedToHand(this);
+						activeEquipment?.OnPlayer_EquippedToHand(this);
 				}
 
 				[CalledByEquipmentBehaviour]
