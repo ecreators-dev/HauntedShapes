@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1333518108}
   - component: {fileID: 1333518107}
   - component: {fileID: 1333518106}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Docht
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -997,7 +997,7 @@ GameObject:
   - component: {fileID: 1504048522541190061}
   - component: {fileID: 2060070780972683198}
   - component: {fileID: 8611142374445531559}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6068,7 +6068,7 @@ GameObject:
   - component: {fileID: 6578682946351267861}
   - component: {fileID: 6578682946351267863}
   - component: {fileID: 6578682946351267860}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Dochtlicht
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6287,7 +6287,7 @@ GameObject:
   - component: {fileID: 6578682946963451622}
   - component: {fileID: 4726864082374653376}
   - component: {fileID: 3811473726350225445}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Kerze
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6384,7 +6384,7 @@ GameObject:
   - component: {fileID: 5524241591343581699}
   - component: {fileID: 5832430965885714245}
   - component: {fileID: 5066067751626762783}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Candlelight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

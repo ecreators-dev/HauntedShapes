@@ -16,6 +16,9 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private bool hoveredHit;
 				[SerializeField] private float hitDistance = 4;
 				[SerializeField] private float hitDistanceFar = 5;
+				[SerializeField] private LayerMask interactibleLayer;
+				[Range(0.0001f, 0.2f)]
+				[SerializeField] private float size = 0.02f;
 
 				private RawImage image;
 
@@ -60,7 +63,7 @@ namespace Assets.Script.Behaviour
 						any = default;
 
 						// condition! 1st: match any, 2nd: match only types
-						hoveredHit = Physics.Raycast(camera.position, camera.forward, out RaycastHit clickInRange, hitDistance)
+						hoveredHit = Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickInRange, hitDistance, interactibleLayer)
 								&& IsHit(out equipment, out item, out any, clickInRange);
 
 						static bool IsHit(out Equipment equipment,
@@ -96,7 +99,7 @@ namespace Assets.Script.Behaviour
 						if (hoveredHit)
 						{
 								// current player who is playing the game active
-								var player = Camera.current.transform.GetComponentInParent<PlayerBehaviour>();
+								var player = Camera.main.transform.GetComponentInParent<PlayerBehaviour>();
 								if (player != null)
 								{
 										if (equipment is { })
@@ -121,7 +124,7 @@ namespace Assets.Script.Behaviour
 								}
 						}
 						// clicked and not hovered: check if in near range!
-						else if (Physics.Raycast(camera.position, camera.forward, out RaycastHit clickOutOfRange, hitDistanceFar))
+						else if (Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickOutOfRange, hitDistanceFar, interactibleLayer))
 						{
 								if (IsEquimentHit(clickOutOfRange, out Equipment tool))
 								{

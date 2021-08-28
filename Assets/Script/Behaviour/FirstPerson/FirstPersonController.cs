@@ -11,22 +11,20 @@ namespace Assets.Script.Behaviour.FirstPerson
 		public class FirstPersonController : MonoBehaviour
 		{
 				[SerializeField] private Camera cam;
-
 				[Range(1, 30)]
-				[SerializeField] private float mouseSensity = 30;
+				[SerializeField] private float mouseSensity = 10;
 				[Range(0, 200)]
 				[SerializeField] private float fieldOfView = 65;
-
-				[SerializeField] private float moveSpeed = 7;
-				[SerializeField] private float runSpeed = 13;
+				[SerializeField] private float moveSpeed = 70;
+				[SerializeField] private float runSpeed = 130;
 
 				[Header("Animation")]
 				[SerializeField] private Animator animator;
 				[SerializeField] private string crouchBooleanName = "Crouch"; // verify name in Start()!
+				private int crouchBooleanNameHash = Animator.StringToHash("Crouch");
 				[SerializeField] private string moveSpeedName = "Speed"; // verify name in Start()!
+				private int moveSpeedNameHash = Animator.StringToHash("Speed");
 				private float actualSpeed;
-				private int crouchBooleanNameHash;
-				private int moveSpeedNameHash;
 
 				private Vector3 startingRotation;
 				private bool stopMovementInputs;
@@ -49,13 +47,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 						startingRotation = Transform.localRotation.eulerAngles;
 						RigidBody = GetComponent<Rigidbody>();
 						RigidBody.useGravity = true;
-				}
-
-				private void Start()
-				{
-						// validate animator parameter names
-						moveSpeedNameHash = VerifyParameterName(moveSpeedName, animator);
-						crouchBooleanNameHash = VerifyParameterName(crouchBooleanName, animator);
 				}
 
 				private void Update()
@@ -149,7 +140,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 						const int frames = 25;
 						actualSpeed = Mathf.Lerp(actualSpeed, moveSpeed, Time.deltaTime / frames); // animation accelleration
 						actualSpeed *= Mathf.Abs(vertical); // stick accelleration
-						
+
 						float maxSpeed = runSpeed;
 						animator.SetFloat(moveSpeedNameHash, actualSpeed / maxSpeed);
 
@@ -174,22 +165,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 						// slow down fast
 						RigidBody.velocity = Vector3.Lerp(RigidBody.velocity, Vector3.zero, Time.deltaTime * 0.2f);
-				}
-
-				/// <summary>
-				/// Prüft
-				/// </summary>
-				/// <param name="parameterName"></param>
-				/// <param name="animator"></param>
-				private static int VerifyParameterName(string parameterName, Animator animator)
-				{
-						int hash = Animator.StringToHash(parameterName);
-						AnimatorControllerParameter p = animator.GetParameter(hash);
-						if (p != null)
-						{
-								Debug.LogError($"Animator is missing parameter with name {parameterName}. Check parameter names inside animator: {animator.name}");
-						}
-						return hash;
 				}
 
 				private bool IsCrouchingButtonPressed()
