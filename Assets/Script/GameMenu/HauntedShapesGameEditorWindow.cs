@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEditor;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Script.GameMenu
 {
@@ -129,7 +130,24 @@ namespace Assets.Script.GameMenu
 
 						ShowSynchronizingStatusCheckBox();
 						EditorGUI.indentLevel--;
-						
+
+						GUI.enabled = activeLinkedCamera != null;
+						if (GUI.enabled is false)
+						{
+								EditorGUILayout.HelpBox("Wähle eine aktive Kamera", MessageType.Info, true);
+						}
+						if (GUILayout.Button("Zeige Kamera Sicht"))
+						{
+								SceneView sceneView = SceneView.lastActiveSceneView;
+								sceneView.ResetCameraSettings();
+								sceneView.camera.projectionMatrix = activeLinkedCamera.projectionMatrix;
+								sceneView.rotation = activeLinkedCamera.transform.rotation;
+								sceneView.pivot = activeLinkedCamera.transform.position;
+								sceneView.camera.CopyFrom(activeLinkedCamera);
+								Debug.Log("Scenen Kamera aktualisiert");
+						}
+						GUI.enabled = true;
+
 						//-- Local Functions -------------------------------------------
 
 						void ShowCameraWithCheckBox(Camera listItemCam, IEnumerable<Camera> allCameras)
