@@ -149,7 +149,9 @@ namespace Assets.Script.Behaviour.FirstPerson
 						const int frames = 25;
 						actualSpeed = Mathf.Lerp(actualSpeed, moveSpeed, Time.deltaTime / frames); // animation accelleration
 						actualSpeed *= Mathf.Abs(vertical); // stick accelleration
-						animator.SetFloat(moveSpeedNameHash, actualSpeed);
+						
+						float maxSpeed = runSpeed;
+						animator.SetFloat(moveSpeedNameHash, actualSpeed / maxSpeed);
 
 						if (vertical > 0)
 						{
@@ -236,7 +238,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 						// both: no roll!
 						// cam: no pan -> but tilt
-						cam.transform.rotation = Quaternion.Euler(startingRotation.y, 0, 0);
+						cam.transform.localRotation = Quaternion.Euler(startingRotation.y, 0, 0);
 
 						// player: no tilt -> but pan
 						Transform.localRotation = Quaternion.Euler(0, startingRotation.x, 0);

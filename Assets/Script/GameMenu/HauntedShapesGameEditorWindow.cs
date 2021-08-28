@@ -26,7 +26,7 @@ namespace Assets.Script.GameMenu
 				private Vector2 interactiblesScrollPositions;
 				private bool cameraListFoldoutStatus;
 
-				[MenuItem("Game/Haunted Shapes Game Editor Settings ...")]
+				[MenuItem("Game/Haunted-Shapes Window ...")]
 				public static void Init()
 				{
 						HauntedShapesGameEditorWindow window = GetWindow<HauntedShapesGameEditorWindow>();
