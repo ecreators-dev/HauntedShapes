@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.MiniFirstPersonController.Scripts;
+
+using UnityEngine;
 
 public class FirstPersonLook : MonoBehaviour
 {
@@ -14,7 +16,7 @@ public class FirstPersonLook : MonoBehaviour
     void Reset()
     {
         // Get the character from the FirstPersonMovement in parents.
-        character = GetComponentInParent<FirstPersonMovement>().transform;
+        character = GetComponentInParent<PlayerMovement>().transform;
     }
 
     void Start()

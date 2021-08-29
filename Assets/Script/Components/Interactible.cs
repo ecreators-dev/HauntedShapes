@@ -87,5 +87,7 @@ namespace Assets.Script.Components
 				protected abstract void OnHuntStart();
 
 				protected abstract void OnHuntStop();
+
+				public abstract string GetTargetName();
 		}
 }

@@ -1,3 +1,5 @@
+using Assets.MiniFirstPersonController.Scripts;
+
 using UnityEngine;
 
 public class Crouch : MonoBehaviour
@@ -6,7 +8,7 @@ public class Crouch : MonoBehaviour
 
     [Header("Slow Movement")]
     [Tooltip("Movement to slow down when crouched.")]
-    public FirstPersonMovement movement;
+    public PlayerMovement movement;
     [Tooltip("Movement speed when crouched.")]
     public float movementSpeed = 2;
 
@@ -29,7 +31,7 @@ public class Crouch : MonoBehaviour
     void Reset()
     {
         // Try to get components.
-        movement = GetComponentInParent<FirstPersonMovement>();
+        movement = GetComponentInParent<PlayerMovement>();
         headToLower = movement.GetComponentInChildren<Camera>().transform;
         colliderToLower = movement.GetComponentInChildren<CapsuleCollider>();
     }
@@ -123,18 +125,12 @@ public class Crouch : MonoBehaviour
         if (state)
         {
             // Try to add the SpeedOverride to the movement component.
-            if (!movement.speedOverrides.Contains(SpeedOverride))
-            {
-                movement.speedOverrides.Add(SpeedOverride);
-            }
+            movement.AddSpeedOverrideOnce(SpeedOverride);
         }
         else
         {
             // Try to remove the SpeedOverride from the movement component.
-            if (movement.speedOverrides.Contains(SpeedOverride))
-            {
-                movement.speedOverrides.Remove(SpeedOverride);
-            }
+            movement.RemoveSpeedOverride(SpeedOverride);
         }
     }
 

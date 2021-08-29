@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onOffGameObjects: []
-  onOffMaterials: []
+  onOffMaterials:
+  - renderer: {fileID: 4907348633551273596}
+    offMaterial: {fileID: 2100000, guid: 1fdde7ac81a82bd4a87bb92f44e295ca, type: 2}
   onOffLights:
   - {fileID: 4120420081381755737}
 --- !u!1 &447789493130343993

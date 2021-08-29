@@ -10,7 +10,7 @@ namespace Assets.Script.Behaviour
 		[RequireComponent(typeof(SphereCollider))]
 		public class GeisterorbBehaviour : MonoBehaviour
 		{
-				[SerializeField] private List<Room> existenceSpace;
+				[SerializeField] private List<GhostRoom> existenceSpace;
 				[SerializeField] [Min(0.1f)] private float fadeSpeed = 1.0f;
 				[SerializeField] [Min(0)] private float moveSpeed = 5;
 				[SerializeField] private bool canChangeRoom = false;
@@ -23,7 +23,7 @@ namespace Assets.Script.Behaviour
 				private Vector3? flyPositionOld;
 				private Vector3? flyToPosition;
 
-				public Room RoomActive { get; set; }
+				public GhostRoom RoomActive { get; set; }
 
 				private void Awake()
 				{
@@ -94,9 +94,12 @@ namespace Assets.Script.Behaviour
 
 				private Vector3 GetNextPositionInsideRoom()
 				{
-						float radius = Mathf.Min(RoomActive.basePlaneGhostorbs.size.x / 2, RoomActive.basePlaneGhostorbs.size.z / 2);
+						return RoomActive.GetRandomOrbPosition();
+
+						Vector3 size = RoomActive.Size;
+						float radius = Mathf.Min(size.x / 2, size.z / 2);
 						Vector3 pos = RoomActive.transform.position + Random.insideUnitSphere * radius;
-						pos.y = RoomActive.basePlaneGhostorbs.transform.position.y;
+						pos.y = RoomActive.GhostOrbY;
 						return pos;
 				}
 

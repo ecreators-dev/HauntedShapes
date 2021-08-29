@@ -19,24 +19,18 @@ namespace Assets.Script.Behaviour.FirstPerson
 				[Header("Movement/Looking")]
 				#region can move inspector group
 				[SerializeField] private bool canMove = true;
-				[ReadOnlyDependingOnBoolean(nameof(canMove), true)]	// this is readonly if canMove is false
+				[ReadOnlyDependingOnBoolean(nameof(canMove), true)] // this is readonly if canMove is false
 				[SerializeField] private float moveSpeed = 70;
-				#endregion
-
-				#region can turn inspector group
-				[BeginGroup] // draws a line before drawing the property
-				[SerializeField] private bool canTurn = true;
-				[ReadOnlyDependingOnBoolean(nameof(canTurn), true)] // this is readonly if canTurn is false
-				[Range(1, 30)]
-				[SerializeField] private float mouseSensity = 10;
-				[ReadOnlyDependingOnBoolean(nameof(canTurn), true)]
+				[ReadOnlyDependingOnBoolean(nameof(canMove), true)] // this is readonly if canMove is false
 				[SerializeField] private float runSpeed = 130;
+				[SerializeField] private CharacterController characterController;
 				#endregion
 
 				[Header("Animation")]
 				[SerializeField] private Animator animator;
 				[SerializeField] private string crouchBooleanName = "Crouch"; // verify name in Start()!
 				[SerializeField] private string moveSpeedName = "Speed"; // verify name in Start()!
+
 				private float actualSpeed;
 
 				private Vector3 startingRotation;
@@ -56,7 +50,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 						Transform = transform;
 						startingRotation = Transform.localRotation.eulerAngles;
 						RigidBody = GetComponent<Rigidbody>();
-						RigidBody.useGravity = true;
 				}
 
 				private void Start()
@@ -72,12 +65,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 						HandleExitGameOrPlaymode();
 						HandleCameraView();
 						HandleCameraEditorStopOnButton();
-
-						// stops inputs for movement and rotation
-						if (stopMovementInputs || canTurn is false)
-								return;
-
-						RotateCamera();
 				}
 
 				private void FixedUpdate()
@@ -129,7 +116,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				private void MoveFixedUpdate()
 				{
 						// can be nagative!
-						float inputForward = Input.Vertical;
+						float forwardWalk = Input.Vertical;
 						float targetSpeed = this.moveSpeed;
 
 						if (IsRunButtonPressed())
@@ -150,45 +137,21 @@ namespace Assets.Script.Behaviour.FirstPerson
 								animator.SetBool(crouchBooleanName, false);
 						}
 
-						const int accellerationSteps = 15;
-						const int deccellerationSteps = 5;
-						float frames = accellerationSteps;
-						if (inputForward == 0f)
+						float sideWalk = Input.Horizonal;
+						if (forwardWalk != 0f && sideWalk != 0f)
 						{
-								targetSpeed = 0;
-								frames = deccellerationSteps;
+								actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime * 3);
+								actualSpeed = Mathf.Min(actualSpeed, runSpeed);
 						}
 						else
 						{
-								frames = accellerationSteps;
+								actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime * 8);
 						}
 
-						actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime / frames); // animation accelleration
-						actualSpeed = Mathf.Min(actualSpeed, runSpeed);
+						animator.SetFloat(moveSpeedName, actualSpeed);
 
-						animator.SetFloat(moveSpeedName, actualSpeed * Time.deltaTime);
-
-						if (inputForward > 0)
-						{
-								RigidBody.MovePosition(transform.position + transform.forward.normalized * actualSpeed * Time.deltaTime);
-						}
-						else if (inputForward < 0)
-						{
-								RigidBody.MovePosition(transform.position + transform.forward.normalized * -actualSpeed * Time.deltaTime);
-						}
-
-						float horizontal = Input.Horizonal;
-						if (horizontal < 0)
-						{
-								RigidBody.MovePosition(transform.position + transform.right.normalized * -actualSpeed * Time.deltaTime);
-						}
-						else if (horizontal > 0)
-						{
-								RigidBody.MovePosition(transform.position + transform.right.normalized * actualSpeed * Time.deltaTime);
-						}
-
-						// slow down fast
-						RigidBody.velocity = Vector3.Lerp(RigidBody.velocity, Vector3.zero, Time.deltaTime * 0.2f);
+						Vector3 motion = (Transform.right * sideWalk) + (Transform.forward * forwardWalk) * actualSpeed;
+						characterController.SimpleMove(motion);
 				}
 
 				private bool IsCrouchingButtonPressed()
@@ -200,54 +163,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 				{
 						return UnityEngine.Input.GetKeyDown(KeyCode.LeftShift) ||
 														UnityEngine.Input.GetKeyDown(KeyCode.RightShift);
-				}
-
-				private void RotateCamera()
-				{
-						float mouseDeltaY = Input.MouseDeltaY;
-						float mouseDeltaX = Input.MouseDeltaX;
-
-						if (RequireOldInputSystem)
-						{
-								if (useOldInputSystem is false)
-								{
-										Debug.Log("Need to use old input system. No use any more.");
-										return;
-								}
-
-								useOldInputSystem = true;
-								Vector3 currentPos = UnityEngine.Input.mousePosition;
-								var delta = currentPos - oldMousePosition;
-								mouseDeltaY = delta.y;
-								mouseDeltaX = delta.x;
-								oldMousePosition = currentPos;
-						}
-						else
-						{
-								useOldInputSystem = false;
-						}
-
-						float deltaTilt = -1 * mouseDeltaY * mouseSensity * Time.deltaTime;
-						float deltaPan = +1 * mouseDeltaX * mouseSensity * Time.deltaTime;
-
-						startingRotation.x += deltaPan;
-						startingRotation.y += deltaTilt;
-
-						LimitTilting();
-
-						// both: no roll!
-						// cam: no pan -> but tilt
-						cam.transform.localRotation = Quaternion.Euler(startingRotation.y, 0, 0);
-
-						// player: no tilt -> but pan
-						Transform.localRotation = Quaternion.Euler(0, startingRotation.x, 0);
-				}
-
-				private void LimitTilting()
-				{
-						const int UP = -66;
-						const int DOWN = 86;
-						startingRotation.y = Mathf.Clamp(startingRotation.y, UP, DOWN);
 				}
 		}
 }

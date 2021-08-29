@@ -1,6 +1,8 @@
 using Assets.Script.Components;
 using Assets.Script.Model;
 
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -20,6 +22,7 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private LayerMask interactibleLayer;
 				[Range(0.0001f, 0.2f)]
 				[SerializeField] private float size = 0.02f;
+				[SerializeField] private TMP_Text targetTextUI;
 
 				private RawImage image;
 
@@ -67,19 +70,20 @@ namespace Assets.Script.Behaviour
 						hoveredHit = Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickInRange, hitDistance, interactibleLayer)
 								&& IsHit(out equipment, out item, out any, clickInRange);
 
+						targetTextUI.enabled = hoveredHit;
+						targetTextUI.text = hoveredHit ?  any.GetTargetName() : string.Empty;
+
 						static bool IsHit(out Equipment equipment,
 								out PickupItem item,
 								out Interactible any,
 								RaycastHit clickInRange)
 						{
-								item = default;
-								any = default;
 								bool match = false;
 
 								// hover only if not in hand!
 								if (IsEquimentHit(clickInRange, out equipment)
-										|| IsPickupItemHit(clickInRange, out item)
-										|| IsInteractibleHit(clickInRange, out any))
+										| IsPickupItemHit(clickInRange, out item)
+										| IsInteractibleHit(clickInRange, out any))
 								{
 										match = true;
 								}

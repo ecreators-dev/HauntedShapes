@@ -58,13 +58,12 @@
     <Compile Include="Assets\Script\Components\RitualArea.cs" />
     <Compile Include="Assets\Script\Behaviour\FadeUIElement.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupDoorRoot.cs" />
-    <Compile Include="Assets\Mini First Person Controller\Scripts\FirstPersonMovement.cs" />
     <Compile Include="Assets\Script\Components\ItemInteractible.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldConstraint.cs" />
     <Compile Include="Assets\Script\Model\IGameController.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostPropertyAsset.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\PngXmpHelper.cs" />
-    <Compile Include="Assets\Script\Behaviour\Room.cs" />
+    <Compile Include="Assets\Script\Behaviour\GhostRoom.cs" />
     <Compile Include="Assets\Script\Behaviour\FlashlightBehaviour.cs" />
     <Compile Include="Assets\Script\Model\IAlphaFader.cs" />
     <Compile Include="Assets\Script\Components\DoorInteractible.cs" />
@@ -100,7 +99,7 @@
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\GroundCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\EditorSnapToGround.cs" />
     <Compile Include="Assets\Script\Behaviour\ShopParameters.cs" />
-    <Compile Include="Assets\Script\Behaviour\GhostboxEntity.cs" />
+    <Compile Include="Assets\Script\Behaviour\Ghostbox.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\FirstPersonController.cs" />
     <Compile Include="Assets\Script\Model\IToggleInteractable.cs" />
     <Compile Include="Assets\Script\Components\Interactible.cs" />
@@ -171,6 +170,7 @@
     <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyDependingOnBooleanAttribute.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\BeginGroupAttribute.cs" />
+    <Compile Include="Assets\Mini First Person Controller\Scripts\PlayerMovement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

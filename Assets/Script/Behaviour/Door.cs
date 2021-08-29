@@ -22,6 +22,8 @@ namespace Assets.Script.Behaviour
 				[Tooltip("Init open status")]
 				[SerializeField] private bool currentlyOpen = false;
 
+				[SerializeField] private GhostRoom roomToOpen;
+
 				[Header("Preview (Editor)")]
 				[SerializeField] private Color previewColor = new Color(1, 1, 0.3f, 0.2f);
 				[Min(0)]
@@ -85,7 +87,6 @@ namespace Assets.Script.Behaviour
 				}
 
 #if UNITY_EDITOR
-
 				private void OnDrawGizmos()
 				{
 						Handles.color = previewColor;
@@ -96,6 +97,16 @@ namespace Assets.Script.Behaviour
 								normal,
 								range, // degrees
 								doorLength);
+
+						if (roomToOpen)
+						{
+								Handles.color = roomToOpen.Color;
+								var center = GetComponent<BoxCollider>().bounds.center;
+								Handles.DrawDottedLine(center, roomToOpen.transform.position, 0.25f);
+								Handles.DrawSolidDisc(center, Transform.right, 0.3f);
+								Handles.color = Color.white;
+								Handles.Label(center, $"Eingang (Door): {roomToOpen.RoomName}");
+						}
 				}
 
 				private void OnValidate()
@@ -176,6 +187,24 @@ namespace Assets.Script.Behaviour
 				protected override void OnHuntStop()
 				{
 						// nothing
+				}
+
+				public override string GetTargetName()
+				{
+						return GetLockCloseStatusName(roomToOpen?.RoomName ?? "??");
+				}
+
+				private string GetLockCloseStatusName(string name)
+				{
+						if (IsLocked)
+						{
+								name = $"{name} - locked";
+						}
+						else if (!IsOpened)
+						{
+								name = $"{name} - closed";
+						}
+						return name;
 				}
 		}
 }

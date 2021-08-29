@@ -91,5 +91,10 @@ namespace Assets.Script.Behaviour
 						string assetPath = AssetDatabase.GetAssetPath(shopInfo.GetInstanceID());
 						string assetGuid = AssetDatabase.AssetPathToGUID(assetPath);
 				}
+
+				public override string GetTargetName()
+				{
+						return ShopInfo.DisplayName;
+				}
 		}
 }

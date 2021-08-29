@@ -1,11 +1,8 @@
 ﻿using Assets.Script.Behaviour;
 
 using System;
-using System.Collections;
 
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
 namespace Assets.Script.Components
 {
@@ -109,6 +106,11 @@ namespace Assets.Script.Components
 				protected override void OnHuntStop()
 				{
 						// nothing
+				}
+
+				public override string GetTargetName()
+				{
+						return gameObject.name;
 				}
 		}
 }

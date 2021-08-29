@@ -8,6 +8,7 @@ TagManager:
   - Getup Door
   - Getup Door Pass
   - Door
+  - Room
   layers:
   - Default
   - TransparentFX

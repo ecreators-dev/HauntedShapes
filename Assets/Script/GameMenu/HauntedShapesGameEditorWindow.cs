@@ -47,7 +47,16 @@ namespace Assets.Script.GameMenu
 
 						OnGUI_Interactibles();
 
+						HorizonalLine();
+
+						OnGUI_OrbHitlines();
+
 						GUILayout.FlexibleSpace();
+				}
+
+				private void OnGUI_OrbHitlines()
+				{
+						GhostRoom.showOrbPositions = EditorGUILayout.Toggle("Orb Positionen zeigen", GhostRoom.showOrbPositions);
 				}
 
 				private void HorizonalLine()

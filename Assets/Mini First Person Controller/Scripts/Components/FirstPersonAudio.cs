@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using Assets.MiniFirstPersonController.Scripts;
+
+using System.Linq;
+
 using UnityEngine;
 
 public class FirstPersonAudio : MonoBehaviour
 {
-    public FirstPersonMovement character;
+    public PlayerMovement character;
     public GroundCheck groundCheck;
 
     [Header("Step")]
@@ -35,7 +38,7 @@ public class FirstPersonAudio : MonoBehaviour
     void Reset()
     {
         // Setup stuff.
-        character = GetComponentInParent<FirstPersonMovement>();
+        character = GetComponentInParent<PlayerMovement>();
         groundCheck = (transform.parent ?? transform).GetComponentInChildren<GroundCheck>();
         stepAudio = GetOrCreateAudioSource("Step Audio");
         runningAudio = GetOrCreateAudioSource("Running Audio");

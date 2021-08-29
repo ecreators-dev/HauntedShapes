@@ -10,6 +10,7 @@ namespace Assets.Script.Components
 				[SerializeField] protected Animator animator;
 				[SerializeField] private AnimationWithSound openAnimation;
 				[SerializeField] private AnimationWithSound closeAnimation;
+				[SerializeField] private GhostRoom room;
 
 				public bool IsOpened { get; private set; }
 
@@ -80,6 +81,24 @@ namespace Assets.Script.Components
 				protected override void OnHuntStop()
 				{
 						// nothing
+				}
+
+				public override string GetTargetName()
+				{
+						return GetLockCloseStatusName(room?.RoomName ?? "??");
+				}
+
+				private string GetLockCloseStatusName(string name)
+				{
+						if (IsLocked)
+						{
+								name = $"{name} - locked";
+						}
+						else if (!IsOpened)
+						{
+								name = $"{name} - closed";
+						}
+						return name;
 				}
 		}
 }
