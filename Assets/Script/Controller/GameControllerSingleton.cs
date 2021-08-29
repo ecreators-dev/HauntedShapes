@@ -14,13 +14,16 @@ namespace Assets.Script.Controller
 		/// - Spieler auszuloggen
 		/// </summary>
 		[RequireComponent(typeof(AudioFaderSingleton))]
+		[DisallowMultipleComponent]
 		public class GameControllerSingleton : MonoBehaviour, IGameController
 		{
 				public static IGameController Instance { get; private set; }
 
-				[Tooltip("Musik im Hintergrund, wenn das Spiel startet")]
-				[SerializeField] private AudioSource musicStartGameSource;
-
+				[Header("Music/Sounds")]
+				[Tooltip("Plays music in background on game start")]
+				[SerializeField] private AudioPlayInfo ambientMusic = new AudioPlayInfo("Ambient Music");
+				
+				[Space]
 				[SerializeField] private FadeUIElement blackscreenUI;
 				[SerializeField] private ShopSingleton shop;
 
@@ -65,7 +68,7 @@ namespace Assets.Script.Controller
 								}
 								AudioFader = fader ?? throw new Exception($"Fehlender {nameof(AudioFaderSingleton)} nach {timeoutSeconds} Sekunden!");
 
-								// verwendung, siehe GameReady_StartPlayBackgroundAmbientMusic()
+								// Verwendung, siehe GameReady_StartPlayBackgroundAmbientMusic()
 								fadeAmbientStartMusic = true;
 								yield break;
 						}
@@ -85,16 +88,23 @@ namespace Assets.Script.Controller
 
 				private void GameReady_StartPlayBackgroundAmbientMusic()
 				{
-						if (musicStartGameSource.clip is null)
-								throw new Exception("Missing clip in ambient music! (null)");
+						ambientMusic.VerifyClipOrThrow();
+
+						if(ambientMusic.CanPlay is false)
+						{
+								Debug.Log($"Play ambient music is set 'off' in {gameObject.name}");
+								return;
+						}
 
 						// setup
-						musicStartGameSource.volume = 0;
-						musicStartGameSource.loop = true;
+						AudioSource ambientAudioSource = ambientMusic.AudioSource;
+						ambientAudioSource.volume = 0;
+						ambientAudioSource.loop = true;
 
 						// play music (fade in, play in loop)
-						musicStartGameSource.Play();
-						AudioFader.FadeIn(musicStartGameSource, OnProgressMusicChanged);
+						ambientAudioSource.Play();
+						AudioFader.MaxVolume = ambientMusic.Volume;
+						AudioFader.FadeIn(ambientAudioSource, OnProgressMusicChanged);
 
 						// fade out (1 to 0) with audio fade (0 to 1) in "blackscreen"
 						void OnProgressMusicChanged(ProgressValue p)

@@ -1,29 +1,42 @@
-﻿using System;
+﻿using Assets.Script.Controller;
+using Assets.Script.InspectorAttibutes;
 
 using UnityEditor;
 
 using UnityEngine;
-using System.Linq;
 
 namespace Assets.Script.Behaviour.FirstPerson
 {
 		[RequireComponent(typeof(Rigidbody))]
+		[DisallowMultipleComponent]
 		public class FirstPersonController : MonoBehaviour
 		{
 				[SerializeField] private Camera cam;
-				[Range(1, 30)]
-				[SerializeField] private float mouseSensity = 10;
 				[Range(0, 200)]
 				[SerializeField] private float fieldOfView = 65;
+				[SerializeField] private Renderer bodyRenderer;
+
+				[Header("Movement/Looking")]
+				#region can move inspector group
+				[SerializeField] private bool canMove = true;
+				[ReadOnlyDependingOnBoolean(nameof(canMove), true)]	// this is readonly if canMove is false
 				[SerializeField] private float moveSpeed = 70;
+				#endregion
+
+				#region can turn inspector group
+				[BeginGroup] // draws a line before drawing the property
+				[SerializeField] private bool canTurn = true;
+				[ReadOnlyDependingOnBoolean(nameof(canTurn), true)] // this is readonly if canTurn is false
+				[Range(1, 30)]
+				[SerializeField] private float mouseSensity = 10;
+				[ReadOnlyDependingOnBoolean(nameof(canTurn), true)]
 				[SerializeField] private float runSpeed = 130;
+				#endregion
 
 				[Header("Animation")]
 				[SerializeField] private Animator animator;
 				[SerializeField] private string crouchBooleanName = "Crouch"; // verify name in Start()!
-				private int crouchBooleanNameHash = Animator.StringToHash("Crouch");
 				[SerializeField] private string moveSpeedName = "Speed"; // verify name in Start()!
-				private int moveSpeedNameHash = Animator.StringToHash("Speed");
 				private float actualSpeed;
 
 				private Vector3 startingRotation;
@@ -34,11 +47,8 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 				private Transform Transform { get; set; }
 				private Rigidbody RigidBody { get; set; }
-
 				public IInputControls Input => controls ??= this.InputControls();
-
 				private bool RequireOldInputSystem => Input.IsEnabled is false;
-
 				private bool ExitGameButton => RequireOldInputSystem ? UnityEngine.Input.GetKeyDown(KeyCode.Escape) : Input.ExitGameButton;
 
 				private void Awake()
@@ -47,6 +57,11 @@ namespace Assets.Script.Behaviour.FirstPerson
 						startingRotation = Transform.localRotation.eulerAngles;
 						RigidBody = GetComponent<Rigidbody>();
 						RigidBody.useGravity = true;
+				}
+
+				private void Start()
+				{
+						//bodyRenderer.enabled = false;
 				}
 
 				private void Update()
@@ -59,14 +74,9 @@ namespace Assets.Script.Behaviour.FirstPerson
 						HandleCameraEditorStopOnButton();
 
 						// stops inputs for movement and rotation
-						if (stopMovementInputs)
+						if (stopMovementInputs || canTurn is false)
 								return;
 
-						UpdateMovement();
-				}
-
-				private void UpdateMovement()
-				{
 						RotateCamera();
 				}
 
@@ -75,7 +85,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 						if (Input is null)
 								return;
 
-						if (stopMovementInputs)
+						if (stopMovementInputs || canMove is false)
 								return;
 
 						MoveFixedUpdate();
@@ -118,37 +128,51 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 				private void MoveFixedUpdate()
 				{
-						float vertical = Input.Vertical;
-						bool isMoving = vertical != 0;
-						float moveSpeed = this.moveSpeed;
+						// can be nagative!
+						float inputForward = Input.Vertical;
+						float targetSpeed = this.moveSpeed;
 
 						if (IsRunButtonPressed())
 						{
-								moveSpeed = this.runSpeed;
+								targetSpeed = runSpeed;
 						}
 
 						if (IsCrouchingButtonPressed())
 						{
-								moveSpeed = 0;
-								animator.SetBool(crouchBooleanNameHash, true);
+								targetSpeed = 0;
+								if (animator.GetBool(crouchBooleanName) is false)
+								{
+										animator.SetBool(crouchBooleanName, true);
+								}
+						}
+						else if (animator.GetBool(crouchBooleanName))
+						{
+								animator.SetBool(crouchBooleanName, false);
+						}
+
+						const int accellerationSteps = 15;
+						const int deccellerationSteps = 5;
+						float frames = accellerationSteps;
+						if (inputForward == 0f)
+						{
+								targetSpeed = 0;
+								frames = deccellerationSteps;
 						}
 						else
 						{
-								animator.SetBool(crouchBooleanNameHash, false);
+								frames = accellerationSteps;
 						}
 
-						const int frames = 25;
-						actualSpeed = Mathf.Lerp(actualSpeed, moveSpeed, Time.deltaTime / frames); // animation accelleration
-						actualSpeed *= Mathf.Abs(vertical); // stick accelleration
+						actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime / frames); // animation accelleration
+						actualSpeed = Mathf.Min(actualSpeed, runSpeed);
 
-						float maxSpeed = runSpeed;
-						animator.SetFloat(moveSpeedNameHash, actualSpeed / maxSpeed);
+						animator.SetFloat(moveSpeedName, actualSpeed * Time.deltaTime);
 
-						if (vertical > 0)
+						if (inputForward > 0)
 						{
 								RigidBody.MovePosition(transform.position + transform.forward.normalized * actualSpeed * Time.deltaTime);
 						}
-						else if (vertical < 0)
+						else if (inputForward < 0)
 						{
 								RigidBody.MovePosition(transform.position + transform.forward.normalized * -actualSpeed * Time.deltaTime);
 						}

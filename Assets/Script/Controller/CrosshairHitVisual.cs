@@ -11,6 +11,7 @@ namespace Assets.Script.Behaviour
 		/// Attached to an Canvas/RawImage (Hand)
 		/// </summary>
 		[RequireComponent(typeof(RawImage))]
+		[DisallowMultipleComponent]
 		public class CrosshairHitVisual : MonoBehaviour
 		{
 				[SerializeField] private bool hoveredHit;

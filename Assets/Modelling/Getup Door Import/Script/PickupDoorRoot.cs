@@ -3,6 +3,7 @@ using UnityEngine;
 namespace HauntedShapes.Doors
 {
 		[ExecuteInEditMode]
+		[DisallowMultipleComponent]
 		public class PickupDoorRoot : MonoBehaviour
 		{
 				[SerializeField] private bool onGround = true;

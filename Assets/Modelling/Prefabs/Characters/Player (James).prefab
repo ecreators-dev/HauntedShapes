@@ -784,6 +784,7 @@ GameObject:
   - component: {fileID: 2789237367910907341}
   - component: {fileID: 2789237367910907340}
   - component: {fileID: 2789237367910907347}
+  - component: {fileID: 203529134}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -828,7 +829,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.55
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -970,6 +971,21 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!114 &203529134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2789237367910907345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fbd94dfde40bbd4c857f682e50032c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  update: 0
+  linkPosition: 1
+  linkRotation: 1
 --- !u!1 &2789237368442032529
 GameObject:
   m_ObjectHideFlags: 0
@@ -1441,10 +1457,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2789237367910907341}
-  mouseSensity: 30
+  mouseSensity: 10
   fieldOfView: 65
-  moveSpeed: 14
-  runSpeed: 26
+  moveSpeed: 70
+  runSpeed: 120
+  bodyRenderer: {fileID: 2279479672552625533}
   animator: {fileID: 8637843828998795790}
   crouchBooleanName: Crouch
   moveSpeedName: Speed
@@ -2985,7 +3002,7 @@ GameObject:
   - component: {fileID: 2279479672552625533}
   - component: {fileID: 6629903542625489143}
   m_Layer: 0
-  m_Name: Ch06
+  m_Name: Ch06 (Model)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3057,8 +3074,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 9049879866427037356}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.88616633, y: 1.6970376, z: 0.55724084}
+    m_Center: {x: -0.17691898, y: 0, z: 0.07730604}
+    m_Extent: {x: 0.4374261, y: 1.6970376, z: 0.25297022}
   m_DirtyAABB: 0
 --- !u!64 &6629903542625489143
 MeshCollider:
@@ -3069,7 +3086,7 @@ MeshCollider:
   m_GameObject: {fileID: 8842671352276678281}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

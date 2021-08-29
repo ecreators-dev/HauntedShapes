@@ -52,15 +52,17 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				public void Unlock()
+				public new void Unlock()
 				{
 						unlocked = true;
+						base.Unlock();
 				}
 
-				public void Lock()
+				public new void Lock()
 				{
 						unlocked = false;
 						Close();
+						base.Lock();
 				}
 
 				public void Open()
@@ -133,13 +135,15 @@ namespace Assets.Script.Behaviour
 				}
 #endif
 
-				private void Update()
+				protected override void Update()
 				{
+						base.Update();
 						UpdateAngle();
 				}
 
 				private void UpdateAngle()
 				{
+						// no collision!
 						Vector3 eulerAngles = Transform.eulerAngles;
 						Transform.eulerAngles = Vector3.Lerp(eulerAngles,
 								new Vector3(eulerAngles.x, toAngle, eulerAngles.z),

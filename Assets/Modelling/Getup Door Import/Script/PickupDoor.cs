@@ -3,6 +3,7 @@ using UnityEngine;
 namespace HauntedShapes.Doors
 {
 		[RequireComponent(typeof(Animator))]
+		[DisallowMultipleComponent]
 		public class PickupDoor : MonoBehaviour
 		{
 				private Animator animator;

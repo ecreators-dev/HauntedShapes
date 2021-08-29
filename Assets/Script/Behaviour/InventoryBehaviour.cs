@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
+		[DisallowMultipleComponent]
 		public class InventoryBehaviour : MonoBehaviour
 		{
 				[Header("Slots")] 

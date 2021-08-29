@@ -1,10 +1,9 @@
-using Assets.Script.Components;
-
 using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(Rigidbody))]
+		[DisallowMultipleComponent]
 		public class FlashlightBehaviour : Equipment
 		{
 				[SerializeField] private ShopParameters shopInfo;

@@ -51,7 +51,20 @@ namespace Assets.Script.Components
 
 				public abstract void Interact(PlayerBehaviour sender);
 
+				/// <summary>
+				/// Not empty Method! Calls <see cref="PerformHuntUpdate"/>
+				/// </summary>
 				protected virtual void Update()
+				{
+						PerformHuntUpdate();
+				}
+
+				/// <summary>
+				/// Is called INSIDE Update.<br/>
+				/// Updates <see cref="IsHuntingActive"/> and <see cref="IsHuntingActiveChanged"/><br/>
+				/// to call <see cref="OnHuntStart"/> or <see cref="OnHuntStop"/>
+				/// </summary>
+				protected void PerformHuntUpdate()
 				{
 						IsHuntingActive = Beans.InHunt;
 						IsHuntingActiveChanged = IsHuntingActive != oldHuntingStatus;

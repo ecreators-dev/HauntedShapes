@@ -1,6 +1,5 @@
 using Assets.Script.Behaviour.GhostTypes;
 using Assets.Script.Components;
-using Assets.Script.Model;
 
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ using Debug = UnityEngine.Debug;
 
 namespace Assets.Script.Behaviour
 {
+		[DisallowMultipleComponent]
 		public class PlayerBehaviour : MonoBehaviour, IPlayerCam, IStepSoundProvider
 		{
 				public string playerFirstName;
