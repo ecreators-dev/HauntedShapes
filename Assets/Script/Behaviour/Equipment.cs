@@ -27,13 +27,19 @@ namespace Assets.Script.Behaviour
 				{
 						if (User is { } && User == owner)
 						{
-								OnInvectory();
+								OnInventory();
 						}
 				}
 
+				/// <summary>
+				/// AFTER the player equipped this item
+				/// </summary>
 				protected abstract void OnEquip();
 
-				protected abstract void OnInvectory();
+				/// <summary>
+				/// AFTER the player put this item into his owner inventory
+				/// </summary>
+				protected abstract void OnInventory();
 
 				protected virtual void SetBroken()
 				{

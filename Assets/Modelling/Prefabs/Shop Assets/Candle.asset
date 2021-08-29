@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc55734df04fe0846b7196660fe59a05, type: 3}
+  m_Name: Candle
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  displayName: Standard Kerze
+  description: "Eine gew\xF6hnliche Kerze"
+  cost: 10
+  sellPrice: 0
+  canBeSold: 0
+  isElectrial: 0
+  canToggleOff: 1
+  activeSeconds: 60
+  coolDownSeconds: 0
+  playerLevelMinimum: 0
+  dragImage: {fileID: 0}
+  shopImageSmall: {fileID: 0}
+  shopImageBig: {fileID: 0}
+  switchOnSound: {fileID: 0}
+  switchOffSound: {fileID: 0}
+  huntingSound: {fileID: 0}
+  switchOnAnimation: {fileID: 0}
+  switchOffAnimation: {fileID: 0}
+  huntAnimation: {fileID: 0}

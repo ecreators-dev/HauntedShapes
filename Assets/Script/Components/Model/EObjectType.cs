@@ -5,6 +5,7 @@
 				UNDEFINED,
 				DOOR,
 				CANDLE,
-				FLASHLIGHT
+				FLASHLIGHT,
+				DOTS_PRJECTOR
 		}
 }

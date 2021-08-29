@@ -13,9 +13,7 @@ GameObject:
   - component: {fileID: 4990787288825231759}
   - component: {fileID: 4990787288825231758}
   - component: {fileID: 4990787288825231745}
-  - component: {fileID: 4990787288825231744}
   - component: {fileID: 4990787288825231747}
-  - component: {fileID: 4990787288825231756}
   m_Layer: 0
   m_Name: Player (James)
   m_TagString: Player
@@ -61,7 +59,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4990787288825231748}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: affae0b5b0dbf364f80989a392d4cd8f, type: 3}
   m_Name: 
@@ -69,9 +67,10 @@ MonoBehaviour:
   cam: {fileID: 4990787288491400423}
   fieldOfView: 65
   bodyRenderer: {fileID: 8959309666353591383}
-  canMove: 0
-  moveSpeed: 70
-  runSpeed: 120
+  canMove: 1
+  moveSpeed: 2
+  runSpeed: 4
+  characterController: {fileID: 4990787288825231747}
   animator: {fileID: 1452484759308882724}
   crouchBooleanName: Crouch
   moveSpeedName: Speed
@@ -102,7 +101,7 @@ MonoBehaviour:
   equipmentHolder: {fileID: 1184993603169591873}
   pickupHolder: {fileID: 6312253848799297411}
   playerCam: {fileID: 4990787288491400423}
-  playerAudioSource3d: {fileID: 0}
+  playerAudioSource3d: {fileID: 4990787288825231745}
   silentHurtClipsRandom:
   - {fileID: 8300000, guid: 72b3582ec3c78a5489beede9d0c9a31c, type: 3}
   interactibleDoorMask:
@@ -120,7 +119,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 6c59786d449ac03459ee8eed40622c90, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -205,22 +204,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4990787288825231744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4990787288825231748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58dacd6dbd48e70438d5d611d3cf9379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeed: 5
-  canRun: 1
-  runSpeed: 9
-  runningKey: 304
 --- !u!143 &4990787288825231747
 CharacterController:
   m_ObjectHideFlags: 0
@@ -239,19 +222,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &4990787288825231756
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4990787288825231748}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.04032278, z: 0.5050987}
-  m_Center: {x: 0, y: -1.4606009, z: 0.071602926}
 --- !u!1001 &7203377874836103466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -305,7 +275,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3059128640496759502, guid: 837ca1b171ce25f42a749cf2b0b90f9e, type: 3}
       propertyPath: m_Name
-      value: Player (James)
+      value: Player (James).old2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8637843828998795790, guid: 837ca1b171ce25f42a749cf2b0b90f9e, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 837ca1b171ce25f42a749cf2b0b90f9e, type: 3}

@@ -980,7 +980,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 487
+  m_VersionIndex: 514
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6052,7 +6052,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 151
+  m_VersionIndex: 178
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6322,7 +6322,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc785ada3575bc41a6f7e324e5314dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  identifier: 2
+  locked: 0
   lightOnOff: {fileID: 3797876825636350234}
+  visualMesh: {fileID: 2060070780972683198}
+  visualCollider: {fileID: 4726864082374653376}
+  shopInfo: {fileID: 11400000, guid: 1967f8fe91259f04885afd5a83a4b08e, type: 2}
+  animator: {fileID: 6578682946963451622}
 --- !u!95 &6578682946963451622
 Animator:
   serializedVersion: 3
@@ -8468,7 +8474,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2953
+  m_VersionIndex: 2980
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

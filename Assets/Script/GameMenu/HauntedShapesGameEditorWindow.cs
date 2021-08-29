@@ -24,6 +24,7 @@ namespace Assets.Script.GameMenu
 				private bool interactiblesFoldout = true;
 				private Vector2 interactiblesScrollPositions;
 				private bool cameraListFoldoutStatus;
+				private bool inGameCameraFollow;
 
 				[MenuItem("Game/Haunted-Shapes Window ...")]
 				public static void Init()
@@ -146,16 +147,13 @@ namespace Assets.Script.GameMenu
 						}
 						if (GUILayout.Button("Zeige Kamera Sicht"))
 						{
-								SceneView sceneView = SceneView.lastActiveSceneView;
-								sceneView.ResetCameraSettings();
-								sceneView.camera.projectionMatrix = activeLinkedCamera.projectionMatrix;
-								sceneView.rotation = activeLinkedCamera.transform.rotation;
-								sceneView.pivot = activeLinkedCamera.transform.position;
-								sceneView.camera.CopyFrom(activeLinkedCamera);
-								Debug.Log("Scenen Kamera aktualisiert");
+								ShowActiveCamera(activeLinkedCamera);
 						}
 						GUI.enabled = true;
 
+						inGameCameraFollow = GUILayout.Toggle(inGameCameraFollow, "Zeige In-Game View in Szene");
+						EditorGUILayout.HelpBox("Wenn von Kamera aufgerufen, wird die Szenen Camera mit der Spielerkamera gekoppelt", MessageType.Info, true);
+						
 						//-- Local Functions -------------------------------------------
 
 						void ShowCameraWithCheckBox(Camera listItemCam, IEnumerable<Camera> allCameras)
@@ -196,6 +194,25 @@ namespace Assets.Script.GameMenu
 								}
 
 								EditorGUILayout.EndHorizontal();
+						}
+				}
+
+				private void ShowActiveCamera(Camera camera)
+				{
+						SceneView sceneView = SceneView.lastActiveSceneView;
+						sceneView.ResetCameraSettings();
+						sceneView.camera.projectionMatrix = camera.projectionMatrix;
+						sceneView.rotation = camera.transform.rotation;
+						sceneView.pivot = camera.transform.position;
+						sceneView.camera.CopyFrom(camera);
+						Debug.Log("Szenen Kamera aktualisiert");
+				}
+
+				public void UpdateSceneViewCamera(Camera camera)
+				{
+						if (inGameCameraFollow)
+						{
+								//ShowActiveCamera(camera);
 						}
 				}
 

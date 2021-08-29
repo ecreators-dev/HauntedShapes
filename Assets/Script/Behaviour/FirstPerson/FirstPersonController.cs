@@ -1,4 +1,5 @@
 ﻿using Assets.Script.Controller;
+using Assets.Script.GameMenu;
 using Assets.Script.InspectorAttibutes;
 
 using UnityEditor;
@@ -38,6 +39,8 @@ namespace Assets.Script.Behaviour.FirstPerson
 				private IInputControls controls;
 				private Vector3 oldMousePosition;
 				private bool useOldInputSystem;
+				private float targetSpeed;
+				private Vector3 playerVelocity;
 
 				private Transform Transform { get; set; }
 				private Rigidbody RigidBody { get; set; }
@@ -65,17 +68,14 @@ namespace Assets.Script.Behaviour.FirstPerson
 						HandleExitGameOrPlaymode();
 						HandleCameraView();
 						HandleCameraEditorStopOnButton();
-				}
 
-				private void FixedUpdate()
-				{
 						if (Input is null)
 								return;
 
 						if (stopMovementInputs || canMove is false)
 								return;
 
-						MoveFixedUpdate();
+						MoveUpdate();
 				}
 
 				private void HandleCameraEditorStopOnButton()
@@ -113,16 +113,45 @@ namespace Assets.Script.Behaviour.FirstPerson
 #endif
 				}
 
-				private void MoveFixedUpdate()
+				private void MoveUpdate()
 				{
+						if (characterController.isGrounded)
+						{
+								playerVelocity.y = 0;
+						}
+
 						// can be nagative!
-						float forwardWalk = Input.Vertical;
-						float targetSpeed = this.moveSpeed;
+						float vertical = Input.Vertical;
+						float horizontal = Input.Horizonal;
+						UpdateTargetSpeed();
+
+						Vector3 motion = new Vector2(horizontal, vertical);
+						characterController.Move(motion * Time.deltaTime * actualSpeed);
+						RigidBody.isKinematic = true;
+
+						if (motion.Equals(Vector3.zero) is false)
+						{
+								Transform.forward = motion;
+						}
+
+						playerVelocity.y += -9.81f * Time.deltaTime;
+						characterController.Move(playerVelocity * Time.deltaTime);
+
+#if UNITY_EDITOR && false
+						if (Application.isPlaying)
+						{
+								HauntedShapesGameEditorWindow existingWindow = EditorWindow.GetWindow<HauntedShapesGameEditorWindow>();
+								existingWindow.UpdateSceneViewCamera(this.cam);
+						}
+#endif
+				}
+
+				private void UpdateTargetSpeed()
+				{
+						targetSpeed = this.moveSpeed;
 
 						if (IsRunButtonPressed())
-						{
 								targetSpeed = runSpeed;
-						}
 
 						if (IsCrouchingButtonPressed())
 						{
@@ -137,21 +166,8 @@ namespace Assets.Script.Behaviour.FirstPerson
 								animator.SetBool(crouchBooleanName, false);
 						}
 
-						float sideWalk = Input.Horizonal;
-						if (forwardWalk != 0f && sideWalk != 0f)
-						{
-								actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime * 3);
-								actualSpeed = Mathf.Min(actualSpeed, runSpeed);
-						}
-						else
-						{
-								actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime * 8);
-						}
-
+						actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime);
 						animator.SetFloat(moveSpeedName, actualSpeed);
-
-						Vector3 motion = (Transform.right * sideWalk) + (Transform.forward * forwardWalk) * actualSpeed;
-						characterController.SimpleMove(motion);
 				}
 
 				private bool IsCrouchingButtonPressed()

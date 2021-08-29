@@ -974,7 +974,7 @@ namespace Assets.Script.Behaviour
 				{
 				}
 
-				protected override void OnInvectory()
+				protected override void OnInventory()
 				{
 				}
 

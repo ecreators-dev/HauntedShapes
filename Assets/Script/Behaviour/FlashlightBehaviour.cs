@@ -177,7 +177,7 @@ namespace Assets.Script.Behaviour
 						activeState = true;
 				}
 
-				protected override void OnInvectory()
+				protected override void OnInventory()
 				{
 						// hide
 						gameObject.SetActive(false);
