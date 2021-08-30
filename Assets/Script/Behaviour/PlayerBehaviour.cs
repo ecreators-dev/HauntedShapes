@@ -164,7 +164,10 @@ namespace Assets.Script.Behaviour
 				private void FindEquipmentInEquipmentHolder()
 				{
 						activeEquipment = equipmentHolder.GetComponentInChildren<Equipment>();
-						activeEquipment?.OnPlayer_EquippedToHand(this);
+						if (activeEquipment is { })
+						{
+								Equip(activeEquipment);
+						}
 				}
 
 				[CalledByEquipmentBehaviour]
@@ -401,7 +404,7 @@ namespace Assets.Script.Behaviour
 				public void Equip(Equipment item)
 				{
 						activeEquipment = item;
-						item.transform.SetParent(Transform, false);
+						item.transform.SetParent(equipmentHolder, false);
 						item.OnPlayer_ItemPickedUp(this);
 				}
 
