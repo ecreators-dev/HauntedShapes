@@ -13,7 +13,7 @@ namespace Assets.Script.Behaviour
 		[ExecuteAlways]
 		public class GhostRoom : MonoBehaviour
 		{
-				public static bool showOrbPositions = true;
+				public static bool showOrbPositions = false;
 
 				[SerializeField] private string roomName;
 				[SerializeField] private Color roomColor;

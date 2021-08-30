@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc55734df04fe0846b7196660fe59a05, type: 3}
   m_Name: DotsProjector
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8349849991034908803, guid: 2fd47a2808ca02a4f8db12420b36da2a, type: 3}
+  prefab: {fileID: 0}
   displayName: Spirit Seeker
   description: "Ein Punkt-Strahler, der Oberfl\xE4chen sichtbar macht"
   cost: 99

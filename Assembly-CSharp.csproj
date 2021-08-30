@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Assets\Script\Model\IPlayerCam.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
+    <Compile Include="Assets\Script\InspectorAttibutes\BeginGroupAttribute.cs" />
     <Compile Include="Assets\Script\Components\RitualArea.cs" />
     <Compile Include="Assets\Script\Behaviour\FadeUIElement.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupDoorRoot.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\PngXmpHelper.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostRoom.cs" />
     <Compile Include="Assets\Script\Behaviour\FlashlightBehaviour.cs" />
+    <Compile Include="Assets\Mini First Person Controller\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Script\Model\IAlphaFader.cs" />
     <Compile Include="Assets\Script\Components\DoorInteractible.cs" />
     <Compile Include="Assets\IInputControls.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Jump.cs" />
     <Compile Include="Assets\Script\Controller\ShopSingleton.cs" />
     <Compile Include="Assets\Script\Controller\VoiceRecognitionSingleton.cs" />
+    <Compile Include="Assets\Script\Behaviour\DotsProjectorEquipment.cs" />
     <Compile Include="Assets\Script\GameMenu\HauntedShapesGameEditorWindow.cs" />
     <Compile Include="Assets\Script\Components\Util\TributesCounter.cs" />
     <Compile Include="Assets\Script\Model\IMonoBehaviourExtensions.cs" />
@@ -127,6 +130,8 @@
     <Compile Include="Assets\Script\BaseCoroutinesYields\MoveLocalPositionToLocalPosition.cs" />
     <Compile Include="Assets\Script\Behaviour\Equipment.cs" />
     <Compile Include="Assets\Script\Model\ProgressValue.cs" />
+    <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyDependingOnBooleanAttribute.cs" />
+    <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\InputControlManagerSingleton.cs" />
     <Compile Include="Assets\Script\Behaviour\DictionaryExtensions.cs" />
     <Compile Include="Assets\Script\Behaviour\Door.cs" />
@@ -150,6 +155,7 @@
     <Compile Include="Assets\Script\Behaviour\RemainingCount.cs" />
     <Compile Include="Assets\Script\Components\Model\AnimationWithSound.cs" />
     <Compile Include="Assets\Script\Behaviour\CalledByEquipmentBehaviourAttribute.cs" />
+    <Compile Include="Assets\Script\Controller\AudioPlayInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\ObjectRayUtils.cs" />
     <Compile Include="Assets\Script\Controller\MouseCursorController.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\Panorama360.cs" />
@@ -166,12 +172,7 @@
     <Compile Include="Assets\Script\Model\IHeatUp.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Controller\AudioPlayInfo.cs" />
-    <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyDependingOnBooleanAttribute.cs" />
-    <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyAttribute.cs" />
-    <Compile Include="Assets\Script\InspectorAttibutes\BeginGroupAttribute.cs" />
-    <Compile Include="Assets\Mini First Person Controller\Scripts\PlayerMovement.cs" />
-    <Compile Include="Assets\Script\Behaviour\DotsProjectorEquipment.cs" />
+    <Compile Include="Assets\Script\Controller\CrosshairRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

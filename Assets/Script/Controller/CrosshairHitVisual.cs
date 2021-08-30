@@ -1,5 +1,8 @@
 using Assets.Script.Components;
+using Assets.Script.Controller;
 using Assets.Script.Model;
+
+using System;
 
 using TMPro;
 
@@ -16,6 +19,7 @@ namespace Assets.Script.Behaviour
 		[DisallowMultipleComponent]
 		public class CrosshairHitVisual : MonoBehaviour
 		{
+				[SerializeField] private CrosshairRoot root;
 				[SerializeField] private bool hoveredHit;
 				[SerializeField] private float hitDistance = 4;
 				[SerializeField] private float hitDistanceFar = 5;
@@ -23,8 +27,14 @@ namespace Assets.Script.Behaviour
 				[Range(0.0001f, 0.2f)]
 				[SerializeField] private float size = 0.02f;
 				[SerializeField] private TMP_Text targetTextUI;
+				[SerializeField] private TMP_Text tooFarTextUI;
 
 				private RawImage image;
+				private Color matchColor;
+				private bool clickableRange;
+				private Equipment hitEquipment;
+				private PickupItem hitItem;
+				private Interactible hitAny;
 
 				public void SetHitActive() => hoveredHit = true;
 				public void SetHitInactive() => hoveredHit = false;
@@ -40,23 +50,24 @@ namespace Assets.Script.Behaviour
 
 						// HOVER: show near items with hand visible! (c)
 						hoveredHit = false;
-						Equipment equipment = default;
-						PickupItem item = default;
-						Interactible any = default;
-						if (!Mouse.current.leftButton.isPressed)
-						{
-								HandleHover(camera, out equipment, out item, out any);
-						}
+						HandleHover(camera, out hitEquipment, out hitItem, out hitAny);
 
 						// CLICK:
-						if (Mouse.current.leftButton.isPressed)
+						if (IsInteractionPressed())
 						{
-								// a) clicked near (match)
-								// b) clicked far (hover) - hand with arraow up (shows one step further to pickup)
-								HandleClickedComponentInWorld(camera, equipment, item, any);
+								// show only when want to interact
+								tooFarTextUI.enabled = hoveredHit && !clickableRange;
 						}
 
 						image.enabled = hoveredHit;
+
+						//! Click Action is handled in Player Behaviour
+				}
+
+				private bool IsInteractionPressed()
+				{
+						return Mouse.current.leftButton.isPressed
+														|| this.InputControls().InteractionCrosshairPressed;
 				}
 
 				private void HandleHover(Transform camera, out Equipment equipment,
@@ -71,9 +82,13 @@ namespace Assets.Script.Behaviour
 								&& IsHit(out equipment, out item, out any, clickInRange);
 
 						targetTextUI.enabled = hoveredHit;
-						targetTextUI.text = hoveredHit ?  any.GetTargetName() : string.Empty;
+						if (hoveredHit)
+						{
+								targetTextUI.text = any.GetTargetName();
+								targetTextUI.color = matchColor;
+						}
 
-						static bool IsHit(out Equipment equipment,
+						bool IsHit(out Equipment equipment,
 								out PickupItem item,
 								out Interactible any,
 								RaycastHit clickInRange)
@@ -85,86 +100,66 @@ namespace Assets.Script.Behaviour
 										| IsPickupItemHit(clickInRange, out item)
 										| IsInteractibleHit(clickInRange, out any))
 								{
+										matchColor = root.GetColor(GetActionType(equipment, any));
 										match = true;
 								}
+								clickableRange = match && clickInRange.distance <= hitDistance;
 								return match;
 						}
 				}
 
-				/// <summary>
-				/// Called when MouseLeft down = pressed!
-				///
-				private void HandleClickedComponentInWorld(Transform camera,
-						Equipment equipment,
-						PickupItem item,
-						Interactible any)
+				private CrosshairRoot.ActionEnum GetActionType(Equipment equipment, Interactible any)
 				{
-						// out of range (hitDistanceFar), but in near reange AND clicked
-						// hovered and clicked in range:
-						if (hoveredHit)
+						if (any is { })
 						{
-								// current player who is playing the game active
-								var player = Camera.main.transform.GetComponentInParent<PlayerBehaviour>();
-								if (player != null)
+								if (any.IsLocked)
 								{
-										if (equipment is { })
+										return CrosshairRoot.ActionEnum.LOCKED;
+								}
+								else if (equipment is { })
+								{
+										if (equipment.IsBroken)
 										{
-												// for example: take a flashlight
-												player.Equip(equipment);
-										}
-										else if (item is { })
-										{
-												// for example: pick up a photo
-												player.PickUp(item);
-										}
-										else if (any is { })
-										{
-												// for example: open a door
-												player.InteractWith(any);
+												return CrosshairRoot.ActionEnum.BROKEN;
 										}
 								}
-								else
-								{
-										Debug.LogError($"No {nameof(PlayerBehaviour)} found in parent of camera.current");
-								}
+								return CrosshairRoot.ActionEnum.INTERACTIBLE;
 						}
-						// clicked and not hovered: check if in near range!
-						else if (Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickOutOfRange, hitDistanceFar, interactibleLayer))
-						{
-								if (IsEquimentHit(clickOutOfRange, out Equipment tool))
-								{
-										Debug.Log($"{tool.gameObject.name} clicked OUT OF RANGE, is Euipment");
-								}
-								else if (IsPickupItemHit(clickOutOfRange, out PickupItem pickup))
-								{
-										Debug.Log($"{pickup.gameObject.name} clicked  OUT OF RANGE, is PickupItem");
-								}
-								else if (IsInteractibleHit(clickOutOfRange, out Interactible interact))
-								{
-										Debug.Log($"{interact.gameObject.name} clicked  OUT OF RANGE, is Interactible");
-								}
-						}
+						return default;
 				}
 
-				private static bool IsInteractibleHit(RaycastHit clickOutOfRange, out Interactible interactible)
+				private bool IsInteractibleHit(RaycastHit clickOutOfRange, out Interactible interactible)
 				{
-						return IsTargetType(clickOutOfRange, out interactible);
+						bool result = IsTargetType(clickOutOfRange, out interactible);
+						hitAny = result ? interactible : default;
+						return result;
 				}
 
-				private static bool IsPickupItemHit(RaycastHit clickOutOfRange, out PickupItem item)
+				private bool IsPickupItemHit(RaycastHit clickOutOfRange, out PickupItem item)
 				{
-						return IsTargetType(clickOutOfRange, out item);
+						bool result = IsTargetType(clickOutOfRange, out item);
+						hitItem = result ? item : default;
+						return result;
 				}
 
-				private static bool IsEquimentHit(RaycastHit clickOutOfRange, out Equipment tool)
+				private bool IsEquimentHit(RaycastHit clickOutOfRange, out Equipment tool)
 				{
-						return IsTargetType(clickOutOfRange, out tool);
+						bool result = IsTargetType(clickOutOfRange, out tool);
+						hitEquipment = result ? tool : default;
+						return result;
 				}
 
 				private static bool IsTargetType<T>(RaycastHit clickInRange, out T target)
 						where T : Component
 				{
 						return clickInRange.collider.TryGetComponent(out target);
+				}
+
+				public bool TryGetObject(out bool inRange, out (Equipment equipment, PickupItem item, Interactible any) result)
+				{
+						result = (hitEquipment, hitItem, hitAny);
+						inRange = clickableRange;
+						return hoveredHit;
 				}
 		}
 }

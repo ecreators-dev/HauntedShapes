@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,13 +53,16 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Editor\WalkingSoundsEffectorInspectorEditor.cs" />
+    <Compile Include="Assets\Editor\EditorSnapToGroundInspectorWindow.cs" />
+    <Compile Include="Assets\Editor\InspectorAttributes\ReadOnlyAttributePropertyDrawer.cs" />
     <Compile Include="Assets\Editor\PostProcessingEditorHeatViewFX.cs" />
     <Compile Include="Assets\Editor\SnapToGroundEditor.cs" />
-    <Compile Include="Assets\Editor\EditorSnapToGroundInspectorWindow.cs" />
-    <Compile Include="Assets\Editor\InspectorAttributes\ReadOnlyDependingOnBooleanAttributeDrawer.cs" />
-    <Compile Include="Assets\Editor\InspectorAttributes\ReadOnlyAttributePropertyDrawer.cs" />
     <Compile Include="Assets\Editor\InspectorAttributes\BeginGroupAttributePropertyDrawer.cs" />
+    <Compile Include="Assets\Editor\InspectorAttributes\ReadOnlyDependingOnBooleanAttributeDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

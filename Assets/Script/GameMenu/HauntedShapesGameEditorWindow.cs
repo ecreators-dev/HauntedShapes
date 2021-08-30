@@ -200,11 +200,14 @@ namespace Assets.Script.GameMenu
 				private void ShowActiveCamera(Camera camera)
 				{
 						SceneView sceneView = SceneView.lastActiveSceneView;
-						sceneView.ResetCameraSettings();
+						//sceneView.ResetCameraSettings();
 						sceneView.camera.projectionMatrix = camera.projectionMatrix;
 						sceneView.rotation = camera.transform.rotation;
 						sceneView.pivot = camera.transform.position;
-						sceneView.camera.CopyFrom(camera);
+						var angles = sceneView.camera.transform.eulerAngles;
+						angles.z = 0;
+						sceneView.camera.transform.eulerAngles = angles;
+						//sceneView.camera.CopyFrom(camera);
 						Debug.Log("Szenen Kamera aktualisiert");
 				}
 

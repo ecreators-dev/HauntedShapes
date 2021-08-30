@@ -9,6 +9,7 @@ TagManager:
   - Getup Door Pass
   - Door
   - Room
+  - Ground Check
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - James Body
   - James Root
   - Interactible Object
-  - 
-  - 
+  - GroundCheck
+  - Player
   - 
   - 
   - 

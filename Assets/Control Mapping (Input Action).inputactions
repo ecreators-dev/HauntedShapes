@@ -60,6 +60,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Keyboard Interaction",
+                    "type": "Button",
+                    "id": "26318fdb-4333-4428-9192-00589aed46dc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -181,6 +189,17 @@
                     "processors": "",
                     "groups": "Classic;Debug",
                     "action": "EquipmentDrop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3bb9d89-12c3-4d97-b664-09fefb5baf38",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Classic",
+                    "action": "Keyboard Interaction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

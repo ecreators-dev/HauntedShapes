@@ -20,6 +20,8 @@ public interface IInputControls
 
 		bool IsEnabled { get; }
 
+		bool InteractionCrosshairPressed {  get; }
+
 		void Disable();
 		void Enable();
 }

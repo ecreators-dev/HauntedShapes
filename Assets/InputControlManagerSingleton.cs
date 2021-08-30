@@ -40,6 +40,8 @@ namespace Assets
 
 				public bool PlayerDropEquipment => inputActions.Player.EquipmentDrop.triggered;
 
+				public bool InteractionCrosshairPressed => inputActions.Player.KeyboardInteraction.triggered;
+
 				private void Awake()
 				{
 						if (Instance is null)
@@ -149,5 +151,6 @@ namespace Assets
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
 
+				public bool InteractionCrosshairPressed => inputActions.Player.KeyboardInteraction.triggered;
 		}
 }

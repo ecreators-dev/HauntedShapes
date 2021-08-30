@@ -41,6 +41,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				private bool useOldInputSystem;
 				private float targetSpeed;
 				private Vector3 playerVelocity;
+				private float oldX;
 
 				private Transform Transform { get; set; }
 				private Rigidbody RigidBody { get; set; }
@@ -76,6 +77,33 @@ namespace Assets.Script.Behaviour.FirstPerson
 								return;
 
 						MoveUpdate();
+				}
+
+				private void FixedUpdate()
+				{
+						float vertical = Input.Vertical;
+						float horizontal = Input.Horizonal;
+
+						Vector3 forwardMove = (Transform.forward * vertical) * actualSpeed;
+						var movement = forwardMove;
+
+						Vector3 sideMove = (Transform.right * horizontal) * actualSpeed;
+						movement += sideMove;
+						movement += Vector3.down * 9.81f;
+
+						characterController.Move(movement * Time.fixedDeltaTime);
+
+						//RigidBody.MovePosition(RigidBody.position + movement * Time.fixedDeltaTime);
+				}
+
+				private void OnCollisionEnter(Collision collision)
+				{
+						// immer, wenn falsch bewegt wird
+						if (oldX != 0f && Transform.position.x < oldX)
+						{
+								Debug.Log($"{Time.realtimeSinceStartup} - [Player][Collision]: {collision.collider.GetType().Name} = {collision.gameObject.name}");
+						}
+						oldX = Transform.position.x;
 				}
 
 				private void HandleCameraEditorStopOnButton()
@@ -125,9 +153,11 @@ namespace Assets.Script.Behaviour.FirstPerson
 						float horizontal = Input.Horizonal;
 						UpdateTargetSpeed();
 
-						Vector3 motion = new Vector2(horizontal, vertical);
+						return;
+
+						Vector3 motion = new Vector3(horizontal, 0, vertical);
 						characterController.Move(motion * Time.deltaTime * actualSpeed);
-						RigidBody.isKinematic = true;
+						//RigidBody.isKinematic = true;
 
 						if (motion.Equals(Vector3.zero) is false)
 						{
@@ -136,14 +166,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 						playerVelocity.y += -9.81f * Time.deltaTime;
 						characterController.Move(playerVelocity * Time.deltaTime);
-
-#if UNITY_EDITOR && false
-						if (Application.isPlaying)
-						{
-								HauntedShapesGameEditorWindow existingWindow = EditorWindow.GetWindow<HauntedShapesGameEditorWindow>();
-								existingWindow.UpdateSceneViewCamera(this.cam);
-						}
-#endif
 				}
 
 				private void UpdateTargetSpeed()

@@ -73,6 +73,14 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Keyboard Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""26318fdb-4333-4428-9192-00589aed46dc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -196,6 +204,17 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""action"": ""EquipmentDrop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3bb9d89-12c3-4d97-b664-09fefb5baf38"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Keyboard Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -244,6 +263,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         m_Player_EquipmentToggle = m_Player.FindAction("EquipmentToggle", throwIfNotFound: true);
         m_Player_EquipmentDrop = m_Player.FindAction("EquipmentDrop", throwIfNotFound: true);
         m_Player_HuntToggleDebug = m_Player.FindAction("HuntToggle (Debug)", throwIfNotFound: true);
+        m_Player_KeyboardInteraction = m_Player.FindAction("Keyboard Interaction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -300,6 +320,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_EquipmentToggle;
     private readonly InputAction m_Player_EquipmentDrop;
     private readonly InputAction m_Player_HuntToggleDebug;
+    private readonly InputAction m_Player_KeyboardInteraction;
     public struct PlayerActions
     {
         private @ControlMappingInputAction m_Wrapper;
@@ -311,6 +332,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         public InputAction @EquipmentToggle => m_Wrapper.m_Player_EquipmentToggle;
         public InputAction @EquipmentDrop => m_Wrapper.m_Player_EquipmentDrop;
         public InputAction @HuntToggleDebug => m_Wrapper.m_Player_HuntToggleDebug;
+        public InputAction @KeyboardInteraction => m_Wrapper.m_Player_KeyboardInteraction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -341,6 +363,9 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @HuntToggleDebug.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
                 @HuntToggleDebug.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
                 @HuntToggleDebug.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
+                @KeyboardInteraction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
+                @KeyboardInteraction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
+                @KeyboardInteraction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -366,6 +391,9 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @HuntToggleDebug.started += instance.OnHuntToggleDebug;
                 @HuntToggleDebug.performed += instance.OnHuntToggleDebug;
                 @HuntToggleDebug.canceled += instance.OnHuntToggleDebug;
+                @KeyboardInteraction.started += instance.OnKeyboardInteraction;
+                @KeyboardInteraction.performed += instance.OnKeyboardInteraction;
+                @KeyboardInteraction.canceled += instance.OnKeyboardInteraction;
             }
         }
     }
@@ -397,5 +425,6 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         void OnEquipmentToggle(InputAction.CallbackContext context);
         void OnEquipmentDrop(InputAction.CallbackContext context);
         void OnHuntToggleDebug(InputAction.CallbackContext context);
+        void OnKeyboardInteraction(InputAction.CallbackContext context);
     }
 }

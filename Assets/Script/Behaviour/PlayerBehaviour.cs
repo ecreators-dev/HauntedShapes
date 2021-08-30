@@ -42,6 +42,7 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private AudioClip[] silentHurtClipsRandom;
 				[SerializeField] private LayerMask interactibleDoorMask;
 				[SerializeField] private InventoryBehaviour inventory;
+				[SerializeField] private CrosshairHitVisual crosshair;
 
 				private float money = 0;
 				private Equipment activeEquipment;
@@ -188,7 +189,7 @@ namespace Assets.Script.Behaviour
 				private void Update()
 				{
 						HandleHuntToggleDebug();
-						HandleClickCrosshair();
+						HandleCrosshairClick();
 						HandleEquipmentToggleButton();
 						HandleEquipmentDropButton();
 				}
@@ -307,59 +308,68 @@ namespace Assets.Script.Behaviour
 						item.DropItem(this);
 				}
 
-				private void HandleClickCrosshair()
+				private void HandleCrosshairClick()
 				{
-						const float maxDistance = 2.25f; // war 2.25
-
-						InteractionEnum equipmentAction = ClickInteractible(maxDistance, out Equipment equipment);
-						HandleEquipmentInteraction(equipmentAction, equipment);
-
-						// prio for equipment picking
-						if (equipmentAction != InteractionEnum.CLICKED_ACTIVE)
+						if (crosshair.TryGetObject(out bool clickable, out var match))
 						{
-								InteractionEnum interactibleAction = ClickInteractible(maxDistance, out Interactible worldInteractible);
-								HandleInteractibleInteraction(interactibleAction, worldInteractible);
+								if (clickable && CheckInteractionCrosshair())
+								{
+										if (match.equipment is { })
+										{
+												HandleEquipment(match.equipment);
+										}
+										else if (match.item is { })
+										{
+												HandlePickupItem(match.item);
+										}
+										else if (match.any is { })
+										{
+												HandleInteractible(match.any);
+										}
+								}
 						}
-
-						return;
 				}
 
-				private void HandleEquipmentInteraction(InteractionEnum result, Equipment equipment)
+				private bool CheckInteractionCrosshair()
 				{
-						switch (result)
+						// mouse or keyboard
+						// (pickup to equip or pickup to take or interact with s.th. you cannot pickup)
+						return Mouse.current.leftButton.isPressed ||
+								this.InputControls().InteractionCrosshairPressed;
+				}
+
+				private void HandlePickupItem(PickupItem item)
+				{
+						if (item.IsTakenByPlayer is false)
 						{
-								case InteractionEnum.NONE:
-										break;
-								case InteractionEnum.HOVER_ACTIVE:
-										break;
-								case InteractionEnum.CLICKED_ACTIVE:
+								PickUp(item);
+						}
+						else
+						{
+								HandleInteractible(item);
+						}
+				}
+
+				private void HandleEquipment(Equipment equipment)
+				{
+						if (equipment.CanInteract(this))
+						{
+								if (equipment.IsTakenByPlayer is false)
+								{
 										Equip(equipment);
-										break;
-								case InteractionEnum.CLICKED_TOO_FAR:
-										break;
-								case InteractionEnum.HOVER_TOO_FAR:
-										break;
-								default:
-										break;
+								}
+								else
+								{
+										HandleInteractible(equipment);
+								}
 						}
 				}
 
-				private void HandleInteractibleInteraction(InteractionEnum result, Interactible worldInteractible)
+				private void HandleInteractible(Interactible any)
 				{
-						switch (result)
+						if (any.CanInteract(this))
 						{
-								case InteractionEnum.NONE:
-										break;
-								case InteractionEnum.HOVER_ACTIVE:
-										break;
-								case InteractionEnum.CLICKED_ACTIVE:
-										break;
-								case InteractionEnum.CLICKED_TOO_FAR:
-										break;
-								case InteractionEnum.HOVER_TOO_FAR:
-										break;
-								default:
-										throw new MissingSwitchCaseException(result);
+								any.Interact(this);
 						}
 				}
 
@@ -475,7 +485,7 @@ namespace Assets.Script.Behaviour
 						{
 								// important! let fall
 								activeEquipment.DropItem(this);
-								
+
 								// important! unset reference
 								activeEquipment = null;
 						}
