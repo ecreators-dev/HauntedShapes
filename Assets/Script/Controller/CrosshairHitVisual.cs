@@ -53,6 +53,7 @@ namespace Assets.Script.Behaviour
 						HandleHover(camera, out hitEquipment, out hitItem, out hitAny);
 
 						// CLICK:
+						tooFarTextUI.enabled = false;
 						if (IsInteractionPressed())
 						{
 								// show only when want to interact
