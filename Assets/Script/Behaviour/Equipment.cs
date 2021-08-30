@@ -1,5 +1,7 @@
 ﻿using UnityEditor;
 
+using UnityEngine;
+
 namespace Assets.Script.Behaviour
 {
 		/// <summary>
@@ -93,10 +95,26 @@ namespace Assets.Script.Behaviour
 				{
 						this.ShopInfo = shopInfo;
 						shopInfo.SetPrefab(prefab);
-
-						string assetPath = AssetDatabase.GetAssetPath(shopInfo.GetInstanceID());
-						string assetGuid = AssetDatabase.AssetPathToGUID(assetPath);
 				}
+
+#if UNITY_EDITOR
+				[ContextMenu("Toggle ON (EDIT-MODE only )")]
+				public void EditorToggleOn()
+				{
+						OnEditMode_ToggleOn();
+				}
+
+
+				[ContextMenu("Toggle OFF (EDIT-MODE only )")]
+				public void EditorToggleOff()
+				{
+						OnEditMode_ToggleOff();
+				}
+#endif
+
+				protected abstract void OnEditMode_ToggleOn();
+
+				protected abstract void OnEditMode_ToggleOff();
 
 				public override string GetTargetName()
 				{

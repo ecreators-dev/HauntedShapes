@@ -40,7 +40,7 @@ namespace HauntedShapes.Doors
 						open = false;
 						animator.ResetTrigger(getupName);
 						animator.ResetTrigger(openName);
-						animator.Play("idle", -1, 0f);
+						animator.Play("idle", 0, 0f);
 				}
 
 				private void SetDoorCooliderEnabled(bool enabled)

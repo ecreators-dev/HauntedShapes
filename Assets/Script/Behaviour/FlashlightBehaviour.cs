@@ -9,8 +9,7 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private ShopParameters shopInfo;
 				[SerializeField] private Animator animator;
 
-				private bool canToggleActiveState = false;
-				private bool pickedUp = false;
+				private bool canToggleActiveState = true;
 				private bool activeStateBeforeHunt;
 				private bool activeState;
 				private bool? currentState = null;
@@ -18,9 +17,8 @@ namespace Assets.Script.Behaviour
 				private float breakCoolDownSeconds;
 
 				private Transform Transform { get; set; }
-				private Rigidbody RigidBody { get; set; }
 
-				private bool IsHeldByPlayer(out PlayerBehaviour p) => this.TryGetComponentAllParent(out p);
+				private Rigidbody RigidBody { get; set; }
 
 				private void Awake()
 				{
@@ -30,21 +28,15 @@ namespace Assets.Script.Behaviour
 
 				private void Start()
 				{
-						SeupShopInfo();
-				}
-
-				private void SeupShopInfo()
-				{
 						if (ShopInfo != null)
-						{
 								shopInfo = ShopInfo;
-						}
-						base.SetShopInfo(shopInfo, this);
+						
+						SetShopInfo(shopInfo, this);
 				}
 
 				protected override void Update()
 				{
-						if (IsHuntingActive || pickedUp == false)
+						if (IsHuntingActive || IsTakenByPlayer is false)
 						{
 								return;
 						}
@@ -134,38 +126,15 @@ namespace Assets.Script.Behaviour
 
 				public override void Interact(PlayerBehaviour sender)
 				{
-						if (IsHeldByPlayer(out _))
+						if (canToggleActiveState)
 						{
-								if (canToggleActiveState)
-								{
-										ToggleOnOff();
-								}
-						}
-						else if (sender.TryGetComponent(out PlayerBehaviour p))
-						{
-								PickUp(p);
+								ToggleOnOff();
 						}
 				}
 
 				private void ToggleOnOff()
 				{
 						activeState = !activeState;
-				}
-
-				private void PickUp(PlayerBehaviour senderIgnored)
-				{
-						if (User == null)
-						{
-
-						}
-
-						/// Remarks:
-						// Only the player script animates if required, when pickup, because
-						// only the player script knows the euipmentholder position and more ...
-
-						pickedUp = true;
-						canToggleActiveState = true;
-						RigidBody.isKinematic = true;
 				}
 
 				protected override void OnEquip()
@@ -224,5 +193,13 @@ namespace Assets.Script.Behaviour
 				{
 						// nothing
 				}
+
+				private void ToggleOn() => activeState = true;
+
+				private void ToggleOff() => activeState = false;
+
+				protected override void OnEditMode_ToggleOn() => ToggleOn();
+
+				protected override void OnEditMode_ToggleOff() => ToggleOff();
 		}
 }

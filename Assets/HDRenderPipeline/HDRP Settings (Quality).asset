@@ -115,7 +115,7 @@ MonoBehaviour:
       atlasResolution: 128
       atlasOctahedralDepthResolution: 2048
     lightLoopSettings:
-      cookieAtlasSize: 1024
+      cookieAtlasSize: 4096
       cookieFormat: 48
       cookieAtlasLastValidMip: 1
       cookieTexArraySize: 1

@@ -20,7 +20,7 @@ namespace Assets.Script.Behaviour
 		public class CrosshairHitVisual : MonoBehaviour
 		{
 				[SerializeField] private CrosshairRoot root;
-				[SerializeField] private bool hoveredHit;
+				[SerializeField] private bool hovered;
 				[SerializeField] private float hitDistance = 4;
 				[SerializeField] private float hitDistanceFar = 5;
 				[SerializeField] private LayerMask interactibleLayer;
@@ -36,8 +36,8 @@ namespace Assets.Script.Behaviour
 				private PickupItem hitItem;
 				private Interactible hitAny;
 
-				public void SetHitActive() => hoveredHit = true;
-				public void SetHitInactive() => hoveredHit = false;
+				public void SetHitActive() => hovered = true;
+				public void SetHitInactive() => hovered = false;
 
 				private void Awake()
 				{
@@ -49,18 +49,18 @@ namespace Assets.Script.Behaviour
 						Transform camera = Camera.main.transform;
 
 						// HOVER: show near items with hand visible! (c)
-						hoveredHit = false;
-						HandleHover(camera, out hitEquipment, out hitItem, out hitAny);
+						hovered = false;
+						HandleHover(camera);
 
 						// CLICK:
 						tooFarTextUI.enabled = false;
 						if (IsInteractionPressed())
 						{
 								// show only when want to interact
-								tooFarTextUI.enabled = hoveredHit && !clickableRange;
+								tooFarTextUI.enabled = hovered && !clickableRange;
 						}
 
-						image.enabled = hoveredHit;
+						image.enabled = hovered;
 
 						//! Click Action is handled in Player Behaviour
 				}
@@ -71,41 +71,29 @@ namespace Assets.Script.Behaviour
 														|| this.InputControls().InteractionCrosshairPressed;
 				}
 
-				private void HandleHover(Transform camera, out Equipment equipment,
-						out PickupItem item, out Interactible any)
+				private void HandleHover(Transform camera)
 				{
-						equipment = default;
-						item = default;
-						any = default;
+						hitEquipment = default;
+						hitItem = default;
+						hitAny = default;
 
 						// condition! 1st: match any, 2nd: match only types
-						hoveredHit = Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickInRange, hitDistance, interactibleLayer)
-								&& IsHit(out equipment, out item, out any, clickInRange);
+						hovered =
+								Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickInRange, hitDistance, interactibleLayer)
+								&& (IsEquimentHit(clickInRange, out hitEquipment)
+										| IsPickupItemHit(clickInRange, out hitItem)
+										| IsInteractibleHit(clickInRange, out hitAny));
 
-						targetTextUI.enabled = hoveredHit;
-						if (hoveredHit)
+						clickableRange = hovered && clickInRange.distance <= hitDistance;
+						matchColor = root.GetColor(GetActionType(hitEquipment, hitAny));
+						targetTextUI.enabled = hovered;
+						tooFarTextUI.enabled = false;
+
+						if (hovered)
 						{
-								targetTextUI.text = any.GetTargetName();
+								targetTextUI.text = hitAny.GetTargetName();
 								targetTextUI.color = matchColor;
-						}
-
-						bool IsHit(out Equipment equipment,
-								out PickupItem item,
-								out Interactible any,
-								RaycastHit clickInRange)
-						{
-								bool match = false;
-
-								// hover only if not in hand!
-								if (IsEquimentHit(clickInRange, out equipment)
-										| IsPickupItemHit(clickInRange, out item)
-										| IsInteractibleHit(clickInRange, out any))
-								{
-										matchColor = root.GetColor(GetActionType(equipment, any));
-										match = true;
-								}
-								clickableRange = match && clickInRange.distance <= hitDistance;
-								return match;
+								tooFarTextUI.enabled = clickInRange.distance <= hitDistance;
 						}
 				}
 
@@ -131,23 +119,17 @@ namespace Assets.Script.Behaviour
 
 				private bool IsInteractibleHit(RaycastHit clickOutOfRange, out Interactible interactible)
 				{
-						bool result = IsTargetType(clickOutOfRange, out interactible);
-						hitAny = result ? interactible : default;
-						return result;
+						return IsTargetType(clickOutOfRange, out interactible);
 				}
 
 				private bool IsPickupItemHit(RaycastHit clickOutOfRange, out PickupItem item)
 				{
-						bool result = IsTargetType(clickOutOfRange, out item);
-						hitItem = result ? item : default;
-						return result;
+						return IsTargetType(clickOutOfRange, out item);
 				}
 
 				private bool IsEquimentHit(RaycastHit clickOutOfRange, out Equipment tool)
 				{
-						bool result = IsTargetType(clickOutOfRange, out tool);
-						hitEquipment = result ? tool : default;
-						return result;
+						return IsTargetType(clickOutOfRange, out tool);
 				}
 
 				private static bool IsTargetType<T>(RaycastHit clickInRange, out T target)
@@ -160,7 +142,7 @@ namespace Assets.Script.Behaviour
 				{
 						result = (hitEquipment, hitItem, hitAny);
 						inRange = clickableRange;
-						return hoveredHit;
+						return hovered;
 				}
 		}
 }

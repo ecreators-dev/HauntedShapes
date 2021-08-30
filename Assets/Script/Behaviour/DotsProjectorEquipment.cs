@@ -4,15 +4,23 @@ using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
+		[RequireComponent(typeof(Light))]
 		public class DotsProjectorEquipment : Equipment
 		{
 				[SerializeField] private MeshRenderer meshRenderer;
 				[SerializeField] private Rigidbody RigidBody;
 				[SerializeField] private ShopParameters shopInfo;
 
+				private Light Light { get; set; }
+
+				private void Awake()
+				{
+						Light = GetComponent<Light>();
+				}
+
 				private void Start()
 				{
-						SetShopInfo(shopInfo, this);		
+						SetShopInfo(shopInfo, this);
 				}
 
 				public override bool CanInteract(PlayerBehaviour sender)
@@ -81,5 +89,13 @@ namespace Assets.Script.Behaviour
 						EnableFalling();
 						MakeVisible();
 				}
+
+				protected override void OnEditMode_ToggleOn() => this.ToggleOn();
+
+				protected override void OnEditMode_ToggleOff() => ToggleOff();
+
+				private void ToggleOn() => Light.enabled = true;
+
+				private void ToggleOff() => Light.enabled = false;
 		}
 }

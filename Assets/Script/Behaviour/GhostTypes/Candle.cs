@@ -125,5 +125,9 @@ namespace Assets.Script.Behaviour.GhostTypes
 				{
 						// stays on / off
 				}
+
+				protected override void OnEditMode_ToggleOn() => ToggleOn();
+
+				protected override void OnEditMode_ToggleOff() => ToggleOff();
 		}
 }

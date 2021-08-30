@@ -223,30 +223,27 @@ namespace Assets.Script.Behaviour
 
 				private void HandleEquipmentToggleButton()
 				{
-						IInputControls keyboardKeys = this.InputControls();
-						Equipment equipment = activeEquipment;
-						if (equipment is null)
+						if (activeEquipment is null)
 						{
 								// no equipment - everything is fine
 								return;
 						}
 
 						// try to toggle on/off held equipment
-						if (keyboardKeys.PlayerToggleEquipmentOnOff)
+						if (this.InputControls().PlayerToggleEquipmentOnOff)
 						{
 								if (toggleTimeout <= 0 && toggle is false)
 								{
 										// 30 ms wait
 										toggleTimeout = 30 / 1000f;
 
-										if (equipment is { })
+										if (activeEquipment is { })
 										{
-												Debug.Log($"Triggered by Keyboard Hotkey: {nameof(keyboardKeys.PlayerToggleEquipmentOnOff)}");
-												DoInteractWithEquipment();
+												InteractWithEquipment();
 										}
 										else
 										{
-												Debug.LogWarning("No item in hand!");
+												Debug.Log("No item in hand!");
 										}
 										toggle = true;
 								}
@@ -262,31 +259,12 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				public void InteractWith(Interactible any)
-				{
-						if (any.CanInteract(this))
-						{
-								any.Interact(this);
-								Debug.Log($"Item interaction: {any.gameObject.name}");
-						}
-						else
-						{
-								Debug.LogWarning($"Cannot interact with item: {any.gameObject.name}. Already Used!");
-						}
-				}
-
-				public void PickUp(PickupItem item)
+				private void PickUp(PickupItem item)
 				{
 						// Handle: is already in hand of any player?
-						if (item.CanInteract(this))
-						{
-								OnPickUp_HandleActivePickupItem(item);
-								Debug.Log($"Item pickup: {item.gameObject.name}");
-						}
-						else
-						{
-								Debug.LogWarning($"Cannot pickup item: {item.gameObject.name}. Already pickup!");
-						}
+						item.transform.SetParent(pickupHolder, true);
+						OnPickUp_HandleActivePickupItem(item);
+						Debug.Log($"Item pickup: {item.gameObject.name}");
 				}
 
 				private void OnPickUp_HandleActivePickupItem(Interactible item)
@@ -310,27 +288,42 @@ namespace Assets.Script.Behaviour
 
 				private void HandleCrosshairClick()
 				{
-						if (crosshair.TryGetObject(out bool clickable, out var match))
+						// an (any) interactible must be in interactible layer mask
+						// to be clickable with name
+						if (crosshair.TryGetObject(out bool inClickRange, out var match)
+								&& inClickRange
+								&& CheckInteractButtonIsPressed()
+								&& match.any.IsUnlocked)
 						{
-								if (clickable && CheckInteractionCrosshair())
+								// equipment is an pickupitem
+								// pickupitem is an interactible
+
+								// interactible can be Interact
+								// pickupitem can be Interact and PickUp, but not set to inventory
+								// equipment can be Interact and PickUp and set to inventory
+
+								if (match.equipment is { })
 								{
-										if (match.equipment is { })
+										if (match.item.IsTakenByPlayer is false)
 										{
 												HandleEquipment(match.equipment);
 										}
-										else if (match.item is { })
+								}
+								else if (match.item is { })
+								{
+										if (match.item.IsTakenByPlayer is false)
 										{
 												HandlePickupItem(match.item);
 										}
-										else if (match.any is { })
-										{
-												HandleInteractible(match.any);
-										}
+								}
+								else if (match.any is { })
+								{
+										HandleInteractible(match.any);
 								}
 						}
 				}
 
-				private bool CheckInteractionCrosshair()
+				private bool CheckInteractButtonIsPressed()
 				{
 						// mouse or keyboard
 						// (pickup to equip or pickup to take or interact with s.th. you cannot pickup)
@@ -367,80 +360,13 @@ namespace Assets.Script.Behaviour
 
 				private void HandleInteractible(Interactible any)
 				{
+						// TODO inside Interact! No check from outside behaviour!
 						if (any.CanInteract(this))
 						{
+								// for example: a door is opened or closed
+								// a flashlight is toggled on or off
+								// an item is switched on or off or nothing
 								any.Interact(this);
-						}
-				}
-
-				private InteractionEnum ClickInteractible<T>(float maxDistance, out T instance)
-						where T : Interactible
-				{
-						mouseDown = Mouse.current.leftButton.isPressed;
-						if (mouseDown)
-						{
-								float nearByDistance = maxDistance + maxDistance * 0.5f;
-								if (CrosshairShoot(transform.position, maxDistance, out var inRangeHit, out Vector3 target))
-								{
-										if (inRangeHit.collider is { } && inRangeHit.collider.GetComponent<T>() is Component you)
-										{
-												Debug.Log($"Clicked Object: {you.gameObject.name} - IN RANGE: {inRangeHit.distance} m");
-												instance = you is T t ? t : default;
-												return InteractionEnum.CLICKED_ACTIVE;
-										}
-								}
-								else if (CrosshairShoot(transform.position, nearByDistance, out inRangeHit, out target))
-								{
-										if (inRangeHit.collider is { } && inRangeHit.collider.GetComponent<T>() is Component you)
-										{
-												Debug.Log($"Clicked Object: {you.gameObject.name} - TOO FAR: {inRangeHit.distance} m");
-												instance = you is T t ? t : default;
-												return InteractionEnum.CLICKED_ACTIVE;
-										}
-								}
-						}
-						else if (CrosshairShoot(transform.position, maxDistance, out var inRangeHit, out var target))
-						{
-								if (inRangeHit.collider is { } && inRangeHit.collider.GetComponent<T>() is Component you)
-								{
-										Debug.Log("Not clickable Object: " + you.gameObject.name);
-										instance = you is T t ? t : default;
-										return InteractionEnum.CLICKED_TOO_FAR;
-								}
-						}
-
-						instance = default;
-						return InteractionEnum.NONE;
-
-						bool CrosshairShoot(Vector3 toolPosition, float dist, out RaycastHit hit, out Vector3 aimPoint)
-						{
-								// Unless you've mucked with the projection matrix, firing through
-								// the center of the screen is the same as firing from the camera itself.
-								var camera = Camera.main.transform;
-								Ray crosshair = new Ray(camera.position, camera.forward);
-
-								// Cast a ray forward from the camera to see what's 
-								// under the crosshair from the player's point of view.
-								if (Physics.Raycast(crosshair, out hit, dist))
-								{
-										aimPoint = hit.point;
-								}
-								else
-								{
-										aimPoint = crosshair.origin + crosshair.direction * dist;
-								}
-
-								// Now we know what to aim at, do a second ray cast from the tool.
-								Ray beam = new Ray(toolPosition, aimPoint - toolPosition);
-
-								// If we don't hit anything, just go straight to the aim point.
-								if (!Physics.Raycast(beam, out hit, dist))
-								{
-										return false;
-								}
-
-								// Otherwise, stop at whatever we hit on the way.
-								return false;
 						}
 				}
 
@@ -476,6 +402,7 @@ namespace Assets.Script.Behaviour
 				{
 						activeEquipment = item;
 						item.transform.SetParent(Transform, false);
+						item.OnPlayer_ItemPickedUp(this);
 				}
 
 				[ContextMenu("Drop equipped item")]
@@ -483,6 +410,8 @@ namespace Assets.Script.Behaviour
 				{
 						if (activeEquipment is { })
 						{
+								Debug.Log($"Drop: {activeEquipment.GetTargetName()}");
+
 								// important! let fall
 								activeEquipment.DropItem(this);
 
@@ -491,46 +420,18 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void OnUselessEquipment(Equipment obj)
-				{
-						if (obj == activeEquipment)
-						{
-								if (silentHurtClipsRandom.Length > 0)
-								{
-										AudioClip clip = silentHurtClipsRandom[UnityEngine.Random.Range(0, silentHurtClipsRandom.Length)];
-										if (clip is { } && clip.length > 0)
-										{
-												PlayOnceFromPosition(clip);
-										}
-								}
-						}
-				}
-
-				private void PlayOnceFromPosition(AudioClip clip)
-				{
-						if (playerAudioSource3d is { })
-						{
-								playerAudioSource3d.spatialBlend = 1;
-								playerAudioSource3d.PlayOneShot(clip);
-								Debug.LogWarning("Play Audio Clip");
-						}
-						else
-						{
-								Debug.LogWarning("Missing AudioSource");
-						}
-				}
-
 				[ContextMenu("Toggle On | Off")]
-				public void DoInteractWithEquipment()
+				public void InteractWithEquipment()
 				{
 						Interactible equipment = activeEquipment;
 						if (equipment is null)
 						{
 								Debug.Log("There's no equipment recognized. Nothing to interact.");
-								return;
 						}
-
-						equipment.Interact(this);
+						else
+						{
+								equipment.Interact(this);
+						}
 				}
 
 				public void Die()

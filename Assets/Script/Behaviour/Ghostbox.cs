@@ -1010,5 +1010,13 @@ namespace Assets.Script.Behaviour
 				{
 						// nothing yet
 				}
+				
+				private void ToggleOn() => isActivated = true;
+
+				private void ToggleOff() => isActivated = false;
+
+				protected override void OnEditMode_ToggleOn() => ToggleOn();
+
+				protected override void OnEditMode_ToggleOff() => ToggleOff();
 		}
 }

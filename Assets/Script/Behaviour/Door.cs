@@ -155,8 +155,8 @@ namespace Assets.Script.Behaviour
 				private void UpdateAngle()
 				{
 						// no collision!
-						Vector3 eulerAngles = Transform.eulerAngles;
-						Transform.eulerAngles = Vector3.Lerp(eulerAngles,
+						Vector3 eulerAngles = Transform.localEulerAngles;
+						Transform.localEulerAngles = Vector3.Lerp(eulerAngles,
 								new Vector3(eulerAngles.x, toAngle, eulerAngles.z),
 								Time.deltaTime * Mathf.Abs(openSpeed));
 				}

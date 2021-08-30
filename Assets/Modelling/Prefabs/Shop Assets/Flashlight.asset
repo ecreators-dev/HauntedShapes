@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
   displayName: Einfache Taschenlampe
-  description: 
+  description: Eine Taschenlampe um 15m weit zu leuchten
   cost: 10
   sellPrice: 0
   canBeSold: 0

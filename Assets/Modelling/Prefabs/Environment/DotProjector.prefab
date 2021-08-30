@@ -18,8 +18,8 @@ GameObject:
   - component: {fileID: 8349849991034908803}
   m_Layer: 12
   m_Name: DotProjector
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_TagString: Equipment
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
