@@ -50,7 +50,7 @@ namespace Assets.Script.Behaviour
 
 						// HOVER: show near items with hand visible! (c)
 						hovered = false;
-						HandleHover(camera);
+						UpdateHoveredTarget(camera);
 
 						// CLICK:
 						tooFarTextUI.enabled = false;
@@ -71,7 +71,7 @@ namespace Assets.Script.Behaviour
 														|| this.InputControls().InteractionCrosshairPressed;
 				}
 
-				private void HandleHover(Transform camera)
+				private void UpdateHoveredTarget(Transform camera)
 				{
 						hitEquipment = default;
 						hitItem = default;
@@ -91,7 +91,7 @@ namespace Assets.Script.Behaviour
 
 						if (hovered)
 						{
-								targetTextUI.text = hitAny.GetTargetName();
+								targetTextUI.text = $"{hitAny.GetTargetName()} in {clickInRange.distance:0}m";
 								targetTextUI.color = matchColor;
 								tooFarTextUI.enabled = clickInRange.distance <= hitDistance;
 						}
