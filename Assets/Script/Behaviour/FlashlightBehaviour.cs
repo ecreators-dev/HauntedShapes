@@ -1,13 +1,19 @@
+using Assets.Script.Behaviour.FirstPerson;
+
+using System;
+
 using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(Rigidbody))]
 		[DisallowMultipleComponent]
-		public class FlashlightBehaviour : Equipment
+		public class FlashlightBehaviour : Equipment, ILightSource
 		{
 				[SerializeField] private ShopParameters shopInfo;
 				[SerializeField] private Animator animator;
+				[Min(1)]
+				[SerializeField] private float activeMultiplier = 2;
 
 				private bool canToggleActiveState = true;
 				private bool activeStateBeforeHunt;
@@ -20,6 +26,10 @@ namespace Assets.Script.Behaviour
 
 				private Rigidbody RigidBody { get; set; }
 
+				public bool IsActive => activeState;
+
+				public float ActiveMultiplier => activeMultiplier;
+
 				private void Awake()
 				{
 						Transform = transform;
@@ -30,7 +40,7 @@ namespace Assets.Script.Behaviour
 				{
 						if (ShopInfo != null)
 								shopInfo = ShopInfo;
-						
+
 						SetShopInfo(shopInfo, this);
 				}
 
@@ -40,6 +50,9 @@ namespace Assets.Script.Behaviour
 						{
 								return;
 						}
+
+						// look at hittarget or zero
+						UpdatePointToTarget();
 
 						if (activeState)
 						{
@@ -91,6 +104,19 @@ namespace Assets.Script.Behaviour
 
 								// start only once! "currentState"
 								currentState = activeState;
+						}
+				}
+
+				private void UpdatePointToTarget()
+				{
+						ICrosshairUI instance = CrosshairHitVisual.Instance;
+						(bool actualHit, Vector3 point) = instance.UpdateHitPointFarAway(CameraMoveType.Instance.GetCamera());
+						if (actualHit)
+						{
+								Vector3 targetDir = point - Transform.position;
+								Transform.rotation = Quaternion
+										.Slerp(Transform.rotation, Quaternion.LookRotation(targetDir, Transform.up),
+										 Time.deltaTime * 10);
 						}
 				}
 

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -52,9 +52,6 @@
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\Model\IPlayerCam.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
@@ -176,6 +173,12 @@
     <Compile Include="Assets\Script\Model\IHeatUp.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
+    <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\LookAtTargetDynamic.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\ICrosshairUI.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraMoveType.cs" />
+    <Compile Include="Assets\Script\Behaviour\LightInteractor.cs" />
+    <Compile Include="Assets\Script\Behaviour\ILightSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

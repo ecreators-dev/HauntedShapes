@@ -22,6 +22,14 @@ public interface IInputControls
 
 		bool InteractionCrosshairPressed {  get; }
 
+		bool CrouchButtonPressed { get; }
+
+		/// <summary>
+		/// Special settings to input controller for run
+		/// 
+		/// </summary>
+		bool RunButtonPressedOrHold { get; }
+
 		void Disable();
 		void Enable();
 }

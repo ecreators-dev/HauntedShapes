@@ -5,6 +5,7 @@ namespace Assets.Script.Model
 		public interface IGameController
 		{
 				IAudioFader AudioFader { get; }
+				bool IsCameraRotateStop { get; }
 
 				void HideBlackscreen();
 				void ShowBlackscreen();

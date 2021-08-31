@@ -81,6 +81,22 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""e4c16749-fb27-453d-bef8-4a525af621aa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""182c65d0-73b1-47c1-9851-aff4ae1a8010"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.001)""
                 }
             ],
             ""bindings"": [
@@ -215,6 +231,28 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""action"": ""Keyboard Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac83b9a2-b318-4aa3-8c97-54e560c7fae6"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aeef0dbc-bd60-4823-94ae-f130a5a2bc7c"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -264,6 +302,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         m_Player_EquipmentDrop = m_Player.FindAction("EquipmentDrop", throwIfNotFound: true);
         m_Player_HuntToggleDebug = m_Player.FindAction("HuntToggle (Debug)", throwIfNotFound: true);
         m_Player_KeyboardInteraction = m_Player.FindAction("Keyboard Interaction", throwIfNotFound: true);
+        m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -321,6 +361,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_EquipmentDrop;
     private readonly InputAction m_Player_HuntToggleDebug;
     private readonly InputAction m_Player_KeyboardInteraction;
+    private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_Run;
     public struct PlayerActions
     {
         private @ControlMappingInputAction m_Wrapper;
@@ -333,6 +375,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         public InputAction @EquipmentDrop => m_Wrapper.m_Player_EquipmentDrop;
         public InputAction @HuntToggleDebug => m_Wrapper.m_Player_HuntToggleDebug;
         public InputAction @KeyboardInteraction => m_Wrapper.m_Player_KeyboardInteraction;
+        public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -366,6 +410,12 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @KeyboardInteraction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
                 @KeyboardInteraction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
                 @KeyboardInteraction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
+                @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Run.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @Run.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @Run.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -394,6 +444,12 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @KeyboardInteraction.started += instance.OnKeyboardInteraction;
                 @KeyboardInteraction.performed += instance.OnKeyboardInteraction;
                 @KeyboardInteraction.canceled += instance.OnKeyboardInteraction;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
             }
         }
     }
@@ -426,5 +482,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         void OnEquipmentDrop(InputAction.CallbackContext context);
         void OnHuntToggleDebug(InputAction.CallbackContext context);
         void OnKeyboardInteraction(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
 }

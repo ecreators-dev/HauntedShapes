@@ -50,12 +50,22 @@ namespace Assets.Script.Behaviour
 				private bool toggle;
 				private AudioClip stepSoundClip;
 				private bool mouseDown;
+				private float litIntensity;
+				private readonly List<LightInteractor> litLights = new List<LightInteractor>();
 
 				public Camera Cam => playerCam;
 
 				private Transform Transform { get; set; }
 
 				public Equipment ActiveEquipment => activeEquipment;
+
+				public bool IsPlayerInDark { get; private set; }
+				
+				// for statistics
+				public float PlayerDarknessTime { get; private set; }
+				
+				// for scoring
+				public float PlayerDarknessTimeFactorized { get; private set; }
 
 				private void Awake()
 				{
@@ -102,7 +112,12 @@ namespace Assets.Script.Behaviour
 
 				private void OnEquipmentSold(ShopParameters shopInfo)
 				{
-						throw new NotImplementedException();
+				}
+
+				public void InLightUpdate(LightInteractor lightInteractor, float intensity)
+				{
+						this.litLights.Add(lightInteractor);
+						this.litIntensity += intensity;
 				}
 
 				public void TakeEquipment(PlayerBehaviour diedPlayer)
@@ -163,7 +178,7 @@ namespace Assets.Script.Behaviour
 
 				private void FindEquipmentInEquipmentHolder()
 				{
-						activeEquipment = equipmentHolder.GetComponentInChildren<Equipment>();
+						activeEquipment = equipmentHolder.GetComponentInChildren<Equipment>(true);
 						if (activeEquipment is { })
 						{
 								Equip(activeEquipment);
@@ -195,6 +210,47 @@ namespace Assets.Script.Behaviour
 						HandleCrosshairClick();
 						HandleEquipmentToggleButton();
 						HandleEquipmentDropButton();
+						UpdatePlayerInDark();
+						HandlePlayerInDarkness();
+				}
+
+				private void HandlePlayerInDarkness()
+				{
+						if (IsPlayerInDark)
+						{
+								PlayerDarknessTime += Time.deltaTime;
+								float multiplier = GetLightSourceEquipmentMultiplier();
+								PlayerDarknessTimeFactorized = Time.deltaTime * multiplier;
+						}
+				}
+
+				private float GetLightSourceEquipmentMultiplier()
+				{
+						float multiplier = 1;
+						if (activeEquipment is ILightSource source
+								&& source.IsActive is false)
+						{
+								multiplier = source.ActiveMultiplier;
+						}
+						return multiplier;
+				}
+
+				private void UpdatePlayerInDark()
+				{
+						IsPlayerInDark = true;
+						if (litLights.Count > 0)
+						{
+								float averageIntensity = litIntensity / litLights.Count;
+								Debug.Log($"Player intensity: {averageIntensity}");
+								if (averageIntensity >= 0.1f)
+								{
+										IsPlayerInDark = false;
+								}
+
+								// reset at end of frame!
+								litLights.Clear();
+								litIntensity = 0;
+						}
 				}
 
 				/// <summary>
@@ -229,6 +285,7 @@ namespace Assets.Script.Behaviour
 						if (activeEquipment is null)
 						{
 								// no equipment - everything is fine
+								FindEquipmentInEquipmentHolder();
 								return;
 						}
 

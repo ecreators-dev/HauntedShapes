@@ -1,6 +1,4 @@
 ﻿using Assets.Script.Controller;
-using Assets.Script.GameMenu;
-using Assets.Script.InspectorAttibutes;
 
 using UnityEditor;
 
@@ -12,77 +10,73 @@ namespace Assets.Script.Behaviour.FirstPerson
 		[DisallowMultipleComponent]
 		public class FirstPersonController : MonoBehaviour
 		{
-				[SerializeField] private Camera cam;
+				[SerializeField] private CameraMoveType camType = new CameraMoveType(CameraMoveType.TypeEnum.NOT_BUMPING);
+				private Camera cam;
+
 				[Range(0, 200)]
 				[SerializeField] private float fieldOfView = 65;
-				[SerializeField] private Renderer bodyRenderer;
 
 				[Header("Movement/Looking")]
-				#region can move inspector group
 				[SerializeField] private bool canMove = true;
 				[ReadOnlyDependingOnBoolean(nameof(canMove), true)] // this is readonly if canMove is false
 				[SerializeField] private float moveSpeed = 70;
 				[ReadOnlyDependingOnBoolean(nameof(canMove), true)] // this is readonly if canMove is false
 				[SerializeField] private float runSpeed = 130;
 				[SerializeField] private CharacterController characterController;
-				#endregion
 
 				[Header("Animation")]
 				[SerializeField] private Animator animator;
-				[SerializeField] private string crouchBooleanName = "Crouch"; // verify name in Start()!
-				[SerializeField] private string moveSpeedName = "Speed"; // verify name in Start()!
+				[SerializeField] private string crouchBooleanName = "Crouch";
+				[SerializeField] private string moveSpeedName = "Speed";
 
 				private float actualSpeed;
 
-				private Vector3 startingRotation;
 				private bool stopMovementInputs;
-				private IInputControls controls;
-				private Vector3 oldMousePosition;
-				private bool useOldInputSystem;
 				private float targetSpeed;
-				private Vector3 playerVelocity;
 				private float oldX;
+				private bool crouching;
+				private bool running;
 
 				private Transform Transform { get; set; }
-				private Rigidbody RigidBody { get; set; }
-				public IInputControls Input => controls ??= this.InputControls();
-				private bool RequireOldInputSystem => Input.IsEnabled is false;
-				private bool ExitGameButton => RequireOldInputSystem ? UnityEngine.Input.GetKeyDown(KeyCode.Escape) : Input.ExitGameButton;
 
 				private void Awake()
 				{
 						Transform = transform;
-						startingRotation = Transform.localRotation.eulerAngles;
-						RigidBody = GetComponent<Rigidbody>();
-				}
-
-				private void Start()
-				{
-						//bodyRenderer.enabled = false;
 				}
 
 				private void Update()
 				{
-						if (Input is null)
-								return;
+						cam = camType.GetCamera();
 
 						HandleExitGameOrPlaymode();
 						HandleCameraView();
 						HandleCameraEditorStopOnButton();
 
-						if (Input is null)
-								return;
-
 						if (stopMovementInputs || canMove is false)
 								return;
 
-						MoveUpdate();
+						// can be nagative!
+						UpdateTargetSpeed();
+
+						float multiplier = 2;
+						if (this.InputControls().Horizonal == 0
+								&& this.InputControls().Vertical == 0)
+						{
+								targetSpeed = 0;
+								multiplier = 50;
+						}
+
+						actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime * multiplier);
+						animator.SetFloat(moveSpeedName, actualSpeed);
+						animator.SetBool(crouchBooleanName, crouching);
+						Debug.Log($"Update character animation with {actualSpeed} and {crouching}");
 				}
 
 				private void FixedUpdate()
 				{
-						float vertical = Input.Vertical;
-						float horizontal = Input.Horizonal;
+						IInputControls inputControls = this.InputControls();
+						float vertical = inputControls.Vertical;
+						float horizontal = inputControls.Horizonal;
 
 						Vector3 forwardMove = (Transform.forward * vertical) * actualSpeed;
 						var movement = forwardMove;
@@ -92,8 +86,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 						movement += Vector3.down * 9.81f;
 
 						characterController.Move(movement * Time.fixedDeltaTime);
-
-						//RigidBody.MovePosition(RigidBody.position + movement * Time.fixedDeltaTime);
 				}
 
 				private void OnCollisionEnter(Collision collision)
@@ -108,7 +100,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 				private void HandleCameraEditorStopOnButton()
 				{
-						if (controls.EditorStopCamera && CanPlay())
+						if (this.InputControls().EditorStopCamera && CanPlay())
 						{
 								stopMovementInputs = !stopMovementInputs;
 								this.GetGameController()?.SetStopCameraEdit(stopMovementInputs);
@@ -122,7 +114,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 				private void HandleExitGameOrPlaymode()
 				{
-						if (ExitGameButton)
+						if (this.InputControls().ExitGameButton)
 						{
 #if UNITY_EDITOR
 								EditorApplication.ExitPlaymode();
@@ -141,66 +133,24 @@ namespace Assets.Script.Behaviour.FirstPerson
 #endif
 				}
 
-				private void MoveUpdate()
-				{
-						if (characterController.isGrounded)
-						{
-								playerVelocity.y = 0;
-						}
-
-						// can be nagative!
-						float vertical = Input.Vertical;
-						float horizontal = Input.Horizonal;
-						UpdateTargetSpeed();
-
-						return;
-
-						Vector3 motion = new Vector3(horizontal, 0, vertical);
-						characterController.Move(motion * Time.deltaTime * actualSpeed);
-						//RigidBody.isKinematic = true;
-
-						if (motion.Equals(Vector3.zero) is false)
-						{
-								Transform.forward = motion;
-						}
-
-						playerVelocity.y += -9.81f * Time.deltaTime;
-						characterController.Move(playerVelocity * Time.deltaTime);
-				}
-
 				private void UpdateTargetSpeed()
 				{
 						targetSpeed = this.moveSpeed;
 
-						if (IsRunButtonPressed())
+						IInputControls inputControls = this.InputControls();
+						running = inputControls.RunButtonPressedOrHold;
+						if (running)
+						{
+								Debug.Log($"Running pressed {Time.realtimeSinceStartup}");
 								targetSpeed = runSpeed;
+						}
 
-						if (IsCrouchingButtonPressed())
+						crouching = inputControls.CrouchButtonPressed;
+						if (crouching)
 						{
+								Debug.Log($"Crouching hold {Time.realtimeSinceStartup}");
 								targetSpeed = 0;
-								if (animator.GetBool(crouchBooleanName) is false)
-								{
-										animator.SetBool(crouchBooleanName, true);
-								}
 						}
-						else if (animator.GetBool(crouchBooleanName))
-						{
-								animator.SetBool(crouchBooleanName, false);
-						}
-
-						actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime);
-						animator.SetFloat(moveSpeedName, actualSpeed);
-				}
-
-				private bool IsCrouchingButtonPressed()
-				{
-						return UnityEngine.Input.GetKeyDown(KeyCode.C);
-				}
-
-				private static bool IsRunButtonPressed()
-				{
-						return UnityEngine.Input.GetKeyDown(KeyCode.LeftShift) ||
-														UnityEngine.Input.GetKeyDown(KeyCode.RightShift);
 				}
 		}
 }

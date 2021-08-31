@@ -27,12 +27,14 @@ namespace Assets.Script.Controller
 				[SerializeField] private FadeUIElement blackscreenUI;
 				[SerializeField] private ShopSingleton shop;
 
-				public IAudioFader AudioFader { get; private set; }
 
 				private float musicStartGameVolume;
 				private bool fadeAmbientStartMusic;
 				private bool backgroundMusicInPlayingInLoop;
 				private bool blackscreenFading;
+				public IAudioFader AudioFader { get; private set; }
+				
+				public bool IsCameraRotateStop { get; private set; }
 
 				private void Awake()
 				{
@@ -154,6 +156,7 @@ namespace Assets.Script.Controller
 				public void SetStopCameraEdit(bool stopCamera)
 				{
 #if UNITY_EDITOR
+						IsCameraRotateStop = stopCamera;
 						if (stopCamera)
 						{
 								MouseCursorController.Instance.HideCursorLocked();

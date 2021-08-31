@@ -1,3 +1,4 @@
+using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Components;
 using Assets.Script.Controller;
 using Assets.Script.Model;
@@ -17,17 +18,19 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		[RequireComponent(typeof(RawImage))]
 		[DisallowMultipleComponent]
-		public class CrosshairHitVisual : MonoBehaviour
+		public class CrosshairHitVisual : MonoBehaviour, ICrosshairUI
 		{
 				[SerializeField] private CrosshairRoot root;
 				[SerializeField] private bool hovered;
 				[SerializeField] private float hitDistance = 4;
 				[SerializeField] private float hitDistanceFar = 5;
+
 				[SerializeField] private LayerMask interactibleLayer;
 				[Range(0.0001f, 0.2f)]
 				[SerializeField] private float size = 0.02f;
 				[SerializeField] private TMP_Text targetTextUI;
 				[SerializeField] private TMP_Text tooFarTextUI;
+				[SerializeField] private LayerMask hitLayers;
 
 				private RawImage image;
 				private Color matchColor;
@@ -35,8 +38,14 @@ namespace Assets.Script.Behaviour
 				private Equipment hitEquipment;
 				private PickupItem hitItem;
 				private Interactible hitAny;
+				private RaycastHit anyTarget;
+				private bool anyTargetHit;
+				private Vector3 hitBefore;
+
+				public static ICrosshairUI Instance { get; private set; }
 
 				public void SetHitActive() => hovered = true;
+
 				public void SetHitInactive() => hovered = false;
 
 				private void Awake()
@@ -44,9 +53,22 @@ namespace Assets.Script.Behaviour
 						image = GetComponent<RawImage>();
 				}
 
+				private void Start()
+				{
+						if (Instance == null)
+						{
+								Instance = this;
+						}
+						else
+						{
+								DestroyImmediate(this);
+								Debug.LogError($"Duplicated Instance of {nameof(CrosshairHitVisual)}");
+						}
+				}
+
 				private void Update()
 				{
-						Transform camera = Camera.main.transform;
+						Transform camera = CameraMoveType.Instance.GetCamera().transform;
 
 						// HOVER: show near items with hand visible! (c)
 						hovered = false;
@@ -65,10 +87,37 @@ namespace Assets.Script.Behaviour
 						//! Click Action is handled in Player Behaviour
 				}
 
+				public (bool actualHit, RaycastHit hit) GetHitPointLastUpdate()
+				{
+						return (anyTargetHit, anyTarget);
+				}
+
+				public (bool hit, Vector3 point) UpdateHitPointFarAway(Camera cam)
+				{
+						// layerMask = cam.cullingMask means:
+						// takes only visible targets in view, not player (for example)
+						Transform camera = cam.transform;
+						Ray ray = new Ray(camera.position, camera.forward);
+						anyTargetHit = Physics.SphereCast(ray, size,
+								out anyTarget, 10000, hitLayers, 
+								// fixes hit no trigger!
+								QueryTriggerInteraction.Ignore);
+						var point = anyTarget.point;
+						if (anyTargetHit is false)
+						{
+								point = hitBefore;
+						}
+						else
+						{
+								hitBefore = point;
+						}
+						return (anyTargetHit, point);
+				}
+
 				private bool IsInteractionPressed()
 				{
 						return Mouse.current.leftButton.isPressed
-														|| this.InputControls().InteractionCrosshairPressed;
+								|| this.InputControls().InteractionCrosshairPressed;
 				}
 
 				private void UpdateHoveredTarget(Transform camera)

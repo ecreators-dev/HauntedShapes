@@ -1,4 +1,5 @@
-﻿using Assets.Script.Components;
+﻿using Assets.Script.Behaviour.FirstPerson;
+using Assets.Script.Components;
 
 using System;
 
@@ -17,6 +18,8 @@ namespace Assets.Script.Behaviour
 				protected PlayerBehaviour User { get; private set; }
 
 				public bool IsTakenByPlayer { get; private set; }
+				
+				protected ICrosshairUI CrosshairHit { get; private set; }
 
 				[CalledByPlayerBehaviour]
 				public virtual void OnPlayer_ItemPickedUp(PlayerBehaviour newUser)
@@ -27,6 +30,7 @@ namespace Assets.Script.Behaviour
 								{
 										User = newUser;
 										IsTakenByPlayer = true;
+										CrosshairHit = CrosshairHitVisual.Instance;
 										OnPickedUp();
 								}
 								else

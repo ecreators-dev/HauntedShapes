@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1176053381553882457}
   - component: {fileID: 8437312610071702572}
+  - component: {fileID: 5492325646639362251}
   m_Layer: 0
   m_Name: Corridore Light (Wide Lamp)
   m_TagString: Untagged
@@ -51,6 +52,19 @@ MonoBehaviour:
     offMaterial: {fileID: 2100000, guid: 1fdde7ac81a82bd4a87bb92f44e295ca, type: 2}
   onOffLights:
   - {fileID: 4120420081381755737}
+--- !u!114 &5492325646639362251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419791361939598589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2108b849fe1b0414084386cf3068ee34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointLight: {fileID: 4120420081381755737}
 --- !u!1 &447789493130343993
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,13 +5,15 @@ using UnityEngine;
 namespace Assets.Script.Behaviour.GhostTypes
 {
 		[RequireComponent(typeof(Rigidbody))]
-		public class Candle : Equipment, IPforteTrigger
+		public class Candle : Equipment, IPforteTrigger, ILightSource
 		{
 				[SerializeField] private Transform lightOnOff;
 				[SerializeField] private MeshRenderer visualMesh;
 				[SerializeField] private Collider visualCollider;
 				[SerializeField] private ShopParameters shopInfo;
 				[SerializeField] private Animator animator;
+				[Min(1)]
+				[SerializeField] private float lightSourceMultiplier = 1.4f;
 
 				private bool reversedAnimation;
 				private float animationSpeedEffector;
@@ -20,7 +22,9 @@ namespace Assets.Script.Behaviour.GhostTypes
 
 				private Rigidbody RigidBody { get; set; }
 
-				private bool IsActive => lightOnOff.gameObject.activeSelf;
+				public bool IsActive => lightOnOff.gameObject.activeSelf;
+
+				public float ActiveMultiplier => lightSourceMultiplier;
 
 				private void Awake()
 				{

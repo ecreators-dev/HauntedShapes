@@ -42,6 +42,10 @@ namespace Assets
 
 				public bool InteractionCrosshairPressed => inputActions.Player.KeyboardInteraction.triggered;
 
+				public bool CrouchButtonPressed => inputActions.Player.Crouch.triggered;
+
+				public bool RunButtonPressedOrHold => inputActions.Player.Run.triggered;
+
 				private void Awake()
 				{
 						if (Instance is null)
@@ -152,5 +156,9 @@ namespace Assets
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
 
 				public bool InteractionCrosshairPressed => inputActions.Player.KeyboardInteraction.triggered;
+
+				public bool CrouchButtonPressed => inputActions.Player.Crouch.triggered;
+
+				public bool RunButtonPressedOrHold => inputActions.Player.Run.triggered;
 		}
 }
