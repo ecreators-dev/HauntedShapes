@@ -43,6 +43,7 @@ namespace Assets.Script.Behaviour
 						Collider = GetComponent<BoxCollider>();
 				}
 
+				#region UNITY_EDITOR RANGE
 #if UNITY_EDITOR
 				private void OnDrawGizmos()
 				{
@@ -60,11 +61,33 @@ namespace Assets.Script.Behaviour
 
 						if (hitPositions == null || updateHitlines)
 						{
-								hitPositions = UpdateHitLines(hitlineColor);
+								hitPositions = UpdateHitLines(0.5f, 0.5f);
+
+								for (int i = 0; i < hitPositions.Count; i++)
+								{
+										(Vector3 source, Vector3 hit) = hitPositions[i];
+
+										// this call will add the position at that index position
+										if (IsGizmoHitLineMatch())
+										{
+												Handles.color = Color.yellow;
+										}
+										else
+										{
+												Handles.color = hitlineColor;
+										}
+
+										if (Application.isPlaying is false && showOrbPositions)
+										{
+												Handles.DrawLine(source, hit);
+										}
+								}
 						}
 				}
+#endif
+				#endregion
 
-				public Vector3 GetRandomOrbPosition()
+				public Vector3 GetRandomOrbPos()
 				{
 						UpdateHitlines();
 						int index = Random.Range(0, hitPositions.Count);
@@ -74,14 +97,11 @@ namespace Assets.Script.Behaviour
 
 				public void UpdateHitlines()
 				{
-						hitPositions = UpdateHitLines(hitlineColor);
+						hitPositions = UpdateHitLines(0.5f, 0.5f);
 				}
 
-				private List<(Vector3 source, Vector3 hit)> UpdateHitLines(Color color, float offsetX = 0.5f, float offsetZ = 0.5f)
+				private List<(Vector3 source, Vector3 hit)> UpdateHitLines(float offsetX, float offsetZ)
 				{
-#if UNITY_EDITOR
-						Handles.color = color;
-#endif
 						hitPositionUpdate = true;
 						hitPositions = new List<(Vector3 source, Vector3 hit)>();
 
@@ -92,7 +112,7 @@ namespace Assets.Script.Behaviour
 						position.y += ghostOrbY;
 
 						// from center:
-						if (DrawGizmoHitLine(color, position, 0, 0, out var orgin, out var originHit))
+						if (CheckHitGround(position, 0, 0, out var orgin, out var originHit))
 						{
 								hitPositions.Add((orgin, originHit));
 						}
@@ -104,25 +124,25 @@ namespace Assets.Script.Behaviour
 										if (x == 0 && z == 0) continue;
 
 										// right forward
-										if (DrawGizmoHitLine(color, position, offsetX * x, offsetZ * z, out var sourceA, out var hitA))
+										if (CheckHitGround(position, offsetX * x, offsetZ * z, out var sourceA, out var hitA))
 										{
 												hitPositions.Add((sourceA, hitA));
 										}
 
 										// left forward
-										if (DrawGizmoHitLine(color, position, offsetX * -x, offsetZ * z, out var sourceB, out var hitB))
+										if (CheckHitGround(position, offsetX * -x, offsetZ * z, out var sourceB, out var hitB))
 										{
 												hitPositions.Add((sourceB, hitB));
 										}
 
 										// right back
-										if (DrawGizmoHitLine(color, position, offsetX * x, offsetZ * -z, out var sourceC, out var hitC))
+										if (CheckHitGround(position, offsetX * x, offsetZ * -z, out var sourceC, out var hitC))
 										{
 												hitPositions.Add((sourceC, hitC));
 										}
 
 										// left back
-										if (DrawGizmoHitLine(color, position, offsetX * -x, offsetZ * -z, out var sourceD, out var hitD))
+										if (CheckHitGround(position, offsetX * -x, offsetZ * -z, out var sourceD, out var hitD))
 										{
 												hitPositions.Add((sourceD, hitD));
 										}
@@ -132,31 +152,14 @@ namespace Assets.Script.Behaviour
 						return hitPositions;
 				}
 
-				private bool DrawGizmoHitLine(Color color, Vector3 center, float xOffset, float zOffset, out Vector3 collisionDown, out Vector3 collistionHit)
+				private bool CheckHitGround(Vector3 center, float xOffset, float zOffset,
+						out Vector3 collisionDown,
+						out Vector3 collistionHit)
 				{
 						Ray ray = new Ray(new Vector3(center.x + xOffset, center.y, center.z + zOffset), Vector3.down);
 						collisionDown = ray.origin;
 						if (Physics.Raycast(ray, out RaycastHit hit, 10))
 						{
-#if UNITY_EDITOR
-								if (Application.isPlaying is false)
-								{
-										// this call will add the position at that index position
-										if (IsGizmoHitLineMatch())
-										{
-												Handles.color = Color.yellow;
-										}
-										else
-										{
-												Handles.color = color;
-										}
-
-										if (showOrbPositions)
-										{
-												Handles.DrawLine(ray.origin, hit.point);
-										}
-								}
-#endif
 								collistionHit = hit.point;
 								return true;
 						}
@@ -169,7 +172,6 @@ namespace Assets.Script.Behaviour
 						return randomPositionIndex >= 0 && hitPositions != null
 																&& randomPositionIndex == hitPositions.Count - 1;
 				}
-#endif
 
 				private void Start()
 				{

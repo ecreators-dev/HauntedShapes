@@ -23,7 +23,7 @@ namespace Assets.Script.Behaviour
 				private Vector3? flyPositionOld;
 				private Vector3? flyToPosition;
 
-				public GhostRoom RoomActive { get; set; }
+				public GhostRoom RoomActive { get; private set; }
 
 				private void Awake()
 				{
@@ -94,7 +94,7 @@ namespace Assets.Script.Behaviour
 
 				private Vector3 GetNextPositionInsideRoom()
 				{
-						return RoomActive.GetRandomOrbPosition();
+						return RoomActive.GetRandomOrbPos();
 
 						Vector3 size = RoomActive.Size;
 						float radius = Mathf.Min(size.x / 2, size.z / 2);

@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Landschaft - Der Schacht.unity
+    guid: 83d0546cd3ed2ea46b2a2987032e376c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 42b08bcf49b2a43418c939f9f26883cd, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 78a91835b1237334bbea98ac0c27ea1a, type: 2}
