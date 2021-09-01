@@ -461,8 +461,12 @@ namespace Assets.Script.Behaviour
 				public void Equip(Equipment item)
 				{
 						activeEquipment = item;
-						item.transform.SetParent(equipmentHolder, false);
+						Transform equipment = item.transform;
+						equipment.SetParent(equipmentHolder, false);
+						equipment.localPosition = Vector3.zero;
+						equipment.localEulerAngles = Vector3.zero;
 						item.OnPlayer_ItemPickedUp(this);
+						item.OnPlayer_EquippedToHand(this);
 				}
 
 				[ContextMenu("Drop equipped item")]

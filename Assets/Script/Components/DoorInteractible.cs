@@ -8,8 +8,8 @@ namespace Assets.Script.Components
 		{
 				[Header("Animator - Trigger Names")]
 				[SerializeField] protected Animator animator;
-				[SerializeField] private AnimationWithSound openAnimation;
-				[SerializeField] private AnimationWithSound closeAnimation;
+				[SerializeField] private AnimationWithSoundTrigger openAnimation;
+				[SerializeField] private AnimationWithSoundTrigger closeAnimation;
 				[SerializeField] private GhostRoom room;
 
 				public bool IsOpened { get; private set; }
@@ -58,7 +58,7 @@ namespace Assets.Script.Components
 						PlayAnimation(closeAnimation);
 				}
 
-				protected void PlayAnimation(AnimationWithSound animation)
+				protected void PlayAnimation(AnimationWithSoundTrigger animation)
 				{
 						animation?.PlayAudio(transform);
 						if (animator != null && animation.triggerName is { })

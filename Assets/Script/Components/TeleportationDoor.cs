@@ -11,7 +11,7 @@ namespace Assets.Script.Components
 		/// </summary>
 		public sealed class TeleportationDoor : DoorInteractible
 		{
-				[SerializeField] private AnimationWithSound getUpAnimation;
+				[SerializeField] private AnimationWithSoundTrigger getUpAnimation;
 				[SerializeField] private Collider doorCollider;
 				[SerializeField] private Collider teleportCollider;
 

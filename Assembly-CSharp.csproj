@@ -54,11 +54,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\Model\IPlayerCam.cs" />
+    <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\BeginGroupAttribute.cs" />
     <Compile Include="Assets\Script\Components\RitualArea.cs" />
     <Compile Include="Assets\Script\Behaviour\FadeUIElement.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupDoorRoot.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\ICrosshairUI.cs" />
     <Compile Include="Assets\Script\Components\ItemInteractible.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldConstraint.cs" />
     <Compile Include="Assets\Script\Controller\CrosshairRoot.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Assets\Script\Behaviour\InteractionEnum.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\GroundCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\EditorSnapToGround.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\LookAtTargetDynamic.cs" />
     <Compile Include="Assets\Script\Behaviour\ShopParameters.cs" />
     <Compile Include="Assets\Script\Behaviour\Ghostbox.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\FirstPersonController.cs" />
@@ -134,6 +137,7 @@
     <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyDependingOnBooleanAttribute.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\InputControlManagerSingleton.cs" />
+    <Compile Include="Assets\Script\Behaviour\ILightSource.cs" />
     <Compile Include="Assets\Script\Behaviour\DictionaryExtensions.cs" />
     <Compile Include="Assets\Script\Behaviour\Door.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostBoxTrigger.cs" />
@@ -154,7 +158,7 @@
     <Compile Include="Assets\Script\Behaviour\GhostTypes\AgeType.cs" />
     <Compile Include="Assets\Script\Behaviour\IGate.cs" />
     <Compile Include="Assets\Script\Behaviour\RemainingCount.cs" />
-    <Compile Include="Assets\Script\Components\Model\AnimationWithSound.cs" />
+    <Compile Include="Assets\Script\Components\Model\AnimationWithSoundTrigger.cs" />
     <Compile Include="Assets\Script\Behaviour\CalledByEquipmentBehaviourAttribute.cs" />
     <Compile Include="Assets\Script\Controller\AudioPlayInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\ObjectRayUtils.cs" />
@@ -166,19 +170,15 @@
     <Compile Include="Assets\Script\Model\IMouseCursor.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\Candle.cs" />
     <Compile Include="Assets\Script\Behaviour\InventorySlot.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraMoveType.cs" />
     <Compile Include="Assets\Script\Behaviour\MissingSwitchCaseException.cs" />
     <Compile Include="Assets\Script\Behaviour\HeatCellBehaviour.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupItem.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostEntity.cs" />
+    <Compile Include="Assets\Script\Behaviour\LightInteractor.cs" />
     <Compile Include="Assets\Script\Model\IHeatUp.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
-    <Compile Include="Assets\Script\Behaviour\FirstPerson\LookAtTargetDynamic.cs" />
-    <Compile Include="Assets\Script\Behaviour\FirstPerson\ICrosshairUI.cs" />
-    <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraMoveType.cs" />
-    <Compile Include="Assets\Script\Behaviour\LightInteractor.cs" />
-    <Compile Include="Assets\Script\Behaviour\ILightSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

@@ -139,6 +139,7 @@ MonoBehaviour:
   locked: 0
   shopInfo: {fileID: 11400000, guid: 1967f8fe91259f04885afd5a83a4b08e, type: 2}
   animator: {fileID: 95363276851437522}
+  activeMultiplier: 2
 --- !u!114 &5575757336325653481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8788,7 +8789,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: d38e37b6714b4cb484524e54f4d7497a
   m_Mesh: {fileID: 4300000, guid: 2a9372691d8a4264d9fb37ea7f53d822, type: 2}
-  m_VersionIndex: 227
+  m_VersionIndex: 266
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -8850,9 +8851,9 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 6272.487
-  m_Range: 15
-  m_SpotAngle: 45
+  m_Intensity: 3946.0852
+  m_Range: 40
+  m_SpotAngle: 66
   m_InnerSpotAngle: 4
   m_CookieSize: 10
   m_Shadows:
@@ -8892,7 +8893,7 @@ Light:
   m_Lightmapping: 1
   m_LightShadowCasterMode: 1
   m_AreaSize: {x: 0.5, y: 0.5}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 2
   m_ColorTemperature: 10000
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -8912,10 +8913,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 3000
+  m_Intensity: 4000
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
-  m_InnerSpotPercent: 75
+  m_InnerSpotPercent: 55
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
   m_VolumetricDimmer: 0.3

@@ -67,8 +67,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camType:
     camBumping: {fileID: 4990787288491400423}
-    camNotBumping: {fileID: 4990787288491400423}
-    type: 1
+    camNotBumping: {fileID: 1111544049044930722}
+    type: 0
   fieldOfView: 65
   canMove: 1
   moveSpeed: 2
@@ -375,6 +375,10 @@ PrefabInstance:
       propertyPath: character
       value: 
       objectReference: {fileID: 4990787288825231746}
+    - target: {fileID: 7769920309729244244, guid: 837ca1b171ce25f42a749cf2b0b90f9e, type: 3}
+      propertyPath: m_VersionIndex
+      value: 290
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 837ca1b171ce25f42a749cf2b0b90f9e, type: 3}
 --- !u!4 &4812219235163670878 stripped
@@ -385,6 +389,11 @@ Transform:
 --- !u!95 &1452484759308882724 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 8637843828998795790, guid: 837ca1b171ce25f42a749cf2b0b90f9e, type: 3}
+  m_PrefabInstance: {fileID: 7203377874836103466}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1111544049044930722 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7825977899085095304, guid: 837ca1b171ce25f42a749cf2b0b90f9e, type: 3}
   m_PrefabInstance: {fileID: 7203377874836103466}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &2478623002197508677 stripped

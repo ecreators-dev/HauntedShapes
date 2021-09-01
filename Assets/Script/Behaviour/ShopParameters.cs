@@ -36,9 +36,9 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private AudioClip switchOnSound;
 				[SerializeField] private AudioClip switchOffSound;
 				[SerializeField] private AudioClip huntingSound;
-				[SerializeField] private AnimationWithSound switchOnAnimation;
-				[SerializeField] private AnimationWithSound switchOffAnimation;
-				[SerializeField] private AnimationWithSound huntAnimation;
+				[SerializeField] private AnimationWithSoundTrigger switchOnAnimation;
+				[SerializeField] private AnimationWithSoundTrigger switchOffAnimation;
+				[SerializeField] private AnimationWithSoundTrigger huntAnimation;
 
 				public string DisplayName { get => displayName; }
 				public string Description { get => description; }
@@ -56,9 +56,9 @@ namespace Assets.Script.Behaviour
 				public AudioClip SwitchOnSound { get => switchOnSound; }
 				public AudioClip SwitchOffSound { get => switchOffSound; }
 				public AudioClip HuntingSound { get => huntingSound; }
-				public AnimationWithSound SwitchOnAnimation { get => switchOnAnimation; }
-				public AnimationWithSound SwitchOffAnimation { get => switchOffAnimation; }
-				public AnimationWithSound HuntAnimation { get => huntAnimation; }
+				public AnimationWithSoundTrigger SwitchOnAnimation { get => switchOnAnimation; }
+				public AnimationWithSoundTrigger SwitchOffAnimation { get => switchOffAnimation; }
+				public AnimationWithSoundTrigger HuntAnimation { get => huntAnimation; }
 				public Equipment Prefab { get => prefab; }
 
 				public void SetPrefab(Equipment instancePrefab)

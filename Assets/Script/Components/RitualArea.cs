@@ -18,13 +18,13 @@ namespace Assets.Script.Components
 				[SerializeField] private Animator ritualAnimator;
 				[Tooltip("Starts an audio clip parallel to the start of the animation with a specific volume." +
 						" It takes place when a tribut enteres the ritual area (Collider)")]
-				[SerializeField] private AnimationWithSound tributePlacedAnimation;
+				[SerializeField] private AnimationWithSoundTrigger tributePlacedAnimation;
 				[Tooltip("Starts an audio clip parallel to the start of the animation with a specific volume." +
 						" It takes place when the last and final tribut has entered the collider area. The ritual is complete.")]
-				[SerializeField] private AnimationWithSound ritualStartAnimation;
+				[SerializeField] private AnimationWithSoundTrigger ritualStartAnimation;
 				[Tooltip("Starts an audio clip parallel to the start of the animation with a specific volume." +
 						" It takes place when a tribute is taken from a completed ritual (out of collider area).")]
-				[SerializeField] private AnimationWithSound ritualEndedAnimation;
+				[SerializeField] private AnimationWithSoundTrigger ritualEndedAnimation;
 
 				[SerializeField] private UnityEvent ritualCompletingEvent;
 				[SerializeField] private UnityEvent ritualEndingEvent;
@@ -134,7 +134,7 @@ namespace Assets.Script.Components
 						ritualCompletingEvent?.Invoke();
 				}
 
-				private void PlayAnimationWithSound(AnimationWithSound soundAndAnimationTrigger)
+				private void PlayAnimationWithSound(AnimationWithSoundTrigger soundAndAnimationTrigger)
 				{
 						if (ritualAnimator is { } && soundAndAnimationTrigger is { })
 						{

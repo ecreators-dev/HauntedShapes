@@ -1,7 +1,5 @@
 using Assets.Script.Behaviour.FirstPerson;
 
-using System;
-
 using UnityEngine;
 
 namespace Assets.Script.Behaviour
@@ -11,14 +9,15 @@ namespace Assets.Script.Behaviour
 		public class FlashlightBehaviour : Equipment, ILightSource
 		{
 				[SerializeField] private ShopParameters shopInfo;
+				[SerializeField] private bool activeState = true;
+				private bool? activeStateOld = null;
+
 				[SerializeField] private Animator animator;
 				[Min(1)]
 				[SerializeField] private float activeMultiplier = 2;
 
 				private bool canToggleActiveState = true;
 				private bool activeStateBeforeHunt;
-				private bool activeState;
-				private bool? currentState = null;
 				private float activeSeconds;
 				private float breakCoolDownSeconds;
 
@@ -46,13 +45,44 @@ namespace Assets.Script.Behaviour
 
 				protected override void Update()
 				{
+						bool togggled = activeStateOld != IsActive;
+						base.Update();
+						animator.SetBool("Hunting", IsHuntingActive);
+						if (IsBroken)
+						{
+								animator.SetBool("PowerOn", false);
+								if (togggled) ShopInfo.SwitchOffAnimation?.ResetOnce();
+								ShopInfo.SwitchOffAnimation?.PlayAudio(Transform);
+						}
+						else
+						{
+								if (togggled)
+								{
+										ShopInfo.SwitchOffAnimation?.ResetOnce();
+										ShopInfo.SwitchOnAnimation?.ResetOnce();
+								}
+
+								animator.SetBool("PowerOn", IsActive);
+								if (IsActive)
+								{
+										ShopInfo.SwitchOnAnimation?.PlayAudio(Transform);
+								}
+								else
+								{
+										ShopInfo.SwitchOffAnimation?.PlayAudio(Transform);
+								}
+						}
+
+						// look at hittarget or zero
+						if (IsTakenByPlayer)
+						{
+								UpdatePointToTarget();
+						}
+
 						if (IsHuntingActive || IsTakenByPlayer is false)
 						{
 								return;
 						}
-
-						// look at hittarget or zero
-						UpdatePointToTarget();
 
 						if (activeState)
 						{
@@ -67,15 +97,11 @@ namespace Assets.Script.Behaviour
 												// switch off
 												activeState = false;
 
-												// play switch off animation as usal
-												PlayAnimationOnOrOffState();
-
 												// after usal playback, set broken
 												// if setbroken is called before play animation -> no animation would show up, but only sound!
 												// the light would stay active
 												breakCoolDownSeconds = ShopInfo.CoolDownSeconds;
 												SetBroken();
-
 												// do not play below code!
 												return;
 										}
@@ -97,14 +123,7 @@ namespace Assets.Script.Behaviour
 								}
 						}
 
-						// toggled or first time:
-						if (currentState == null || currentState != activeState)
-						{
-								PlayAnimationOnOrOffState();
-
-								// start only once! "currentState"
-								currentState = activeState;
-						}
+						activeStateOld = activeState;
 				}
 
 				private void UpdatePointToTarget()
@@ -117,34 +136,6 @@ namespace Assets.Script.Behaviour
 								Transform.rotation = Quaternion
 										.Slerp(Transform.rotation, Quaternion.LookRotation(targetDir, Transform.up),
 										 Time.deltaTime * 10);
-						}
-				}
-
-				private void PlayAnimationOnOrOffState()
-				{
-						if (activeState)
-						{
-								if (IsBroken)
-								{
-										// only toggle, but do no visual!
-										ShopInfo.SwitchOnAnimation?.PlayAudio(Transform);
-								}
-								else
-								{
-										ShopInfo.SwitchOnAnimation?.Play(Transform, animator);
-								}
-						}
-						else
-						{
-								if (IsBroken)
-								{
-										// only toggle, but do no visual!
-										ShopInfo.SwitchOffAnimation?.PlayAudio(Transform);
-								}
-								else
-								{
-										ShopInfo.SwitchOffAnimation?.Play(Transform, animator);
-								}
 						}
 				}
 
