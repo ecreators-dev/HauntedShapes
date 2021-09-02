@@ -24,7 +24,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				{
 						if (crosshair is { })
 						{
-								(bool actualHit, RaycastHit hit) = crosshair.GetHitPointLastUpdate();
+								(bool actualHit, RaycastHit hit) = crosshair.GetRaycastCollidersOnlyResult();
 								if (actualHit)
 								{
 										Handles.color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, 0.2f);
@@ -42,7 +42,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 						// where is the player look at
 						cam = CameraMoveType.Instance.GetCamera();
 						crosshair ??= (CrosshairHitVisual)CrosshairHitVisual.Instance;
-						crosshair.UpdateHitPointFarAway(cam);
+						crosshair.RaycastCollidersOnly(cam);
 				}
 		}
 }

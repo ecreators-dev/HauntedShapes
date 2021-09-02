@@ -10,14 +10,8 @@ namespace Assets.Script.Components
 				public string triggerName;
 				public AudioClip audio;
 				public float volume;
-				private bool playing;
 
-				public void ResetOnce()
-				{
-						playing = false;
-				}
-				
-				public void PlayAudio(Transform transform, bool playOnce = true)
+				public void PlayAudio(Transform transform)
 				{
 						if (audio == null)
 						{
@@ -25,13 +19,7 @@ namespace Assets.Script.Components
 								return;
 						}
 
-						if(playOnce && playing)
-						{
-								return;
-						}
-
 						AudioSource.PlayClipAtPoint(audio, transform.position, volume);
-						playing = true;
 				}
 
 				public void StartTriggerAnimation(Animator animator)

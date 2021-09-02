@@ -2,6 +2,7 @@
 using Assets.Script.Components;
 
 using System;
+using System.Collections;
 
 using UnityEngine;
 
@@ -15,10 +16,10 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// Represents the player that actual captured the equipment
 				/// </summary>
-				protected PlayerBehaviour User { get; private set; }
+				public PlayerBehaviour User { get; private set; }
 
 				public bool IsTakenByPlayer { get; private set; }
-				
+
 				protected ICrosshairUI CrosshairHit { get; private set; }
 
 				[CalledByPlayerBehaviour]
@@ -31,11 +32,23 @@ namespace Assets.Script.Behaviour
 										User = newUser;
 										IsTakenByPlayer = true;
 										CrosshairHit = CrosshairHitVisual.Instance;
+
+										if (TryGetComponent(out Rigidbody body))
+										{
+												body.isKinematic = true;
+												Debug.Log("Disable physics gravity for pick up");
+										}
+
+										Transform obj = transform;
+										obj.localRotation = Quaternion.identity;
+										obj.localPosition = Vector3.zero;
+
+										Debug.Log($"Picked up: {GetTargetName()}");
 										OnPickedUp();
 								}
 								else
 								{
-										Debug.LogError($"Duplicated pickup action. Item already in use of player {User.gameObject.name}");
+										Debug.LogError($"Item already in use of player '{User.gameObject.name}'");
 								}
 						}
 						else
@@ -55,12 +68,25 @@ namespace Assets.Script.Behaviour
 
 						if (User is { } && oldOwner == User)
 						{
-								// unsetting parent belongs inside here! Because only after the check, the drop may be done
-								transform.SetParent(null, true);
-
 								User = null;
 								IsTakenByPlayer = false;
-								PerformDrop();
+
+								// unsetting parent belongs inside here! Because only after the check, the drop may be done
+								Transform obj = transform;
+								obj.SetParent(null);
+								// updside!
+								obj.rotation = Quaternion.identity;
+								obj.up = Vector3.up;
+
+								if (TryGetComponent(out Rigidbody body))
+								{
+										body.AddForce(obj.forward * 2, ForceMode.Impulse);
+										body.isKinematic = false;
+										Debug.Log("Enable physics for drop: throw forward");
+
+								}
+								Debug.Log($"Dropped: {GetTargetName()}");
+								OnPerformedDrop();
 						}
 				}
 
@@ -78,12 +104,12 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// Is called only AFTER the player script put this in his hand (animated)
 				/// </summary>
-				protected abstract void OnPickedUp();
+				protected virtual void OnPickedUp() { }
 
 				/// <summary>
 				/// Is called only AFTER the player script released this item from transform - do gravity
 				/// </summary>
-				protected abstract void PerformDrop();
+				protected virtual void OnPerformedDrop() { }
 
 				public bool CheckBelongsTo(PlayerBehaviour player)
 				{

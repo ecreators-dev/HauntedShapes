@@ -4,7 +4,14 @@ namespace Assets.Script.Behaviour.FirstPerson
 {
 		public interface ICrosshairUI
 		{
-				(bool actualHit, RaycastHit hit) GetHitPointLastUpdate();
-				(bool hit, Vector3 point) UpdateHitPointFarAway(Camera camera);
+				void SetPlaced(Equipment equipment);
+
+				void SetPlacementEquipment(Equipment equipmentNotNull);
+
+				(bool actualHit, RaycastHit hit) GetRaycastCollidersOnlyResult();
+
+				(bool hit, Vector3 point, Vector3 normal) RaycastCollidersOnly(Camera camera);
+				Transform GetPlacementPosition();
+				PlacementEnum GetPlacementInfo(out PlacementCheck.HitCheck? info);
 		}
 }

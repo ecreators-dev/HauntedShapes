@@ -1,6 +1,4 @@
-﻿using UnityEditor;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
@@ -11,9 +9,30 @@ namespace Assets.Script.Behaviour
 		{
 				public bool IsBroken { get; private set; }
 
+				public bool IsPowered { get; private set; }
+
 				public ShopParameters ShopInfo { get; private set; }
 
 				public PlayerBehaviour Owner { get; private set; }
+
+				public bool TryGetCrosshairHitInfo(out Vector3 position, out Vector3 normal, out PlacementEnum type)
+				{
+						bool result = CrosshairHit.GetPlacementInfo(out var info) != PlacementEnum.NONE;
+						position = result ? info.Value.Raycast.point : default;
+						normal = result ? info.Value.Raycast.normal : default;
+						type = result ? info.Value.PlacementType : PlacementEnum.NONE;
+						return result;
+				}
+
+				protected void SetPowered(bool active)
+				{
+						this.IsPowered = active;
+				}
+
+				protected void TogglePowered()
+				{
+						this.IsPowered = !this.IsPowered;
+				}
 
 				[CalledByPlayerBehaviour]
 				public virtual void OnPlayer_EquippedToHand(PlayerBehaviour owner)
@@ -36,12 +55,12 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// AFTER the player equipped this item
 				/// </summary>
-				protected abstract void OnEquip();
+				protected virtual void OnEquip() { }
 
 				/// <summary>
 				/// AFTER the player put this item into his owner inventory
 				/// </summary>
-				protected abstract void OnInventory();
+				protected virtual void OnInventory() { }
 
 				protected virtual void SetBroken()
 				{
@@ -52,7 +71,7 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				protected void SetFixed()
+				protected void SetRepaired()
 				{
 						IsBroken = false;
 						if (User is { })
@@ -89,7 +108,7 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// AFTER the player paid for this equipment, the owner changed to [not null]
 				/// </summary>
-				protected abstract void OnOwnerOwnedEquipment();
+				protected virtual void OnOwnerOwnedEquipment() { }
 
 				public void SetShopInfo(ShopParameters shopInfo, Equipment prefab)
 				{
@@ -112,13 +131,15 @@ namespace Assets.Script.Behaviour
 				}
 #endif
 
-				protected abstract void OnEditMode_ToggleOn();
+				protected virtual void OnEditMode_ToggleOn() { }
 
-				protected abstract void OnEditMode_ToggleOff();
+				protected virtual void OnEditMode_ToggleOff() { }
 
 				public override string GetTargetName()
 				{
 						return ShopInfo.DisplayName;
 				}
+
+				public abstract EquipmentInfo GetEquipmentInfo();
 		}
 }

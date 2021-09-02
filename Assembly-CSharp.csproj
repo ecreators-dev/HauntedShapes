@@ -61,13 +61,13 @@
     <Compile Include="Assets\Script\Behaviour\FadeUIElement.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupDoorRoot.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\ICrosshairUI.cs" />
-    <Compile Include="Assets\Script\Components\ItemInteractible.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldConstraint.cs" />
     <Compile Include="Assets\Script\Controller\CrosshairRoot.cs" />
     <Compile Include="Assets\Script\Model\IGameController.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostPropertyAsset.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\PngXmpHelper.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostRoom.cs" />
+    <Compile Include="Assets\Script\Behaviour\EquipmentInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\FlashlightBehaviour.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Script\Model\IAlphaFader.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Assets\Script\Controller\CrosshairHitVisual.cs" />
     <Compile Include="Assets\Script\Components\Model\Tribute.cs" />
     <Compile Include="Assets\Script\Behaviour\CalledByPlayerBehaviourAttribute.cs" />
+    <Compile Include="Assets\Script\Behaviour\DropOnButton.cs" />
     <Compile Include="Assets\Script\Model\IInteractible.cs" />
     <Compile Include="Assets\Script\Model\IInteractibleExtensions.cs" />
     <Compile Include="Assets\Modelling\Asteroids Pack\Assets\Scripts\RandomRotator.cs" />
@@ -179,6 +180,8 @@
     <Compile Include="Assets\Script\Model\IHeatUp.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
+    <Compile Include="Assets\Script\Behaviour\PlacementEnum.cs" />
+    <Compile Include="Assets\Script\Behaviour\PlacementCheck.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />
@@ -203,6 +206,7 @@
     <None Include="Assets\SpeechSDK\Plugins\WSA\x64\Microsoft.CognitiveServices.Speech.extension.lu.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Script\How To Postprocessing.txt" />
+    <None Include="Assets\Shader Graphs\Wired.shader" />
     <None Include="Assets\Script\DLL\NameGenerator\RandomNameGeneratorLibrary.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\x64\Microsoft.CognitiveServices.Speech.extension.silk_codec.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.extension.silk_codec.dll" />
@@ -218,9 +222,11 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\x86\Microsoft.CognitiveServices.Speech.extension.audio.sys.dll" />
+    <None Include="Assets\UCLAGameLab\Wireframe\Shaders\UCLA GameLab Wireframe Functions.cginc" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\x86\Microsoft.CognitiveServices.Speech.extension.lu.dll" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Script\DLL\HauntedShapesRecognition\Microsoft.CognitiveServices.Speech.csharp.xml" />
+    <None Include="Assets\UCLAGameLab\Wireframe\Shaders\UCLA GameLab Cutout Wireframe.shader" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.extension.lu.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.core.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
@@ -229,11 +235,14 @@
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM64\Microsoft.CognitiveServices.Speech.extension.silk_codec.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM64\Microsoft.CognitiveServices.Speech.extension.lu.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\UCLAGameLab\Wireframe\Shaders\UCLA GameLab Double-Sided Wireframe.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\UCLAGameLab\Wireframe\Shaders\UCLA GameLab Double-Sided Cutout Wireframe.shader" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\x86\Microsoft.CognitiveServices.Speech.extension.kws.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\UCLAGameLab\Wireframe\Shaders\UCLA GameLab Wireframe.shader" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.extension.kws.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\x86\Microsoft.CognitiveServices.Speech.extension.silk_codec.dll" />
   </ItemGroup>

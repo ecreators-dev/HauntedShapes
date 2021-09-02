@@ -69,7 +69,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 						actualSpeed = Mathf.Lerp(actualSpeed, targetSpeed, Time.deltaTime * multiplier);
 						animator.SetFloat(moveSpeedName, actualSpeed);
 						animator.SetBool(crouchBooleanName, crouching);
-						Debug.Log($"Update character animation with {actualSpeed} and {crouching}");
 				}
 
 				private void FixedUpdate()

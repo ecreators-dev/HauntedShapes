@@ -4,6 +4,8 @@ using Assets.Script.Components;
 using System;
 using System.Collections.Generic;
 
+using TMPro;
+
 using UnityEditor;
 
 using UnityEngine;
@@ -43,6 +45,8 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private LayerMask interactibleDoorMask;
 				[SerializeField] private InventoryBehaviour inventory;
 				[SerializeField] private CrosshairHitVisual crosshair;
+				[SerializeField] private TMP_Text infoText;
+				[SerializeField] private TMP_Text timerText;
 
 				private float money = 0;
 				private Equipment activeEquipment;
@@ -60,10 +64,10 @@ namespace Assets.Script.Behaviour
 				public Equipment ActiveEquipment => activeEquipment;
 
 				public bool IsPlayerInDark { get; private set; }
-				
+
 				// for statistics
 				public float PlayerDarknessTime { get; private set; }
-				
+
 				// for scoring
 				public float PlayerDarknessTimeFactorized { get; private set; }
 
@@ -210,8 +214,58 @@ namespace Assets.Script.Behaviour
 						HandleCrosshairClick();
 						HandleEquipmentToggleButton();
 						HandleEquipmentDropButton();
+						HandleEquipmentInfoGui();
 						UpdatePlayerInDark();
 						HandlePlayerInDarkness();
+				}
+
+				private void HandleEquipmentInfoGui()
+				{
+						if (ActiveEquipment is { })
+						{
+								EquipmentInfo info = ActiveEquipment.GetEquipmentInfo();
+								if (info is { })
+								{
+										ShowEquipmentInfo(info);
+								}
+								else
+								{
+										HideEquipmentInfo();
+								}
+						}
+						else
+						{
+								HideEquipmentInfo();
+						}
+				}
+
+				private void ShowEquipmentInfo(EquipmentInfo info)
+				{
+						if (info.Text != null)
+						{
+								infoText.gameObject.SetActive(true);
+								infoText.text = info.Text;
+						}
+						else
+						{
+								infoText.gameObject.SetActive(false);
+						}
+
+						if (info.TimerText != null)
+						{
+								timerText.gameObject.SetActive(true);
+								timerText.text = info.TimerText;
+						}
+						else
+						{
+								timerText.gameObject.SetActive(false);
+						}
+				}
+
+				private void HideEquipmentInfo()
+				{
+						infoText.gameObject.SetActive(false);
+						timerText.gameObject.SetActive(false);
 				}
 
 				private void HandlePlayerInDarkness()
@@ -241,7 +295,6 @@ namespace Assets.Script.Behaviour
 						if (litLights.Count > 0)
 						{
 								float averageIntensity = litIntensity / litLights.Count;
-								Debug.Log($"Player intensity: {averageIntensity}");
 								if (averageIntensity >= 0.1f)
 								{
 										IsPlayerInDark = false;
@@ -333,17 +386,12 @@ namespace Assets.Script.Behaviour
 						PickupItem active = parent.GetComponentInChildren<PickupItem>();
 						if (active != null)
 						{
-								if (active != null && item != active)
+								if (active != null && item != active && item is PickupItem)
 								{
 										// player can only carry one item at the same time!
-										DropItem(active);
+										active.DropItem(this);
 								}
 						}
-				}
-
-				private void DropItem(PickupItem item)
-				{
-						item.DropItem(this);
 				}
 
 				private void HandleCrosshairClick()
@@ -352,33 +400,37 @@ namespace Assets.Script.Behaviour
 						// to be clickable with name
 						if (crosshair.TryGetObject(out bool inClickRange, out var match)
 								&& inClickRange
-								&& CheckInteractButtonIsPressed()
 								&& match.any.IsUnlocked)
 						{
-								// equipment is an pickupitem
-								// pickupitem is an interactible
+								// an (any) interactible must be in interactible layer mask
+								// to be clickable with name
+								if (CheckInteractButtonIsPressed())
+								{
+										// equipment is an pickupitem
+										// pickupitem is an interactible
 
-								// interactible can be Interact
-								// pickupitem can be Interact and PickUp, but not set to inventory
-								// equipment can be Interact and PickUp and set to inventory
+										// interactible can be Interact
+										// pickupitem can be Interact and PickUp, but not set to inventory
+										// equipment can be Interact and PickUp and set to inventory
 
-								if (match.equipment is { })
-								{
-										if (match.item.IsTakenByPlayer is false)
+										if (match.equipment is { })
 										{
-												HandleEquipment(match.equipment);
+												if (match.item.IsTakenByPlayer is false)
+												{
+														HandleEquipment(match.equipment);
+												}
 										}
-								}
-								else if (match.item is { })
-								{
-										if (match.item.IsTakenByPlayer is false)
+										else if (match.item is { })
 										{
-												HandlePickupItem(match.item);
+												if (match.item.IsTakenByPlayer is false)
+												{
+														HandlePickupItem(match.item);
+												}
 										}
-								}
-								else if (match.any is { })
-								{
-										HandleInteractible(match.any);
+										else if (match.any is { })
+										{
+												HandleInteractible(match.any);
+										}
 								}
 						}
 				}

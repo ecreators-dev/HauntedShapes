@@ -37,10 +37,10 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private Light buttonLightOn;
 				[SerializeField] private AudioSource whiteSmokeSoundLoop;
 				[SerializeField] private Rigidbody RigidBody;
+				[SerializeField] private string brokenText = "Akku leer";
 
 				private readonly Queue<string> recognizedTextQueue = new Queue<string>();
 				private readonly Queue<string> sayQueue = new Queue<string>();
-				private bool isActivated = false;
 				private IVoiceRecognition recognizer;
 				private bool initialized;
 				private PlayerBehaviour owner;
@@ -54,8 +54,6 @@ namespace Assets.Script.Behaviour
 				public PlayerBehaviour OwnedByPlayer => owner;
 
 				public bool IsUseless => IsBroken;
-
-				public bool IsPowered => isActivated && IsUseless is false;
 
 				public bool CanToggleOnOff => canToggleOff;
 
@@ -74,7 +72,7 @@ namespace Assets.Script.Behaviour
 						canToggleOff = ShopInfo.CanToggleOff;
 						if (runAsToggledOn)
 						{
-								isActivated = true;
+								SetPowered(false);
 						}
 				}
 
@@ -94,7 +92,7 @@ namespace Assets.Script.Behaviour
 								if (Time.timeSinceLevelLoad - toggleTimestamp >= 30)
 								{
 										// toggle off
-										isActivated = false;
+										SetPowered(false);
 								}
 						}
 
@@ -103,7 +101,7 @@ namespace Assets.Script.Behaviour
 								string next = recognizedTextQueue.Dequeue();
 								if (triggers is { })
 								{
-										if (isActivated is false || IsUseless)
+										if (IsPowered is false || IsUseless)
 										{
 												// gerät kann nicht genutzt werden
 												return;
@@ -154,7 +152,7 @@ namespace Assets.Script.Behaviour
 
 				private void UpdateVisual()
 				{
-						if (isActivated)
+						if (IsPowered)
 						{
 								ShowActive();
 						}
@@ -220,7 +218,7 @@ namespace Assets.Script.Behaviour
 												displayFrequency.text = $"{fq:0.0}{fHz}";
 												yield return waiting;
 										}
-								} while (isActivated && IsUseless is false);
+								} while (IsPowered && IsUseless is false);
 								OnStop();
 								yield break;
 						}
@@ -978,14 +976,6 @@ namespace Assets.Script.Behaviour
 				{
 				}
 
-				protected override void OnPickedUp()
-				{
-				}
-
-				protected override void PerformDrop()
-				{
-				}
-
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
 						return IsTakenByPlayer is false;
@@ -1010,13 +1000,21 @@ namespace Assets.Script.Behaviour
 				{
 						// nothing yet
 				}
-				
-				private void ToggleOn() => isActivated = true;
 
-				private void ToggleOff() => isActivated = false;
+				protected override void OnEditMode_ToggleOn() => SetPowered(true);
 
-				protected override void OnEditMode_ToggleOn() => ToggleOn();
+				protected override void OnEditMode_ToggleOff() => SetPowered(false);
 
-				protected override void OnEditMode_ToggleOff() => ToggleOff();
+				public override EquipmentInfo GetEquipmentInfo()
+				{
+						if (IsBroken)
+						{
+								return new EquipmentInfo
+								{
+										Text = brokenText
+								};
+						}
+						return null;
+				}
 		}
 }

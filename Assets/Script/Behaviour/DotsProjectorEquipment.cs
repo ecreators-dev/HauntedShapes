@@ -1,21 +1,23 @@
-using System;
-
 using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
-		[RequireComponent(typeof(Light))]
-		public class DotsProjectorEquipment : Equipment
+		public partial class DotsProjectorEquipment : Equipment
 		{
-				[SerializeField] private MeshRenderer meshRenderer;
 				[SerializeField] private Rigidbody RigidBody;
 				[SerializeField] private ShopParameters shopInfo;
+				[SerializeField] private Animator animator;
+				[SerializeField] private string brokenText = "Gerät ist kaputt";
 
-				private Light Light { get; set; }
+				private PlacementEnum PlacementStatus { get; set; } = PlacementEnum.NONE;
+
+				private bool IsPlaced => PlacementStatus != PlacementEnum.NONE;
+
+				private Transform Transform { get; set; }
 
 				private void Awake()
 				{
-						Light = GetComponent<Light>();
+						Transform = transform;
 				}
 
 				private void Start()
@@ -23,79 +25,72 @@ namespace Assets.Script.Behaviour
 						SetShopInfo(shopInfo, this);
 				}
 
+				protected override void Update()
+				{
+						base.Update();
+						animator.SetBool("Hunting", IsHuntingActive);
+						animator.SetBool("PowerOn", IsPowered);
+
+						// no matter if in hand of player:
+						if (IsPlaced)
+						{
+								switch (PlacementStatus)
+								{
+										case PlacementEnum.CEILING:
+										case PlacementEnum.WALL:
+												DisableFalling();
+												break;
+										default:
+												EnableFalling();
+												break;
+								}
+						}
+
+						// in players hand
+						if (IsTakenByPlayer)
+						{
+								CrosshairHit.SetPlacementEquipment(this);
+								// interacting is placing it first
+						}
+				}
+
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						return false;
+						return IsLocked is false && (User == null || User == sender);
 				}
 
 				public override void Interact(PlayerBehaviour sender)
 				{
-						// not enabled yet!
+						TogglePowered();
 				}
 
-				protected override void OnEquip()
+				private void PlaceItem()
 				{
-						DisableFalling();
-						MakeVisible();
+						// do placing
+						if (TryGetCrosshairHitInfo(out var position, out var normal, out var type))
+						{
+								Transform.position = position;
+								Transform.up = normal;
+						}
+						PlacementStatus = type;
 				}
 
-				protected override void OnHuntStart()
+				private void DisableFalling() => RigidBody.isKinematic = true;
+
+				private void EnableFalling() => RigidBody.isKinematic = false;
+
+				protected override void OnEditMode_ToggleOn() => SetPowered(true);
+
+				protected override void OnEditMode_ToggleOff() => SetPowered(false);
+
+				public override EquipmentInfo GetEquipmentInfo()
 				{
-						// nothing, may be less light?
+						string text = null;
+						if (IsBroken)
+						{
+								text = brokenText;
+						}
+						return text != null ? new EquipmentInfo { Text = text, TimerText = null } : null;
 				}
-
-				protected override void OnHuntStop()
-				{
-						// nothing, light normal?
-				}
-
-				protected override void OnInventory()
-				{
-						MakeInvisible();
-				}
-
-				private void MakeInvisible()
-				{
-						meshRenderer.enabled = false;
-				}
-
-				private void MakeVisible()
-				{
-						meshRenderer.enabled = true;
-				}
-
-				protected override void OnOwnerOwnedEquipment()
-				{
-
-				}
-
-				protected override void OnPickedUp()
-				{
-						DisableFalling();
-				}
-
-				private void DisableFalling()
-				{
-						RigidBody.isKinematic = true;
-				}
-
-				private void EnableFalling()
-				{
-						RigidBody.isKinematic = false;
-				}
-
-				protected override void PerformDrop()
-				{
-						EnableFalling();
-						MakeVisible();
-				}
-
-				protected override void OnEditMode_ToggleOn() => this.ToggleOn();
-
-				protected override void OnEditMode_ToggleOff() => ToggleOff();
-
-				private void ToggleOn() => Light.enabled = true;
-
-				private void ToggleOff() => Light.enabled = false;
 		}
 }

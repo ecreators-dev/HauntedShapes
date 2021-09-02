@@ -31,6 +31,8 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private TMP_Text targetTextUI;
 				[SerializeField] private TMP_Text tooFarTextUI;
 				[SerializeField] private LayerMask hitLayers;
+				[SerializeField] private Transform placementSprite;
+				[SerializeField] private PlacementCheck placementCheck;
 
 				private RawImage image;
 				private Color matchColor;
@@ -41,6 +43,7 @@ namespace Assets.Script.Behaviour
 				private RaycastHit anyTarget;
 				private bool anyTargetHit;
 				private Vector3 hitBefore;
+				private Equipment showPlacementForEquipment;
 
 				public static ICrosshairUI Instance { get; private set; }
 
@@ -66,13 +69,61 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
+
+				public void SetPlacementEquipment(Equipment equipmentNotNull)
+				{
+						if (showPlacementForEquipment != null && showPlacementForEquipment != equipmentNotNull)
+						{
+								Debug.LogError($"You must call {nameof(SetPlaced)} from the original quipment first");
+								return;
+						}
+						if (equipmentNotNull == null)
+						{
+								Debug.LogError($"Only allowed for equipments not null!");
+								return;
+						}
+						showPlacementForEquipment = equipmentNotNull;
+				}
+
+				public void SetPlaced(Equipment equipment)
+				{
+						if (showPlacementForEquipment == null || showPlacementForEquipment != equipment)
+						{
+								Debug.LogError("You must call this from the quipment, when placed or aborted");
+								return;
+						}
+						showPlacementForEquipment = null;
+				}
+
+				public PlacementEnum GetPlacementInfo(out PlacementCheck.HitCheck? info)
+				{
+						return placementCheck.GetPlacementType(out info);
+				}
+
+				public Transform GetPlacementPosition()
+				{
+						return placementSprite;
+				}
+
 				private void Update()
 				{
-						Transform camera = CameraMoveType.Instance.GetCamera().transform;
+						Camera cam = CameraMoveType.Instance.GetCamera();
+						Transform camera = cam.transform;
 
 						// HOVER: show near items with hand visible! (c)
 						hovered = false;
 						UpdateHoveredTarget(camera);
+
+						var hit = GetPlacementInfo(out var hitCheck) != PlacementEnum.NONE;
+						bool showPlacement = hit && showPlacementForEquipment != null;
+						placementSprite.gameObject.SetActive(showPlacement);
+						if (showPlacement)
+						{
+								Vector3 normal = hitCheck.Value.Raycast.normal;
+								Vector3 position = hitCheck.Value.Raycast.point;
+								placementSprite.forward = normal;
+								placementSprite.position = position + placementSprite.forward * 0.01f;
+						}
 
 						// CLICK:
 						tooFarTextUI.enabled = false;
@@ -87,19 +138,19 @@ namespace Assets.Script.Behaviour
 						//! Click Action is handled in Player Behaviour
 				}
 
-				public (bool actualHit, RaycastHit hit) GetHitPointLastUpdate()
+				public (bool actualHit, RaycastHit hit) GetRaycastCollidersOnlyResult()
 				{
 						return (anyTargetHit, anyTarget);
 				}
 
-				public (bool hit, Vector3 point) UpdateHitPointFarAway(Camera cam)
+				public (bool hit, Vector3 point, Vector3 normal) RaycastCollidersOnly(Camera sourceCamera)
 				{
 						// layerMask = cam.cullingMask means:
 						// takes only visible targets in view, not player (for example)
-						Transform camera = cam.transform;
+						Transform camera = sourceCamera.transform;
 						Ray ray = new Ray(camera.position, camera.forward);
 						anyTargetHit = Physics.SphereCast(ray, size,
-								out anyTarget, 10000, hitLayers, 
+								out anyTarget, 10000, hitLayers,
 								// fixes hit no trigger!
 								QueryTriggerInteraction.Ignore);
 						var point = anyTarget.point;
@@ -111,7 +162,7 @@ namespace Assets.Script.Behaviour
 						{
 								hitBefore = point;
 						}
-						return (anyTargetHit, point);
+						return (anyTargetHit, point, anyTarget.normal);
 				}
 
 				private bool IsInteractionPressed()

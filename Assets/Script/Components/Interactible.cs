@@ -84,9 +84,9 @@ namespace Assets.Script.Components
 						oldHuntingStatus = IsHuntingActive;
 				}
 
-				protected abstract void OnHuntStart();
+				protected virtual void OnHuntStart() { }
 
-				protected abstract void OnHuntStop();
+				protected virtual void OnHuntStop() { }
 
 				public abstract string GetTargetName();
 		}
