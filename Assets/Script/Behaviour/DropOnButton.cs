@@ -20,7 +20,7 @@ namespace Assets.Script.Behaviour
 				{
 						if (reference.IsTakenByPlayer)
 						{
-								if (this.InputControls().PlayerDropEquipment)
+								if (this.InputControls().DropItemButtonPressed)
 								{
 										reference.DropItem(reference.User);
 								}

@@ -1,35 +1,41 @@
 ﻿using UnityEngine;
 
-public interface IInputControls
+namespace Assets
 {
-		Vector2 InputAxis { get; }
-		float Horizonal { get; }
-		float Vertical { get; }
-		Vector2 MouseDelta { get; }
-		float MouseDeltaX { get; }
-		float MouseDeltaY { get; }
+		public interface IInputControls
+		{
+				Vector2 InputAxis { get; }
+				float Horizonal { get; }
+				float Vertical { get; }
+				Vector2 MouseDelta { get; }
+				float MouseDeltaX { get; }
+				float MouseDeltaY { get; }
 
-		bool ExitGameButton { get; }
-		bool EditorStopCamera { get; }
+				bool ExitGameButton { get; }
+				bool EditorStopCamera { get; }
 
-		bool PlayerToggleEquipmentOnOff { get; }
+				bool InteractButtonPressed { get; }
 
-		bool PlayerDropEquipment { get; }
+				bool DropItemButtonPressed { get; }
 
-		bool DebugHuntToggleOnOff { get; }
+				bool DebugHuntToggleOnOff { get; }
 
-		bool IsEnabled { get; }
+				bool IsEnabled { get; }
 
-		bool InteractionCrosshairPressed {  get; }
+				bool CrosshairTargetInteractionButtonPressed { get; }
 
-		bool CrouchButtonPressed { get; }
+				bool CrouchButtonPressed { get; }
 
-		/// <summary>
-		/// Special settings to input controller for run
-		/// 
-		/// </summary>
-		bool RunButtonPressedOrHold { get; }
+				/// <summary>
+				/// Special settings to input controller for run
+				/// 
+				/// </summary>
+				bool RunButtonPressedOrHold { get; }
 
-		void Disable();
-		void Enable();
+				bool PlaceEquipmentButtonPressed { get; }
+
+				void Disable();
+
+				void Enable();
+		}
 }

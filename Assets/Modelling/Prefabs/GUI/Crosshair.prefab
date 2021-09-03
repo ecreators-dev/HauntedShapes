@@ -510,6 +510,8 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 0
+  placementSprite: {fileID: 0}
+  placementCheck: {fileID: 0}
 --- !u!1001 &403450084747696639
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -519,7 +521,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4012233555959440879, guid: f14e5cca55778294b9752cf4deb6ec78, type: 3}
       propertyPath: m_Name
-      value: Corsshair-Placement
+      value: Crosshair-Placement
       objectReference: {fileID: 0}
     - target: {fileID: 4460393101016709178, guid: f14e5cca55778294b9752cf4deb6ec78, type: 3}
       propertyPath: m_RootOrder

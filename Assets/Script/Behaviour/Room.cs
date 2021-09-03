@@ -56,7 +56,12 @@ namespace Assets.Script.Behaviour
 								// temperature by distance
 								otherThermal += other.GetTemperature(Transform);
 						}
-						Debug.Log($"Room Temperature {Temperature} °C, Ghosts: {ghostThermal} °C, Other: {otherThermal} °C: '{gameObject.name}'");
+
+						// TODO
+						if(false)
+						{
+								Debug.Log($"Room Temperature {Temperature} °C, Ghosts: {ghostThermal} °C, Other: {otherThermal} °C: '{gameObject.name}'");
+						}
 				}
 
 				private void OnTriggerEnter(Collider other)

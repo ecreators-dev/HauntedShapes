@@ -51,7 +51,15 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""EquipmentToggle"",
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""26318fdb-4333-4428-9192-00589aed46dc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Equipment Toggle"",
                     ""type"": ""Button"",
                     ""id"": ""fd3ae3b8-52ae-481a-9aa2-a681193030fd"",
                     ""expectedControlType"": ""Button"",
@@ -59,7 +67,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""EquipmentDrop"",
+                    ""name"": ""Equipment Drop"",
                     ""type"": ""Button"",
                     ""id"": ""bfd09ad3-e785-4050-9099-0e11fb5e8674"",
                     ""expectedControlType"": ""Button"",
@@ -67,17 +75,9 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""HuntToggle (Debug)"",
+                    ""name"": ""Hunt Toggle (Debug)"",
                     ""type"": ""Button"",
                     ""id"": ""55fba300-6b61-4a38-97fc-8ac581f64d9f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Keyboard Interaction"",
-                    ""type"": ""Button"",
-                    ""id"": ""26318fdb-4333-4428-9192-00589aed46dc"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -97,6 +97,14 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=0.1,pressPoint=0.001)""
+                },
+                {
+                    ""name"": ""Place Item"",
+                    ""type"": ""Button"",
+                    ""id"": ""96c0c9a0-39df-43de-9585-191f7d26acaf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -172,7 +180,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Classic"",
+                    ""groups"": """",
                     ""action"": ""Exit Game"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -195,18 +203,29 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Classic"",
-                    ""action"": ""EquipmentToggle"",
+                    ""action"": ""Equipment Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""014fc77a-9a17-471d-9f69-030184c984d5"",
+                    ""id"": ""93faaecc-6a7d-485e-8430-83c581937a01"",
                     ""path"": ""<Keyboard>/h"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Debug;Classic"",
-                    ""action"": ""HuntToggle (Debug)"",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Hunt Toggle (Debug)"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ca66cb1a-e861-45a1-a7b4-5014b79b3c0e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Equipment Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -216,19 +235,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/g"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Classic;Debug"",
-                    ""action"": ""EquipmentDrop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e3bb9d89-12c3-4d97-b664-09fefb5baf38"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
                     ""groups"": ""Classic"",
-                    ""action"": ""Keyboard Interaction"",
+                    ""action"": ""Equipment Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -251,6 +259,50 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Classic"",
                     ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6bda184-88a9-49ad-9dd3-552e9e3b1020"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Place Item"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48239a39-e936-4ee9-97d4-5fdbea3d58b2"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Place Item"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3bb9d89-12c3-4d97-b664-09fefb5baf38"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9af0f257-88a3-4be2-abe4-7d27fcc4ebb8"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Classic"",
+                    ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -298,12 +350,13 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
         m_Player_ExitGame = m_Player.FindAction("Exit Game", throwIfNotFound: true);
         m_Player_EditorStopRotateCamera = m_Player.FindAction("Editor Stop Rotate Camera", throwIfNotFound: true);
-        m_Player_EquipmentToggle = m_Player.FindAction("EquipmentToggle", throwIfNotFound: true);
-        m_Player_EquipmentDrop = m_Player.FindAction("EquipmentDrop", throwIfNotFound: true);
-        m_Player_HuntToggleDebug = m_Player.FindAction("HuntToggle (Debug)", throwIfNotFound: true);
-        m_Player_KeyboardInteraction = m_Player.FindAction("Keyboard Interaction", throwIfNotFound: true);
+        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
+        m_Player_EquipmentToggle = m_Player.FindAction("Equipment Toggle", throwIfNotFound: true);
+        m_Player_EquipmentDrop = m_Player.FindAction("Equipment Drop", throwIfNotFound: true);
+        m_Player_HuntToggleDebug = m_Player.FindAction("Hunt Toggle (Debug)", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
+        m_Player_PlaceItem = m_Player.FindAction("Place Item", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -357,12 +410,13 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Looking;
     private readonly InputAction m_Player_ExitGame;
     private readonly InputAction m_Player_EditorStopRotateCamera;
+    private readonly InputAction m_Player_Interaction;
     private readonly InputAction m_Player_EquipmentToggle;
     private readonly InputAction m_Player_EquipmentDrop;
     private readonly InputAction m_Player_HuntToggleDebug;
-    private readonly InputAction m_Player_KeyboardInteraction;
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Run;
+    private readonly InputAction m_Player_PlaceItem;
     public struct PlayerActions
     {
         private @ControlMappingInputAction m_Wrapper;
@@ -371,12 +425,13 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         public InputAction @Looking => m_Wrapper.m_Player_Looking;
         public InputAction @ExitGame => m_Wrapper.m_Player_ExitGame;
         public InputAction @EditorStopRotateCamera => m_Wrapper.m_Player_EditorStopRotateCamera;
+        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputAction @EquipmentToggle => m_Wrapper.m_Player_EquipmentToggle;
         public InputAction @EquipmentDrop => m_Wrapper.m_Player_EquipmentDrop;
         public InputAction @HuntToggleDebug => m_Wrapper.m_Player_HuntToggleDebug;
-        public InputAction @KeyboardInteraction => m_Wrapper.m_Player_KeyboardInteraction;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Run => m_Wrapper.m_Player_Run;
+        public InputAction @PlaceItem => m_Wrapper.m_Player_PlaceItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -398,6 +453,9 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @EditorStopRotateCamera.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEditorStopRotateCamera;
                 @EditorStopRotateCamera.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEditorStopRotateCamera;
                 @EditorStopRotateCamera.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEditorStopRotateCamera;
+                @Interaction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
+                @Interaction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
+                @Interaction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
                 @EquipmentToggle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
                 @EquipmentToggle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
                 @EquipmentToggle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
@@ -407,15 +465,15 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @HuntToggleDebug.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
                 @HuntToggleDebug.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
                 @HuntToggleDebug.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHuntToggleDebug;
-                @KeyboardInteraction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
-                @KeyboardInteraction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
-                @KeyboardInteraction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKeyboardInteraction;
                 @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
                 @Run.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
                 @Run.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
                 @Run.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @PlaceItem.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlaceItem;
+                @PlaceItem.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlaceItem;
+                @PlaceItem.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPlaceItem;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -432,6 +490,9 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @EditorStopRotateCamera.started += instance.OnEditorStopRotateCamera;
                 @EditorStopRotateCamera.performed += instance.OnEditorStopRotateCamera;
                 @EditorStopRotateCamera.canceled += instance.OnEditorStopRotateCamera;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
                 @EquipmentToggle.started += instance.OnEquipmentToggle;
                 @EquipmentToggle.performed += instance.OnEquipmentToggle;
                 @EquipmentToggle.canceled += instance.OnEquipmentToggle;
@@ -441,15 +502,15 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @HuntToggleDebug.started += instance.OnHuntToggleDebug;
                 @HuntToggleDebug.performed += instance.OnHuntToggleDebug;
                 @HuntToggleDebug.canceled += instance.OnHuntToggleDebug;
-                @KeyboardInteraction.started += instance.OnKeyboardInteraction;
-                @KeyboardInteraction.performed += instance.OnKeyboardInteraction;
-                @KeyboardInteraction.canceled += instance.OnKeyboardInteraction;
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @PlaceItem.started += instance.OnPlaceItem;
+                @PlaceItem.performed += instance.OnPlaceItem;
+                @PlaceItem.canceled += instance.OnPlaceItem;
             }
         }
     }
@@ -478,11 +539,12 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         void OnLooking(InputAction.CallbackContext context);
         void OnExitGame(InputAction.CallbackContext context);
         void OnEditorStopRotateCamera(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
         void OnEquipmentToggle(InputAction.CallbackContext context);
         void OnEquipmentDrop(InputAction.CallbackContext context);
         void OnHuntToggleDebug(InputAction.CallbackContext context);
-        void OnKeyboardInteraction(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+        void OnPlaceItem(InputAction.CallbackContext context);
     }
 }

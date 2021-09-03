@@ -22,6 +22,19 @@ namespace Assets.Script.Behaviour
 
 				protected ICrosshairUI CrosshairHit { get; private set; }
 
+				protected bool IsCrosshairHovered
+				{
+						get
+						{
+								if (CrosshairHit == null)
+								{
+										return false;
+								}
+								(bool actualHit, RaycastHit hit) = CrosshairHit.GetRaycastCollidersOnlyResult();
+								return actualHit && hit.collider.GetComponent<PickupItem>() == this;
+						}
+				}
+
 				[CalledByPlayerBehaviour]
 				public virtual void OnPlayer_ItemPickedUp(PlayerBehaviour newUser)
 				{
@@ -61,7 +74,7 @@ namespace Assets.Script.Behaviour
 				/// After the player dropped this item
 				/// </summary>
 				[CalledByPlayerBehaviour]
-				public void DropItem(PlayerBehaviour oldOwner)
+				public void DropItem(PlayerBehaviour oldOwner, bool noForce = false)
 				{
 						// must not be null!
 						oldOwner = oldOwner ?? throw new ArgumentNullException(nameof(oldOwner));
@@ -80,10 +93,13 @@ namespace Assets.Script.Behaviour
 
 								if (TryGetComponent(out Rigidbody body))
 								{
-										body.AddForce(obj.forward * 2, ForceMode.Impulse);
+										if (noForce is false)
+										{
+												body.AddForce(obj.forward * 2, ForceMode.Impulse);
+										}
+
 										body.isKinematic = false;
 										Debug.Log("Enable physics for drop: throw forward");
-
 								}
 								Debug.Log($"Dropped: {GetTargetName()}");
 								OnPerformedDrop();

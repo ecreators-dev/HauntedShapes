@@ -4,14 +4,22 @@ namespace Assets.Script.Behaviour.FirstPerson
 {
 		public interface ICrosshairUI
 		{
-				void SetPlaced(Equipment equipment);
+				/// <summary>
+				/// Does placement position and rotation upward from surface and hides placement sprite
+				/// </summary>
+				void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal);
 
-				void SetPlacementEquipment(Equipment equipmentNotNull);
+				/// <summary>
+				/// Sets an equipment active for beeing placed. Shows a placement sprite at target surface and
+				/// how it will be oriented, propably.
+				/// </summary>
+				void ShowPlacementPointer(Equipment equipmentNotNull);
 
 				(bool actualHit, RaycastHit hit) GetRaycastCollidersOnlyResult();
 
 				(bool hit, Vector3 point, Vector3 normal) RaycastCollidersOnly(Camera camera);
 				Transform GetPlacementPosition();
 				PlacementEnum GetPlacementInfo(out PlacementCheck.HitCheck? info);
+				Vector3 GetPlacementNormal();
 		}
 }

@@ -97,7 +97,11 @@ namespace Assets.Script.Behaviour.Thermal
 								float deltaTemperature = targetTemperature - oldTemperature;
 								float temperatureChangeRelative = deltaTemperature * progress;
 								currentTemperature = oldTemperature + temperatureChangeRelative;
-								Debug.Log($"Thermal Body Temperature: {currentTemperature} °C of max. {temperatureDegreesCelsius} °C: '{gameObject.name}'");
+								// TODO:
+								if (false)
+								{
+										Debug.Log($"Thermal Body Temperature: {currentTemperature} °C of max. {temperatureDegreesCelsius} °C: '{gameObject.name}'");
+								}
 						}
 				}
 

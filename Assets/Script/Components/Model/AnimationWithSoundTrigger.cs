@@ -15,7 +15,7 @@ namespace Assets.Script.Components
 				{
 						if (audio == null)
 						{
-								Debug.LogError($"Missing audio: {name}: {triggerName}");
+								Debug.LogWarning($"Missing audio: {name}: {triggerName}");
 								return;
 						}
 

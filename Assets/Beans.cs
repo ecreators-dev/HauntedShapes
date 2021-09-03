@@ -8,9 +8,6 @@ namespace Assets
 {
 		public static class Beans
 		{
-				private static bool wasNotInstanced;
-				private static bool wasDisabled;
-
 				public static bool InHunt => HuntingStateBean.Instance?.InHunt ?? false;
 
 				public static IGameController GetGameController(this Behaviour _) => GameControllerSingleton.Instance;
@@ -25,20 +22,12 @@ namespace Assets
 						IInputControls instance = InputControlManagerSingleton.Instance;
 						if (instance is null)
 						{
-								wasNotInstanced = true;
 								Debug.LogWarning($"{nameof(InputControlManagerSingleton)} not yet instantiated or set!");
 						}
 						else if (instance.IsEnabled is false)
 						{
-								wasDisabled = true;
 								instance.Enable();
-								Debug.LogWarning($"{nameof(InputControlManagerSingleton)} not yet enabled! Now enabled.");
-						}
-						else if (wasDisabled || wasNotInstanced)
-						{
-								Debug.LogWarning($"{nameof(InputControlManagerSingleton)} ready!");
-								wasDisabled = false;
-								wasNotInstanced = false;
+								Debug.Log($"{nameof(InputControlManagerSingleton)} now enabled!");
 						}
 						return instance;
 				}

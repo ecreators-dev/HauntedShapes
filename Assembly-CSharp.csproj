@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,11 +53,15 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Script\Model\IPlayerCam.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\BeginGroupAttribute.cs" />
     <Compile Include="Assets\Script\Components\RitualArea.cs" />
+    <Compile Include="Assets\Script\Behaviour\GhostBehaviour.cs" />
     <Compile Include="Assets\Script\Behaviour\FadeUIElement.cs" />
     <Compile Include="Assets\Script\Behaviour\PlacementEnum.cs" />
     <Compile Include="Assets\Script\Behaviour\GetUpDoorBehaviour.cs" />
@@ -84,6 +88,7 @@
     <Compile Include="Assets\Script\Behaviour\InventoryBehaviour.cs" />
     <Compile Include="Assets\Beans.cs" />
     <Compile Include="Assets\Script\Behaviour\VoiceMaker.cs" />
+    <Compile Include="Assets\Script\Behaviour\Thermal\ThermalBody.cs" />
     <Compile Include="Assets\Script\Behaviour\GetUpDoor.cs" />
     <Compile Include="Assets\Script\Behaviour\InteractibleChild.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognition.cs" />
@@ -106,9 +111,11 @@
     <Compile Include="Assets\Script\Behaviour\EditorSnapToGround.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\LookAtTargetDynamic.cs" />
     <Compile Include="Assets\Script\Behaviour\ShopParameters.cs" />
+    <Compile Include="Assets\Script\Behaviour\Room.cs" />
     <Compile Include="Assets\Script\Behaviour\Ghostbox.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\FirstPersonController.cs" />
     <Compile Include="Assets\Script\Components\Interactible.cs" />
+    <Compile Include="Assets\Script\Controller\SurfacePlacingFactory.cs" />
     <Compile Include="Assets\Script\Behaviour\BehaviourExtensions.cs" />
     <Compile Include="Assets\Script\Model\Fade.cs" />
     <Compile Include="Assets\Script\Model\IAudioFader.cs" />
@@ -140,6 +147,7 @@
     <Compile Include="Assets\Script\Behaviour\DictionaryExtensions.cs" />
     <Compile Include="Assets\Script\Behaviour\Door.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostBoxTrigger.cs" />
+    <Compile Include="Assets\Script\Behaviour\IPlacableEquipment.cs" />
     <Compile Include="Assets\Modelling\IgniteCoders\Simple Water Shader\Info\Scripts\Readme.cs" />
     <Compile Include="Assets\Script\BaseCoroutinesYields\CoroutineCommand.cs" />
     <Compile Include="Assets\Script\Components\Model\EObjectType.cs" />
@@ -179,9 +187,6 @@
     <Compile Include="Assets\Script\Model\IHeatUp.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Behaviour\Thermal\ThermalBody.cs" />
-    <Compile Include="Assets\Script\Behaviour\Room.cs" />
-    <Compile Include="Assets\Script\Behaviour\GhostBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

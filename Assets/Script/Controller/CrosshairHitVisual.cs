@@ -1,15 +1,14 @@
 using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Components;
 using Assets.Script.Controller;
-using Assets.Script.Model;
-
-using System;
 
 using TMPro;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+
+using static Assets.Script.Behaviour.SurfacePlacingFactory;
 
 namespace Assets.Script.Behaviour
 {
@@ -20,8 +19,11 @@ namespace Assets.Script.Behaviour
 		[DisallowMultipleComponent]
 		public class CrosshairHitVisual : MonoBehaviour, ICrosshairUI
 		{
+				private static readonly LayerMask LAYER_MASK_EVERYTHING = ~0;
+
 				[SerializeField] private CrosshairRoot root;
 				[SerializeField] private bool hovered;
+				private bool placementHitFound;
 				[SerializeField] private float hitDistance = 4;
 				[SerializeField] private float hitDistanceFar = 5;
 
@@ -31,7 +33,7 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private TMP_Text targetTextUI;
 				[SerializeField] private TMP_Text tooFarTextUI;
 				[SerializeField] private LayerMask hitLayers;
-				[SerializeField] private Transform placementSprite;
+				[SerializeField] private GameObject placementSprite;
 				[SerializeField] private PlacementCheck placementCheck;
 
 				private RawImage image;
@@ -43,7 +45,8 @@ namespace Assets.Script.Behaviour
 				private RaycastHit anyTarget;
 				private bool anyTargetHit;
 				private Vector3 hitBefore;
-				private Equipment showPlacementForEquipment;
+				private Equipment placementRequestor;
+				private RaycastHit placementHit;
 
 				public static ICrosshairUI Instance { get; private set; }
 
@@ -58,6 +61,7 @@ namespace Assets.Script.Behaviour
 
 				private void Start()
 				{
+						placementSprite.SetActive(false);
 						if (Instance == null)
 						{
 								Instance = this;
@@ -69,12 +73,14 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-
-				public void SetPlacementEquipment(Equipment equipmentNotNull)
+				/// <summary>
+				/// See also <seealso cref="PlaceEquipment"/>
+				/// </summary>
+				public void ShowPlacementPointer(Equipment equipmentNotNull)
 				{
-						if (showPlacementForEquipment != null && showPlacementForEquipment != equipmentNotNull)
+						if (placementRequestor != null && placementRequestor != equipmentNotNull)
 						{
-								Debug.LogError($"You must call {nameof(SetPlaced)} from the original quipment first");
+								Debug.LogError($"You must call {nameof(PlaceEquipment)} from the original quipment first");
 								return;
 						}
 						if (equipmentNotNull == null)
@@ -82,17 +88,28 @@ namespace Assets.Script.Behaviour
 								Debug.LogError($"Only allowed for equipments not null!");
 								return;
 						}
-						showPlacementForEquipment = equipmentNotNull;
+						placementRequestor = equipmentNotNull;
+						//placing = SurfacePlacingFactory.FindSurface(showPlacementForEquipment.transform, Vector3.up);
 				}
 
-				public void SetPlaced(Equipment equipment)
+				/// <summary>
+				/// See also <seealso cref="ShowPlacementPointer"/>
+				/// </summary>
+				public void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal)
 				{
-						if (showPlacementForEquipment == null || showPlacementForEquipment != equipment)
+						if (placementRequestor == null || placementRequestor != equipment)
 						{
 								Debug.LogError("You must call this from the quipment, when placed or aborted");
 								return;
 						}
-						showPlacementForEquipment = null;
+
+						equipment.transform.SetParent(null);
+						equipment.transform.position = placementHit.point;
+						if (useHitNormal)
+						{
+								equipment.transform.rotation = Quaternion.FromToRotation(up, placementHit.normal);
+						}
+						placementRequestor = null;
 				}
 
 				public PlacementEnum GetPlacementInfo(out PlacementCheck.HitCheck? info)
@@ -102,7 +119,12 @@ namespace Assets.Script.Behaviour
 
 				public Transform GetPlacementPosition()
 				{
-						return placementSprite;
+						return placementSprite.transform;
+				}
+
+				public Vector3 GetPlacementNormal()
+				{
+						return placementHitFound ? placementHit.normal : Vector3.up;
 				}
 
 				private void Update()
@@ -113,17 +135,7 @@ namespace Assets.Script.Behaviour
 						// HOVER: show near items with hand visible! (c)
 						hovered = false;
 						UpdateHoveredTarget(camera);
-
-						var hit = GetPlacementInfo(out var hitCheck) != PlacementEnum.NONE;
-						bool showPlacement = hit && showPlacementForEquipment != null;
-						placementSprite.gameObject.SetActive(showPlacement);
-						if (showPlacement)
-						{
-								Vector3 normal = hitCheck.Value.Raycast.normal;
-								Vector3 position = hitCheck.Value.Raycast.point;
-								placementSprite.forward = normal;
-								placementSprite.position = position + placementSprite.forward * 0.01f;
-						}
+						UpdatePlacementTarget();
 
 						// CLICK:
 						tooFarTextUI.enabled = false;
@@ -136,6 +148,36 @@ namespace Assets.Script.Behaviour
 						image.enabled = hovered;
 
 						//! Click Action is handled in Player Behaviour
+				}
+
+				private void UpdatePlacementTarget()
+				{
+						// now placed: reset (only placeable equipments can be placed)
+						if (placementRequestor != null && placementRequestor is IPlacableEquipment p
+								&& p.IsPlaced)
+						{
+								placementRequestor = null;
+						}
+
+						// show or hide
+						bool hoveredOnEnvironment = placementRequestor != null && placementHitFound;
+						if (hoveredOnEnvironment)
+						{
+								// put sprite to wall:
+								PlacementVisualUpdatePosition();
+						}
+						placementSprite.SetActive(hoveredOnEnvironment);
+				}
+
+				private void PlacementVisualUpdatePosition()
+				{
+						if (placementHitFound is false)
+								return;
+
+						Vector3 normal = placementHit.normal;
+						Vector3 position = placementHit.point;
+						placementSprite.transform.forward = normal;
+						placementSprite.transform.position = position + placementSprite.transform.forward * 0.01f;
 				}
 
 				public (bool actualHit, RaycastHit hit) GetRaycastCollidersOnlyResult()
@@ -168,7 +210,7 @@ namespace Assets.Script.Behaviour
 				private bool IsInteractionPressed()
 				{
 						return Mouse.current.leftButton.isPressed
-								|| this.InputControls().InteractionCrosshairPressed;
+								|| this.InputControls().CrosshairTargetInteractionButtonPressed;
 				}
 
 				private void UpdateHoveredTarget(Transform camera)
@@ -183,6 +225,19 @@ namespace Assets.Script.Behaviour
 								&& (IsEquimentHit(clickInRange, out hitEquipment)
 										| IsPickupItemHit(clickInRange, out hitItem)
 										| IsInteractibleHit(clickInRange, out hitAny));
+
+						// place anywhere:
+						placementHitFound =
+								Physics.Raycast(new Ray(camera.position, camera.forward),
+								out placementHit, hitDistance, LAYER_MASK_EVERYTHING, QueryTriggerInteraction.Ignore);
+
+						// place not on other interactibles!
+						if (placementHit.collider != null &&
+								placementHit.collider.GetComponent<Interactible>() != null)
+						{
+								placementHitFound = false;
+								placementHit = default;
+						}
 
 						clickableRange = hovered && clickInRange.distance <= hitDistance;
 						matchColor = root.GetColor(GetActionType(hitEquipment, hitAny));
@@ -238,7 +293,7 @@ namespace Assets.Script.Behaviour
 						return clickInRange.collider.TryGetComponent(out target);
 				}
 
-				public bool TryGetObject(out bool inRange, out (Equipment equipment, PickupItem item, Interactible any) result)
+				public bool TryGetItem(out bool inRange, out (Equipment equipment, PickupItem item, Interactible any) result)
 				{
 						result = (hitEquipment, hitItem, hitAny);
 						inRange = clickableRange;

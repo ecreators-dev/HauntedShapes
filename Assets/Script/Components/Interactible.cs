@@ -45,7 +45,10 @@ namespace Assets.Script.Components
 				{
 				}
 
-				public abstract bool CanInteract(PlayerBehaviour sender);
+				public virtual bool CanInteract(PlayerBehaviour sender)
+				{
+						return IsLocked is false;
+				}
 
 				public abstract void Interact(PlayerBehaviour sender);
 

@@ -38,7 +38,15 @@
                     "interactions": ""
                 },
                 {
-                    "name": "EquipmentToggle",
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "26318fdb-4333-4428-9192-00589aed46dc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Equipment Toggle",
                     "type": "Button",
                     "id": "fd3ae3b8-52ae-481a-9aa2-a681193030fd",
                     "expectedControlType": "Button",
@@ -46,7 +54,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "EquipmentDrop",
+                    "name": "Equipment Drop",
                     "type": "Button",
                     "id": "bfd09ad3-e785-4050-9099-0e11fb5e8674",
                     "expectedControlType": "Button",
@@ -54,17 +62,9 @@
                     "interactions": ""
                 },
                 {
-                    "name": "HuntToggle (Debug)",
+                    "name": "Hunt Toggle (Debug)",
                     "type": "Button",
                     "id": "55fba300-6b61-4a38-97fc-8ac581f64d9f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Keyboard Interaction",
-                    "type": "Button",
-                    "id": "26318fdb-4333-4428-9192-00589aed46dc",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -84,6 +84,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold(duration=0.1,pressPoint=0.001)"
+                },
+                {
+                    "name": "Place Item",
+                    "type": "Button",
+                    "id": "96c0c9a0-39df-43de-9585-191f7d26acaf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -159,7 +167,7 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Classic",
+                    "groups": "",
                     "action": "Exit Game",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -182,18 +190,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Classic",
-                    "action": "EquipmentToggle",
+                    "action": "Equipment Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "014fc77a-9a17-471d-9f69-030184c984d5",
+                    "id": "93faaecc-6a7d-485e-8430-83c581937a01",
                     "path": "<Keyboard>/h",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Debug;Classic",
-                    "action": "HuntToggle (Debug)",
+                    "groups": "Classic",
+                    "action": "Hunt Toggle (Debug)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ca66cb1a-e861-45a1-a7b4-5014b79b3c0e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Classic",
+                    "action": "Equipment Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -203,19 +222,8 @@
                     "path": "<Keyboard>/g",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Classic;Debug",
-                    "action": "EquipmentDrop",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e3bb9d89-12c3-4d97-b664-09fefb5baf38",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
                     "groups": "Classic",
-                    "action": "Keyboard Interaction",
+                    "action": "Equipment Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -238,6 +246,50 @@
                     "processors": "",
                     "groups": "Classic",
                     "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c6bda184-88a9-49ad-9dd3-552e9e3b1020",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Classic",
+                    "action": "Place Item",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "48239a39-e936-4ee9-97d4-5fdbea3d58b2",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Classic",
+                    "action": "Place Item",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3bb9d89-12c3-4d97-b664-09fefb5baf38",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Classic",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9af0f257-88a3-4be2-abe4-7d27fcc4ebb8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Classic",
+                    "action": "Interaction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

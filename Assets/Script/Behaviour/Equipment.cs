@@ -15,11 +15,14 @@ namespace Assets.Script.Behaviour
 
 				public PlayerBehaviour Owner { get; private set; }
 
-				public bool TryGetCrosshairHitInfo(out Vector3 position, out Vector3 normal, out PlacementEnum type)
+				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						bool result = CrosshairHit.GetPlacementInfo(out var info) != PlacementEnum.NONE;
-						position = result ? info.Value.Raycast.point : default;
-						normal = result ? info.Value.Raycast.normal : default;
+						return base.CanInteract(sender) && !IsBroken;
+				}
+
+				public bool TryGetCrosshairHitInfo(out PlacementEnum type)
+				{
+						bool result = CrosshairHit.GetPlacementInfo(out PlacementCheck.HitCheck? info) != PlacementEnum.NONE;
 						type = result ? info.Value.PlacementType : PlacementEnum.NONE;
 						return result;
 				}
@@ -32,6 +35,7 @@ namespace Assets.Script.Behaviour
 				protected void TogglePowered()
 				{
 						this.IsPowered = !this.IsPowered;
+						Debug.Log($"'{GetTargetName()}': Toggled Power {!IsPowered} -> {IsPowered}");
 				}
 
 				[CalledByPlayerBehaviour]

@@ -79,6 +79,10 @@ namespace Assets.Script.Behaviour.FirstPerson
 				private void FixedUpdate()
 				{
 						IInputControls inputControls = this.InputControls();
+						if(inputControls == null)
+						{
+								return;
+						}
 						float vertical = inputControls.Vertical;
 						float horizontal = inputControls.Horizonal;
 

@@ -50,11 +50,10 @@ namespace Assets.Script.Behaviour
 
 				private float money = 0;
 				private Equipment activeEquipment;
-				private float toggleTimeout;
-				private bool toggle;
 				private AudioClip stepSoundClip;
 				private bool mouseDown;
 				private float litIntensity;
+				private IInputControls inputControls;
 				private readonly List<LightInteractor> litLights = new List<LightInteractor>();
 
 				public Camera Cam => playerCam;
@@ -70,6 +69,11 @@ namespace Assets.Script.Behaviour
 
 				// for scoring
 				public float PlayerDarknessTimeFactorized { get; private set; }
+				private bool ButtonEquipmentTogglePressed { get; set; }
+				private bool ButtonPlacePressed { get; set; }
+				private bool ButtonDropPressed { get; set; }
+				private bool ButtonCrosshairTargetInteractionPressed { get; set; }
+				public bool InteractedInFrame { get; private set; }
 
 				private void Awake()
 				{
@@ -78,7 +82,7 @@ namespace Assets.Script.Behaviour
 
 				private void Start()
 				{
-						FindEquipmentInEquipmentHolder();
+						FindEquipment();
 				}
 
 				public bool CheckCanBuy(ShopParameters equipmentInfo, uint quantity = 1)
@@ -131,7 +135,7 @@ namespace Assets.Script.Behaviour
 								var oneItem = inventory.GetRandomEquipment();
 								if (oneItem is { } && inventory.CheckCanPutAll(oneItem.ShopInfo, 1))
 								{
-										PutEquipment(oneItem);
+										PutEquipmentIntoInventory(oneItem);
 								}
 						}
 				}
@@ -139,7 +143,7 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// You can put one item into your inventory
 				/// </summary>
-				public bool PutEquipment(Equipment equipmentWithoutOwner)
+				public bool PutEquipmentIntoInventory(Equipment equipmentWithoutOwner)
 				{
 						// an equipment within the world and without owned by someone
 						// this may happen, if a player dies. Other players can pickup
@@ -180,12 +184,12 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void FindEquipmentInEquipmentHolder()
+				private void FindEquipment()
 				{
-						activeEquipment = equipmentHolder.GetComponentInChildren<Equipment>(true);
-						if (activeEquipment is { })
+						var foundEquipment = equipmentHolder.GetComponentInChildren<Equipment>(true);
+						if (foundEquipment is { })
 						{
-								Equip(activeEquipment);
+								DropThenEquip(foundEquipment);
 						}
 				}
 
@@ -210,10 +214,19 @@ namespace Assets.Script.Behaviour
 
 				private void Update()
 				{
+						InteractedInFrame = false;
+						inputControls ??= this.InputControls();
+						ButtonEquipmentTogglePressed = inputControls.InteractButtonPressed;
+						ButtonPlacePressed = inputControls.PlaceEquipmentButtonPressed;
+						ButtonDropPressed = inputControls.DropItemButtonPressed;
+						ButtonCrosshairTargetInteractionPressed = inputControls.CrosshairTargetInteractionButtonPressed;
+
 						HandleHuntToggleDebug();
-						HandleCrosshairClick();
-						HandleEquipmentToggleButton();
-						HandleEquipmentDropButton();
+
+						HandleCrosshairHoverTarget();
+						HandleToggleOnEquippedItem();
+						HandleDropButton();
+
 						HandleEquipmentInfoGui();
 						UpdatePlayerInDark();
 						HandlePlayerInDarkness();
@@ -309,9 +322,9 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// Handles only to drop the actual equipment
 				/// </summary>
-				private void HandleEquipmentDropButton()
+				private void HandleDropButton()
 				{
-						if (activeEquipment is { } && this.InputControls().PlayerDropEquipment)
+						if (activeEquipment is { } && ButtonDropPressed)
 						{
 								DropEquipment();
 						}
@@ -319,7 +332,7 @@ namespace Assets.Script.Behaviour
 
 				private void HandleHuntToggleDebug()
 				{
-						if (this.InputControls().DebugHuntToggleOnOff)
+						if (inputControls.DebugHuntToggleOnOff)
 						{
 								HuntingStateBean hunt = HuntingStateBean.Instance;
 								if (hunt.InHunt is false)
@@ -333,43 +346,30 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void HandleEquipmentToggleButton()
+				private void HandleToggleOnEquippedItem()
 				{
-						if (activeEquipment is null)
+						if (activeEquipment == null)
 						{
 								// no equipment - everything is fine
-								FindEquipmentInEquipmentHolder();
+								FindEquipment();
 								return;
 						}
 
+						// fixes double toggled by input via crosshair target clicked
+						// when hovered = true -> end
+						// hovered interaction is priorized
+
 						// try to toggle on/off held equipment
-						if (this.InputControls().PlayerToggleEquipmentOnOff)
+						if (ButtonEquipmentTogglePressed)
 						{
-								if (toggleTimeout <= 0 && toggle is false)
-								{
-										// 30 ms wait
-										toggleTimeout = 30 / 1000f;
+								Debug.Log("interaction-button pressed for equipment");
+								OnActiveEquipment_ToggleInteractibleButtonPressed();
+						}
+				}
 
-										if (activeEquipment is { })
-										{
-												InteractWithEquipment();
-										}
-										else
-										{
-												Debug.Log("No item in hand!");
-										}
-										toggle = true;
-								}
-						}
-						else
-						{
-								toggle = false;
-						}
-
-						if (toggleTimeout > 0)
-						{
-								toggleTimeout -= Time.deltaTime;
-						}
+				private void OnActiveEquipment_ToggleInteractibleButtonPressed()
+				{
+						HandleInteractible(ActiveEquipment);
 				}
 
 				private void PickUp(PickupItem item)
@@ -394,53 +394,63 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void HandleCrosshairClick()
+				private void HandleCrosshairHoverTarget()
 				{
 						// an (any) interactible must be in interactible layer mask
 						// to be clickable with name
-						if (crosshair.TryGetObject(out bool inClickRange, out var match)
-								&& inClickRange
-								&& match.any.IsUnlocked)
+						if (crosshair.TryGetItem(out bool inClickRange, out var match)
+																				&& inClickRange
+																				&& match.any.IsUnlocked)
 						{
 								// an (any) interactible must be in interactible layer mask
 								// to be clickable with name
-								if (CheckInteractButtonIsPressed())
+								if (ButtonCrosshairTargetInteractionPressed)
 								{
-										// equipment is an pickupitem
-										// pickupitem is an interactible
-
-										// interactible can be Interact
-										// pickupitem can be Interact and PickUp, but not set to inventory
-										// equipment can be Interact and PickUp and set to inventory
-
-										if (match.equipment is { })
-										{
-												if (match.item.IsTakenByPlayer is false)
-												{
-														HandleEquipment(match.equipment);
-												}
-										}
-										else if (match.item is { })
-										{
-												if (match.item.IsTakenByPlayer is false)
-												{
-														HandlePickupItem(match.item);
-												}
-										}
-										else if (match.any is { })
-										{
-												HandleInteractible(match.any);
-										}
+										Debug.Log("interaction-button pressed for hovered target");
+										OnCrosshairHoverInteractible_InteractionButtonPressed(match);
+								}
+								else if (ButtonPlacePressed)
+								{
+										Debug.Log("place-button pressed for hovered target");
+										OnCrosshairHoverInteractible_PlaceButtonPressed(match);
 								}
 						}
 				}
 
-				private bool CheckInteractButtonIsPressed()
+				private void OnCrosshairHoverInteractible_PlaceButtonPressed((Equipment equipment, PickupItem item, Interactible any) match)
 				{
-						// mouse or keyboard
-						// (pickup to equip or pickup to take or interact with s.th. you cannot pickup)
-						return Mouse.current.leftButton.isPressed ||
-								this.InputControls().InteractionCrosshairPressed;
+						// grab from anywhere, but not from other player
+						if (match.equipment.IsTakenByPlayer is false && match.any.IsLocked is false)
+						{
+								DropThenEquip(match.equipment);
+								Debug.Log($"'{gameObject.name}' equipped a placed '{match.equipment.GetTargetName()}'");
+						}
+				}
+
+				private void OnCrosshairHoverInteractible_InteractionButtonPressed((Equipment equipment, PickupItem item, Interactible any) match)
+				{
+						// equipment is an pickupitem
+						// pickupitem is an interactible
+
+						// interactible can be Interact
+						// pickupitem can be Interact and PickUp, but not set to inventory
+						// equipment can be Interact and PickUp and set to inventory
+
+						if (match.equipment is { })
+						{
+								HandleEquipment(match.equipment);
+						}
+						else if (match.item is { })
+						{
+								if (match.item.IsTakenByPlayer is false)
+								{
+										HandlePickupItem(match.item);
+								}
+						}
+						else if (match.any is { })
+						{
+								HandleInteractible(match.any);
+						}
 				}
 
 				private void HandlePickupItem(PickupItem item)
@@ -459,26 +469,34 @@ namespace Assets.Script.Behaviour
 				{
 						if (equipment.CanInteract(this))
 						{
-								if (equipment.IsTakenByPlayer is false)
+								if (equipment.IsTakenByPlayer is false
+										&& (!(equipment is IPlacableEquipment p) || p.IsPlaced is false))
 								{
-										Equip(equipment);
+										//drop and equip:
+										DropThenEquip(equipment);
 								}
 								else
 								{
 										HandleInteractible(equipment);
+										Debug.Log($"'{gameObject.name}' toggled a placed '{equipment.GetTargetName()}'");
 								}
 						}
 				}
 
 				private void HandleInteractible(Interactible any)
 				{
-						// TODO inside Interact! No check from outside behaviour!
-						if (any.CanInteract(this))
+						// inside only Interact! No check from outside behaviour!
+						if (any.CanInteract(this) && !InteractedInFrame)
 						{
 								// for example: a door is opened or closed
 								// a flashlight is toggled on or off
 								// an item is switched on or off or nothing
 								any.Interact(this);
+								InteractedInFrame = true;
+						}
+						else if (!InteractedInFrame)
+						{
+								Debug.Log("Unable to interact: not allowed");
 						}
 				}
 
@@ -510,11 +528,16 @@ namespace Assets.Script.Behaviour
 						}
 				}
 #endif
-				public void Equip(Equipment item)
+				public void DropThenEquip(Equipment item)
 				{
+						if (ActiveEquipment != null)
+						{
+								DropEquipment();
+						}
+
 						activeEquipment = item;
 						Transform equipment = item.transform;
-						equipment.SetParent(equipmentHolder, false);
+						equipment.SetParent(equipmentHolder);
 						equipment.localPosition = Vector3.zero;
 						equipment.localEulerAngles = Vector3.zero;
 						item.OnPlayer_ItemPickedUp(this);
@@ -533,20 +556,6 @@ namespace Assets.Script.Behaviour
 
 								// important! unset reference
 								activeEquipment = null;
-						}
-				}
-
-				[ContextMenu("Toggle On | Off")]
-				public void InteractWithEquipment()
-				{
-						Interactible equipment = activeEquipment;
-						if (equipment is null)
-						{
-								Debug.Log("There's no equipment recognized. Nothing to interact.");
-						}
-						else
-						{
-								equipment.Interact(this);
 						}
 				}
 

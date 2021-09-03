@@ -27,7 +27,7 @@ namespace Assets
 				public bool EditorStopCamera => inputActions.Player.EditorStopRotateCamera.triggered;
 
 				public bool IsEnabled { get; private set; }
-				public bool PlayerToggleEquipmentOnOff
+				public bool InteractButtonPressed
 				{
 						get
 						{
@@ -38,13 +38,15 @@ namespace Assets
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
 
-				public bool PlayerDropEquipment => inputActions.Player.EquipmentDrop.triggered;
+				public bool DropItemButtonPressed => inputActions.Player.EquipmentDrop.triggered;
 
-				public bool InteractionCrosshairPressed => inputActions.Player.KeyboardInteraction.triggered;
+				public bool CrosshairTargetInteractionButtonPressed => inputActions.Player.Interaction.triggered;
 
 				public bool CrouchButtonPressed => inputActions.Player.Crouch.triggered;
 
 				public bool RunButtonPressedOrHold => inputActions.Player.Run.triggered;
+
+				public bool PlaceEquipmentButtonPressed => inputActions.Player.PlaceItem.triggered;
 
 				private void Awake()
 				{
@@ -72,6 +74,7 @@ namespace Assets
 
 						Instance = this;
 						inputActions = new ControlMappingInputAction();
+						inputActions.Enable();
 				}
 
 				private void OnValidate()
@@ -149,16 +152,18 @@ namespace Assets
 
 				public bool IsEnabled { get; private set; }
 
-				public bool PlayerToggleEquipmentOnOff => inputActions.Player.EquipmentToggle.ReadValue<bool>();
+				public bool InteractButtonPressed => inputActions.Player.EquipmentToggle.triggered;
 				
-				public bool PlayerDropEquipment => inputActions.Player.EquipmentDrop.triggered;
+				public bool DropItemButtonPressed => inputActions.Player.EquipmentDrop.triggered;
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
 
-				public bool InteractionCrosshairPressed => inputActions.Player.KeyboardInteraction.triggered;
+				public bool CrosshairTargetInteractionButtonPressed => inputActions.Player.Interaction.triggered;
 
 				public bool CrouchButtonPressed => inputActions.Player.Crouch.triggered;
 
 				public bool RunButtonPressedOrHold => inputActions.Player.Run.triggered;
+
+				public bool PlaceEquipmentButtonPressed => inputActions.Player.PlaceItem.triggered;
 		}
 }
