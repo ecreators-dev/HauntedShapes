@@ -83,7 +83,14 @@ namespace Assets.Script.Behaviour
 
 						if (IsActive)
 						{
-								Drain();
+								if (IsHuntingActive is false)
+								{
+										Drain();
+								}
+								else
+								{
+										Cooldown();
+								}
 						}
 						else if (activeSeconds > 0)
 						{

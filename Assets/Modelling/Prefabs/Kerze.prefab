@@ -980,7 +980,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 4300000, guid: b2e627f2f3f61b04bb458f3c5491582a, type: 2}
-  m_VersionIndex: 526
+  m_VersionIndex: 535
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -997,6 +997,7 @@ GameObject:
   - component: {fileID: 1504048522541190061}
   - component: {fileID: 2060070780972683198}
   - component: {fileID: 8611142374445531559}
+  - component: {fileID: 964260361}
   m_Layer: 12
   m_Name: Body
   m_TagString: Untagged
@@ -6052,11 +6053,30 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 4300000, guid: eb05b7b6e032acc4685a087f4204e5c3, type: 2}
-  m_VersionIndex: 190
+  m_VersionIndex: 199
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!114 &964260361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877726083698261411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aee3016a092a714c94bc801fe3c0237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  identifier: 0
+  locked: 0
+  temperatureDegreesCelsius: 0
+  heatMaximumSpot: {fileID: 0}
+  heatingSeconds: 0
+  coolingSeconds: 0
+  maxDistance: 5
 --- !u!1 &6578682946351267850
 GameObject:
   m_ObjectHideFlags: 0
@@ -6287,6 +6307,7 @@ GameObject:
   - component: {fileID: 6578682946963451622}
   - component: {fileID: 4726864082374653376}
   - component: {fileID: 3811473726350225445}
+  - component: {fileID: 9001831590188773395}
   m_Layer: 12
   m_Name: Kerze
   m_TagString: Untagged
@@ -6324,12 +6345,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   identifier: 2
   locked: 0
-  lightOnOff: {fileID: 3797876825636350234}
-  visualMesh: {fileID: 2060070780972683198}
-  visualCollider: {fileID: 4726864082374653376}
   shopInfo: {fileID: 11400000, guid: 396bce61906480c419cfceaa29479e32, type: 2}
   animator: {fileID: 6578682946963451622}
   lightSourceMultiplier: 1.4
+  brokenText: abgebrannt
 --- !u!95 &6578682946963451622
 Animator:
   serializedVersion: 3
@@ -6378,6 +6397,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &9001831590188773395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578682946963451621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aee3016a092a714c94bc801fe3c0237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  identifier: 2
+  locked: 0
+  temperatureDegreesCelsius: 20
+  heatMaximumSpot: {fileID: 6578682946963451620}
+  heatingSeconds: 5
+  coolingSeconds: 15
+  maxDistance: 5
 --- !u!1 &7994781315661343515
 GameObject:
   m_ObjectHideFlags: 0
@@ -8474,7 +8512,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 4300000, guid: 6170de3cb702ba2438c5acf7ca38ee0b, type: 2}
-  m_VersionIndex: 2992
+  m_VersionIndex: 3001
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

@@ -1,27 +1,22 @@
 using Assets.Script.Behaviour;
-using Assets.Script.Model;
+using Assets.Script.Components;
 
 using UnityEngine;
 
 namespace HauntedShapes.Doors
 {
 		[RequireComponent(typeof(Animator))]
-		public class PickupDoor : MonoBehaviour, IInteractible
+		public class GetUpDoor : Interactible
 		{
-				private Animator animator;
-
 				[Header("Animator Controller - Trigger Names")]
 				[SerializeField] private string getupName = "Getup";
 				[SerializeField] private string openName = "Open";
 				[SerializeField] private Collider passCollider;
 				[SerializeField] private Collider doorCollider;
-				
+
+				private Animator animator;
 				private bool getup;
 				private bool open;
-
-				public bool IsPickable { get; }
-				public string GameObjectName => this.GetGameObjectName();
-				public string ImplementationTypeName => this.GetImplementationTypeName();
 
 				private void Awake()
 				{
@@ -33,6 +28,11 @@ namespace HauntedShapes.Doors
 						SetDoorCooliderEnabled(true);
 				}
 
+				protected override void Update()
+				{
+						base.Update();
+				}
+
 				[ContextMenu("Animation/Reset")]
 				internal void ResetDoor()
 				{
@@ -41,13 +41,15 @@ namespace HauntedShapes.Doors
 						animator.ResetTrigger(getupName);
 						animator.ResetTrigger(openName);
 						animator.Play("idle", 0, 0f);
+
+						SetDoorCooliderEnabled(true);
 				}
 
 				private void SetDoorCooliderEnabled(bool enabled)
 				{
 						// at start:
 						// enabled = true, if door is laying on the floor
-						
+
 						doorCollider.enabled = enabled;
 						passCollider.enabled = !enabled;
 				}
@@ -60,6 +62,7 @@ namespace HauntedShapes.Doors
 
 						getup = true;
 						animator.SetTrigger(getupName);
+						SetDoorCooliderEnabled(false);
 				}
 
 				[ContextMenu("Animation/Open")]
@@ -70,28 +73,38 @@ namespace HauntedShapes.Doors
 
 						open = true;
 						animator.SetTrigger(openName);
-
 						SetDoorCooliderEnabled(false);
 				}
 
-				public void TouchClickUpdate()
+				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						
+						// for testing: in game, the player will need to have at least level 10
+						// the player need to unlock first a ritual area to see the door (only the player with lavel >= 10 can see)
+						// the player can then interact to pick up or to open
+						UnlockForTesting();
+
+						return IsLocked is false && (getup is false || open is false);
 				}
 
-				public void TouchOverUpdate()
+				public override void Interact(PlayerBehaviour sender)
 				{
-						
+						if (getup is false)
+						{
+								GetUp();
+						}
+						else if (open is false)
+						{
+								Open();
+						}
 				}
 
-				public void Drop()
+				public override string GetTargetName()
 				{
-						
-				}
-
-				public void OnPickup(PlayerBehaviour player)
-				{
-						
+						if (IsLocked)
+						{
+								return $"{gameObject.name} (Lv {10})";
+						}
+						return $"{gameObject.name}";
 				}
 		}
 }

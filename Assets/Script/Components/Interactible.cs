@@ -1,7 +1,5 @@
 ﻿using Assets.Script.Behaviour;
 
-using System;
-
 using UnityEngine;
 
 namespace Assets.Script.Components
@@ -85,6 +83,12 @@ namespace Assets.Script.Components
 				}
 
 				protected virtual void OnHuntStart() { }
+
+				protected void UnlockForTesting()
+				{
+						Unlock();
+						Debug.Log("Testing Settings: always unlocked!");
+				}
 
 				protected virtual void OnHuntStop() { }
 

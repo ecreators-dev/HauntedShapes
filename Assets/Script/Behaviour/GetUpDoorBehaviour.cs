@@ -4,10 +4,10 @@ namespace HauntedShapes.Doors
 {
 		[ExecuteInEditMode]
 		[DisallowMultipleComponent]
-		public class PickupDoorRoot : MonoBehaviour
+		public class GetUpDoorBehaviour : MonoBehaviour
 		{
 				[SerializeField] private bool onGround = true;
-				[SerializeField] private PickupDoor door;
+				[SerializeField] private GetUpDoor door;
 
 				[ContextMenu("Animation/Reset Door")]
 				public void ResetDoor()

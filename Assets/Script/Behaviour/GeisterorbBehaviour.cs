@@ -92,16 +92,7 @@ namespace Assets.Script.Behaviour
 						UpdateInvariantPosition();
 				}
 
-				private Vector3 GetNextPositionInsideRoom()
-				{
-						return RoomActive.GetRandomOrbPos();
-
-						Vector3 size = RoomActive.Size;
-						float radius = Mathf.Min(size.x / 2, size.z / 2);
-						Vector3 pos = RoomActive.transform.position + Random.insideUnitSphere * radius;
-						pos.y = RoomActive.GhostOrbY;
-						return pos;
-				}
+				private Vector3 GetNextPositionInsideRoom() => RoomActive.GetRandomOrbPos();
 
 				private bool MoveToRoomPosition(Vector3 worldPositionDestintion)
 				{

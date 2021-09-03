@@ -1,7 +1,5 @@
 using Assets.Script.Behaviour;
 
-using System;
-
 using UnityEditor;
 
 using UnityEngine;
@@ -9,7 +7,7 @@ using UnityEngine;
 namespace Assets.Door
 {
 		[RequireComponent(typeof(BoxCollider))]
-		public class PickupDoorPass : MonoBehaviour
+		public class TriggerTeleporter : MonoBehaviour
 		{
 				[SerializeField] private Transform exitTransform;
 
@@ -23,7 +21,7 @@ namespace Assets.Door
 				private void Start()
 				{
 						passCollider.isTrigger = true;
-						Debug.Log($"setting {nameof(PickupDoorPass)} collider.isTrigger = true at Start()");
+						Debug.Log($"setting {nameof(TriggerTeleporter)} collider.isTrigger = true at Start()");
 				}
 
 #if UNITY_EDITOR
@@ -37,6 +35,7 @@ namespace Assets.Door
 						Handles.DrawLine(exitTransform.position, transform.position);
 						Handles.color = Color.blue;
 						Handles.DrawWireCube(exitTransform.position, Vector3.one * 0.25f);
+
 						RaycastHit? floorHit = GetFloorHitDownside(exitTransform);
 						if (floorHit.HasValue)
 						{
@@ -46,6 +45,7 @@ namespace Assets.Door
 						}
 						Handles.color = Color.white;
 						Handles.Label(exitTransform.position, exitTransform.gameObject.name);
+
 				}
 #endif
 
@@ -57,32 +57,13 @@ namespace Assets.Door
 						}
 				}
 
-				private void TeleportTo(Component behaviour, Transform exitTransform)
+				private void TeleportTo(Component teleporterObject, Transform exit)
 				{
-						float distanceToGround = GetDistanceToGround(behaviour);
-						Vector3 position = exitTransform.position;
-						position.y = exitTransform.position.y + distanceToGround;
-						behaviour.transform.position = position;
-						behaviour.transform.rotation = exitTransform.rotation;
+						Transform target = teleporterObject.transform;
+						target.position = exit.position;
+						target.rotation = exit.rotation;
+						Debug.Log($"Teleportation: '{teleporterObject.gameObject.name}' to '{exit.gameObject.name}'");
 				}
-
-				private float GetDistanceToGround(Component behaviour)
-				{
-						Transform myTransform = behaviour.transform;
-						GameObject go = behaviour.gameObject;
-						if (Physics.Raycast(myTransform.position, -Vector3.up, out RaycastHit hit))
-						{
-								Vector3 targetPosition = hit.point;
-								if (go.GetComponent<MeshFilter>() != null)
-								{
-										Bounds bounds = go.GetComponent<MeshFilter>().sharedMesh.bounds;
-										targetPosition.y += bounds.extents.y;
-								}
-								return Vector3.Distance(myTransform.position, targetPosition);
-						}
-						return 0;
-				}
-
 				private RaycastHit? GetFloorHitDownside(Transform from)
 				{
 						if (Physics.Raycast(from.position, -Vector3.up, out RaycastHit hit))

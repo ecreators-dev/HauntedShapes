@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using UnityEditor;
 
@@ -11,11 +12,10 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		[RequireComponent(typeof(BoxCollider))]
 		[ExecuteAlways]
-		public class GhostRoom : MonoBehaviour
+		public class GhostRoom : Room
 		{
 				public static bool showOrbPositions = false;
 
-				[SerializeField] private string roomName;
 				[SerializeField] private Color roomColor;
 				[SerializeField] private MeshRenderer meshRenderer;
 				[SerializeField] private float ghostOrbY;
@@ -27,16 +27,17 @@ namespace Assets.Script.Behaviour
 				private bool hitPositionUpdate;
 				private List<(Vector3 source, Vector3 hit)> hitPositions;
 				private int randomPositionIndex = -1;
+				private readonly Dictionary<int, GhostBehaviour> ghosts = new Dictionary<int, GhostBehaviour>();
 
 				private BoxCollider Collider { get; set; }
-
-				public string RoomName => roomName;
 
 				public Vector3 Size => Collider.bounds.size;
 
 				public float GhostOrbY => ghostOrbY;
 
 				public Color Color => this.roomColor;
+
+				public IReadOnlyList<GhostBehaviour> GetGhosts() => ghosts.Values.ToList().AsReadOnly();
 
 				private void Awake()
 				{
@@ -186,6 +187,17 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
+				private bool IsGhost(Collider other, out GhostBehaviour ghost)
+				{
+						ghost = null;
+						return other.gameObject is { } && other.TryGetComponent(out ghost);
+				}
+
+				private static bool IsPlayer(Collider other)
+				{
+						return other.gameObject != null && other.TryGetComponent(out PlayerBehaviour player);
+				}
+
 				private void OnTriggerEnter(Collider other)
 				{
 						if (IsPlayer(other))
@@ -195,11 +207,10 @@ namespace Assets.Script.Behaviour
 										meshMaterial.color = Color.red;
 								}
 						}
-				}
-
-				private static bool IsPlayer(Collider other)
-				{
-						return other.gameObject != null && other.TryGetComponent(out PlayerBehaviour player);
+						else if (IsGhost(other, out GhostBehaviour ghost))
+						{
+								ghosts[ghost.GetInstanceID()] = ghost;
+						}
 				}
 
 				private void OnTriggerExit(Collider other)
@@ -210,6 +221,10 @@ namespace Assets.Script.Behaviour
 								{
 										meshMaterial.color = roomColor;
 								}
+						}
+						else if (IsGhost(other, out GhostBehaviour ghost))
+						{
+								ghosts.Remove(ghost.GetInstanceID());
 						}
 				}
 

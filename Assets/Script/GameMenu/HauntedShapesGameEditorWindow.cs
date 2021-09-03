@@ -1,4 +1,5 @@
 ﻿using Assets.Script.Behaviour;
+using Assets.Script.Components;
 using Assets.Script.Controller;
 using Assets.Script.Model;
 
@@ -94,17 +95,17 @@ namespace Assets.Script.GameMenu
 						if (interactiblesFoldout)
 						{
 								var all = (from obj in FindObjectsOfType<MonoBehaviour>()
-													 let interactible = obj.GetComponent<IInteractible>()
+													 let interactible = obj.GetComponent<Interactible>()
 													 where interactible is { }
 													 let typeName = interactible.GetType().Name
-													 orderby obj.gameObject.name ascending, typeName
+													 orderby typeName ascending, obj.gameObject.name ascending
 													 select (@object: obj, interactible, typeName)).ToList();
 
 								interactiblesScrollPositions = EditorGUILayout.BeginScrollView(interactiblesScrollPositions);
 								EditorGUI.indentLevel++;
-								foreach ((MonoBehaviour @object, IInteractible interactible, string typeName) in all)
+								foreach ((MonoBehaviour @object, Interactible interactible, string typeName) in all)
 								{
-										EditorGUILayout.ObjectField(@object, typeof(IInteractible), allowSceneObjects: true);
+										EditorGUILayout.ObjectField(@object, typeof(Interactible), allowSceneObjects: true);
 								}
 								EditorGUI.indentLevel--;
 								EditorGUILayout.EndScrollView();

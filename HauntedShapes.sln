@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HauntedShapes.Doors", "HauntedShapes.Doors.csproj", "{1AC96C1A-830B-B71B-E437-BCA1ED9AA081}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{21D1707E-74B5-6B20-BBC8-578B8D576F64}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{06D7A943-EC50-3A0C-1628-D0180B09747E}"
 EndProject
 Global
@@ -21,6 +23,10 @@ Global
 		{1AC96C1A-830B-B71B-E437-BCA1ED9AA081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AC96C1A-830B-B71B-E437-BCA1ED9AA081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AC96C1A-830B-B71B-E437-BCA1ED9AA081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21D1707E-74B5-6B20-BBC8-578B8D576F64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21D1707E-74B5-6B20-BBC8-578B8D576F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21D1707E-74B5-6B20-BBC8-578B8D576F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21D1707E-74B5-6B20-BBC8-578B8D576F64}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06D7A943-EC50-3A0C-1628-D0180B09747E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06D7A943-EC50-3A0C-1628-D0180B09747E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06D7A943-EC50-3A0C-1628-D0180B09747E}.Release|Any CPU.ActiveCfg = Release|Any CPU

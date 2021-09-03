@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4746741619604079955}
   - component: {fileID: 6585144794796329983}
   - component: {fileID: 8366839621440100478}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Holzeingang (Door)
   m_TagString: Door
   m_Icon: {fileID: 0}
@@ -46,13 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   identifier: 1
-  closeYAngle: 0
-  openYAngle: -90
-  unlocked: 1
+  locked: 0
+  opened: 0
+  open: {fileID: 0}
+  close: {fileID: 0}
   openSpeed: 4
-  currentlyOpen: 0
-  previewColor: {r: 0.19485582, g: 0.38679248, b: 0.2051718, a: 0.015686275}
-  doorLength: 2.33
+  closeSpeed: 0
+  room: {fileID: 0}
 --- !u!65 &8366839621440100478
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1402,8 +1402,8 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
-  m_Mesh: {fileID: 0}
-  m_VersionIndex: 1000
+  m_Mesh: {fileID: 4300000, guid: fa0731d7f2a5e584592a85c05899937c, type: 2}
+  m_VersionIndex: 1039
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1457,4 +1457,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4262559594558877026}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300000, guid: fa0731d7f2a5e584592a85c05899937c, type: 2}
