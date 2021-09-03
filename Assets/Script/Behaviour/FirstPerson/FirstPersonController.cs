@@ -1,4 +1,7 @@
-﻿using Assets.Script.Controller;
+﻿using Assets.Door;
+using Assets.Script.Controller;
+
+using System;
 
 using UnityEditor;
 
@@ -36,6 +39,8 @@ namespace Assets.Script.Behaviour.FirstPerson
 				private float oldX;
 				private bool crouching;
 				private bool running;
+				private Vector3 teleportedPosition;
+				private TriggerTeleporter teleportedSource;
 
 				private Transform Transform { get; set; }
 
@@ -85,6 +90,17 @@ namespace Assets.Script.Behaviour.FirstPerson
 						movement += Vector3.down * 9.81f;
 
 						characterController.Move(movement * Time.fixedDeltaTime);
+						if (teleportedSource != null)
+						{
+								Transform.position = teleportedPosition;
+								teleportedSource = null;
+						}
+				}
+
+				public void SetTeleported(TriggerTeleporter triggerTeleporter)
+				{
+						this.teleportedPosition = Transform.position;
+						this.teleportedSource = triggerTeleporter;
 				}
 
 				private void OnCollisionEnter(Collision collision)

@@ -1,4 +1,9 @@
 using Assets.Script.Behaviour;
+using Assets.Script.Behaviour.FirstPerson;
+
+using System;
+using System.Collections;
+using System.Threading.Tasks;
 
 using UnityEditor;
 
@@ -59,9 +64,20 @@ namespace Assets.Door
 
 				private void TeleportTo(Component teleporterObject, Transform exit)
 				{
-						Transform target = teleporterObject.transform;
-						target.position = exit.position;
-						target.rotation = exit.rotation;
+						teleporterObject.transform.position = exit.position;
+						teleporterObject.transform.rotation = exit.rotation;
+						if (teleporterObject.TryGetComponent(out Rigidbody body))
+						{
+								body.useGravity = false;
+								Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(_ =>
+								{
+										body.useGravity = true;
+								});
+						}
+						if (teleporterObject.TryGetComponent(out FirstPersonController fpc))
+						{
+								fpc.SetTeleported(this);
+						}
 						Debug.Log($"Teleportation: '{teleporterObject.gameObject.name}' to '{exit.gameObject.name}'");
 				}
 				private RaycastHit? GetFloorHitDownside(Transform from)

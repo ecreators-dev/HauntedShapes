@@ -179,7 +179,7 @@ namespace Assets.Script.Behaviour
 						// no trigger, no force - for Y only
 						Collider.isTrigger = true;
 
-						if (meshRenderer is { })
+						if (meshRenderer != null)
 						{
 								meshMaterial = meshRenderer.sharedMaterial;
 								meshRenderer.material = meshMaterial;
