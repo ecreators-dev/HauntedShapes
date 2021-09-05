@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Assets.Script.Behaviour.GhostTypes
 {
 		[RequireComponent(typeof(Rigidbody))]
-		public class Candle : Equipment, IPforteTrigger, ILightSource
+		public class Candle : Equipment, IRitualTribute, ILightSource
 		{
 				[SerializeField] private ShopParameters shopInfo;
 				[SerializeField] private Animator animator;
@@ -11,14 +11,16 @@ namespace Assets.Script.Behaviour.GhostTypes
 				[SerializeField] private float lightSourceMultiplier = 1.4f;
 				[SerializeField] private string brokenText = "abgebrannt";
 
-				public PforteTriggerTypeEnum TriggerType => PforteTriggerTypeEnum.KERZE;
+				public TributeTypeEnum TriggerType => TributeTypeEnum.CANDLE;
 
 				public float ActiveMultiplier => lightSourceMultiplier;
 
 				public bool IsActive => IsPowered;
 
-				private void Start()
+				protected override void Start()
 				{
+						base.Start();
+
 						SetShopInfo(shopInfo, this);
 
 						RandomAnimation();
@@ -44,44 +46,17 @@ namespace Assets.Script.Behaviour.GhostTypes
 
 				public void ToggleOn() => SetPowered(true);
 
-				protected override void OnEquip()
-				{
-				}
-
-				protected override void OnInventory()
-				{
-				}
-
-				protected override void OnOwnerOwnedEquipment()
-				{
-						// when paid and owner set: nothing
-				}
-
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						return User == null || User == sender;
+						return base.CanInteract(sender) && (User == null || User == sender);
 				}
 
 				public override void Interact(PlayerBehaviour senderIgnored)
 				{
-						if (IsActive)
+						if (IsTakenByPlayer)
 						{
-								ToggleOff();
+								TogglePowered();
 						}
-						else
-						{
-								ToggleOn();
-						}
-				}
-
-				protected override void OnHuntStart()
-				{
-						// stays on / off
-				}
-
-				protected override void OnHuntStop()
-				{
-						// stays on / off
 				}
 
 				protected override void OnEditMode_ToggleOn() => ToggleOn();

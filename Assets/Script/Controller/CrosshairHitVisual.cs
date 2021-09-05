@@ -2,6 +2,8 @@ using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Components;
 using Assets.Script.Controller;
 
+using System;
+
 using TMPro;
 
 using UnityEngine;
@@ -19,22 +21,23 @@ namespace Assets.Script.Behaviour
 		[DisallowMultipleComponent]
 		public class CrosshairHitVisual : MonoBehaviour, ICrosshairUI
 		{
-				private static readonly LayerMask LAYER_MASK_EVERYTHING = ~0;
-
 				[SerializeField] private CrosshairRoot root;
 				[SerializeField] private bool hovered;
-				private bool placementHitFound;
 				[SerializeField] private float hitDistance = 4;
 				[SerializeField] private float hitDistanceFar = 5;
 
 				[SerializeField] private LayerMask interactibleLayer;
 				[Range(0.0001f, 0.2f)]
 				[SerializeField] private float size = 0.02f;
+				[Range(0.0001f, 0.2f)]
+				[SerializeField] private float sizeGamepad = 0.04f;
 				[SerializeField] private TMP_Text targetTextUI;
 				[SerializeField] private TMP_Text tooFarTextUI;
 				[SerializeField] private LayerMask hitLayers;
 				[SerializeField] private GameObject placementSprite;
+				[SerializeField] private LayerMask placementLayers = ~0;
 				[SerializeField] private PlacementCheck placementCheck;
+				[SerializeField] private Transform crosshairDot;
 
 				private RawImage image;
 				private Color matchColor;
@@ -47,8 +50,15 @@ namespace Assets.Script.Behaviour
 				private Vector3 hitBefore;
 				private Equipment placementRequestor;
 				private RaycastHit placementHit;
+				private float initSize;
 
 				public static ICrosshairUI Instance { get; private set; }
+
+				private Transform Transform { get; set; }
+
+				public bool PlacementHitFound { get; set; }
+
+				private bool GamepadConnected { get; set; }
 
 				public void SetHitActive() => hovered = true;
 
@@ -57,10 +67,12 @@ namespace Assets.Script.Behaviour
 				private void Awake()
 				{
 						image = GetComponent<RawImage>();
+						Transform = transform;
 				}
 
 				private void Start()
 				{
+						this.initSize = size;
 						placementSprite.SetActive(false);
 						if (Instance == null)
 						{
@@ -72,6 +84,35 @@ namespace Assets.Script.Behaviour
 								Debug.LogError($"Duplicated Instance of {nameof(CrosshairHitVisual)}");
 						}
 				}
+
+				private void Update()
+				{
+						GamepadConnected = !this.GetGameController().IsGamepadDisconnected;
+						size = GamepadConnected ? sizeGamepad : initSize;
+
+						crosshairDot.localScale = Vector3.one * (size / 0.02f);
+						Camera cam = CameraMoveType.Instance.GetCamera();
+						Transform camera = cam.transform;
+
+						// HOVER: show near items with hand visible! (c)
+						hovered = false;
+						UpdateHoveredTarget(camera);
+						UpdatePlacementTarget();
+
+						// CLICK:
+						tooFarTextUI.enabled = false;
+						if (IsInteractionPressed())
+						{
+								// show only when want to interact
+								tooFarTextUI.enabled = hovered && !clickableRange;
+						}
+
+						image.enabled = hovered;
+
+						//! Click Action is handled in Player Behaviour
+				}
+
+
 
 				/// <summary>
 				/// See also <seealso cref="PlaceEquipment"/>
@@ -95,16 +136,18 @@ namespace Assets.Script.Behaviour
 				/// <summary>
 				/// See also <seealso cref="ShowPlacementPointer"/>
 				/// </summary>
-				public void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal)
+				public void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal, float normalOffset)
 				{
 						if (placementRequestor == null || placementRequestor != equipment)
 						{
-								Debug.LogError("You must call this from the quipment, when placed or aborted");
+								Debug.LogWarning("You must call this from the quipment, when placed or aborted");
 								return;
 						}
 
 						equipment.transform.SetParent(null);
-						equipment.transform.position = placementHit.point;
+						Vector3 normal = placementHit.normal;
+						Vector3 position = placementHit.point;
+						equipment.transform.position = position + normal * normalOffset;
 						if (useHitNormal)
 						{
 								equipment.transform.rotation = Quaternion.FromToRotation(up, placementHit.normal);
@@ -124,30 +167,7 @@ namespace Assets.Script.Behaviour
 
 				public Vector3 GetPlacementNormal()
 				{
-						return placementHitFound ? placementHit.normal : Vector3.up;
-				}
-
-				private void Update()
-				{
-						Camera cam = CameraMoveType.Instance.GetCamera();
-						Transform camera = cam.transform;
-
-						// HOVER: show near items with hand visible! (c)
-						hovered = false;
-						UpdateHoveredTarget(camera);
-						UpdatePlacementTarget();
-
-						// CLICK:
-						tooFarTextUI.enabled = false;
-						if (IsInteractionPressed())
-						{
-								// show only when want to interact
-								tooFarTextUI.enabled = hovered && !clickableRange;
-						}
-
-						image.enabled = hovered;
-
-						//! Click Action is handled in Player Behaviour
+						return PlacementHitFound ? placementHit.normal : Vector3.up;
 				}
 
 				private void UpdatePlacementTarget()
@@ -160,7 +180,7 @@ namespace Assets.Script.Behaviour
 						}
 
 						// show or hide
-						bool hoveredOnEnvironment = placementRequestor != null && placementHitFound;
+						bool hoveredOnEnvironment = placementRequestor != null && PlacementHitFound;
 						if (hoveredOnEnvironment)
 						{
 								// put sprite to wall:
@@ -171,11 +191,18 @@ namespace Assets.Script.Behaviour
 
 				private void PlacementVisualUpdatePosition()
 				{
-						if (placementHitFound is false)
+						if (PlacementHitFound is false)
 								return;
 
 						Vector3 normal = placementHit.normal;
 						Vector3 position = placementHit.point;
+
+						Vector3 dir = (position - placementRequestor.transform.position).normalized;
+						if (dir.y < 0)
+						{
+								normal = new Vector3(normal.x, normal.y * -1, normal.z);
+						}
+
 						placementSprite.transform.forward = normal;
 						placementSprite.transform.position = position + placementSprite.transform.forward * 0.01f;
 				}
@@ -219,6 +246,14 @@ namespace Assets.Script.Behaviour
 						hitItem = default;
 						hitAny = default;
 
+						// visiual size;
+						float size = this.size;
+						// when gamepad, hitsize should be bigger
+						if (!this.GetGameController().IsGamepadDisconnected)
+						{
+								size *= 2;
+						}
+
 						// condition! 1st: match any, 2nd: match only types
 						hovered =
 								Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickInRange, hitDistance, interactibleLayer)
@@ -227,17 +262,9 @@ namespace Assets.Script.Behaviour
 										| IsInteractibleHit(clickInRange, out hitAny));
 
 						// place anywhere:
-						placementHitFound =
+						PlacementHitFound =
 								Physics.Raycast(new Ray(camera.position, camera.forward),
-								out placementHit, hitDistance, LAYER_MASK_EVERYTHING, QueryTriggerInteraction.Ignore);
-
-						// place not on other interactibles!
-						if (placementHit.collider != null &&
-								placementHit.collider.GetComponent<Interactible>() != null)
-						{
-								placementHitFound = false;
-								placementHit = default;
-						}
+								out placementHit, hitDistance, placementLayers, QueryTriggerInteraction.Ignore);
 
 						clickableRange = hovered && clickInRange.distance <= hitDistance;
 						matchColor = root.GetColor(GetActionType(hitEquipment, hitAny));

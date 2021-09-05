@@ -3,6 +3,7 @@ using Assets.MiniFirstPersonController.Scripts;
 using Assets.Script.Behaviour.FirstPerson;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FirstPersonLook : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class FirstPersonLook : MonoBehaviour
 		private FirstPersonController fpsController;
 
 		private Transform Transform { get; set; }
+		
+		private bool GamepadDisconnected => this.GetGameController()?.IsGamepadDisconnected ?? false;
 
 		private void Reset()
 		{
@@ -45,7 +48,15 @@ public class FirstPersonLook : MonoBehaviour
 				}
 
 				// Get smooth velocity.
-				Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+				Vector2 mouseDelta = this.InputControls().MouseDelta; 
+				//new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+																															
+				// only mouse, then it is too fast:
+				float sensitivity = this.sensitivity;
+				if (GamepadDisconnected)
+				{
+						sensitivity /= 5f;
+				}
 				Vector2 rawFrameVelocity = Vector2.Scale(mouseDelta, Vector2.one * sensitivity);
 				frameVelocity = Vector2.Lerp(frameVelocity, rawFrameVelocity, 1 / smoothing);
 				velocity += frameVelocity;

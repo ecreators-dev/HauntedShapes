@@ -13,6 +13,8 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		public abstract class PickupItem : Interactible
 		{
+				[SerializeField] private SnapAxis upAxis = SnapAxis.Y;
+
 				/// <summary>
 				/// Represents the player that actual captured the equipment
 				/// </summary>
@@ -33,6 +35,12 @@ namespace Assets.Script.Behaviour
 								(bool actualHit, RaycastHit hit) = CrosshairHit.GetRaycastCollidersOnlyResult();
 								return actualHit && hit.collider.GetComponent<PickupItem>() == this;
 						}
+				}
+				protected Vector3 UpNormal { get; set; } = Vector3.up;
+
+				protected virtual void Start()
+				{
+						UpNormal = GetUpNormalFromAxis(upAxis);
 				}
 
 				[CalledByPlayerBehaviour]
@@ -74,7 +82,7 @@ namespace Assets.Script.Behaviour
 				/// After the player dropped this item
 				/// </summary>
 				[CalledByPlayerBehaviour]
-				public void DropItem(PlayerBehaviour oldOwner, bool noForce = false)
+				public void DropItemRotated(PlayerBehaviour oldOwner, bool noForce = false)
 				{
 						// must not be null!
 						oldOwner = oldOwner ?? throw new ArgumentNullException(nameof(oldOwner));
@@ -88,8 +96,7 @@ namespace Assets.Script.Behaviour
 								Transform obj = transform;
 								obj.SetParent(null);
 								// updside!
-								obj.rotation = Quaternion.identity;
-								obj.up = Vector3.up;
+								obj.rotation = Quaternion.FromToRotation(Vector3.up, UpNormal);
 
 								if (TryGetComponent(out Rigidbody body))
 								{
@@ -130,6 +137,22 @@ namespace Assets.Script.Behaviour
 				public bool CheckBelongsTo(PlayerBehaviour player)
 				{
 						return User is { } && User == player;
+				}
+
+				protected static Vector3 GetUpNormalFromAxis(SnapAxis upAxis)
+				{
+						switch (upAxis)
+						{
+								case SnapAxis.X:
+										return Vector3.right;
+								case SnapAxis.Z:
+										return Vector3.forward;
+								case SnapAxis.All:
+								case SnapAxis.Y:
+								case SnapAxis.None:
+								default:
+										return Vector3.up;
+						}
 				}
 
 		}

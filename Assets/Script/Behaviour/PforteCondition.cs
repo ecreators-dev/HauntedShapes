@@ -7,15 +7,15 @@ namespace Assets.Script.Behaviour
 		[Serializable]
 		public class PforteCondition
 		{
-				public PforteTriggerTypeEnum type = PforteTriggerTypeEnum.BUCH;
+				public TributeTypeEnum type = TributeTypeEnum.ENCHANTMENT_BOOK;
 				[Min(1)]
 				public int amount = 1;
 
-				public PforteTriggerTypeEnum TriggerType => type;
+				public TributeTypeEnum TriggerType => type;
 
 				public int RequiredCount => this.amount;
 
-				public bool IsFullfilled(IPforteTrigger trigger, int available, out bool matchType)
+				public bool IsFullfilled(IRitualTribute trigger, int available, out bool matchType)
 				{
 						// count up available before calling this!
 						bool granted = trigger.TriggerType == type && available == amount;

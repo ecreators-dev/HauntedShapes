@@ -7,7 +7,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				/// <summary>
 				/// Does placement position and rotation upward from surface and hides placement sprite
 				/// </summary>
-				void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal);
+				void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal, float normalOffset);
 
 				/// <summary>
 				/// Sets an equipment active for beeing placed. Shows a placement sprite at target surface and

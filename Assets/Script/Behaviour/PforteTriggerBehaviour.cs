@@ -6,7 +6,7 @@ namespace Assets.Script.Behaviour
 {
 		public class PforteTriggerBehaviour : MonoBehaviour
 		{
-				private readonly Dictionary<PforteTriggerTypeEnum, int> amountsOfType = new Dictionary<PforteTriggerTypeEnum, int>();
+				private readonly Dictionary<TributeTypeEnum, int> amountsOfType = new Dictionary<TributeTypeEnum, int>();
 
 				[SerializeField] private Collider triggerCollider;
 				[SerializeField] private PasswayUpDown gate;
@@ -49,7 +49,7 @@ namespace Assets.Script.Behaviour
 				private void OnTriggerExit(Collider other)
 				{
 						// a unit has been taken away again
-						if (other.TryGetComponent<IPforteTrigger>(out var trigger))
+						if (other.TryGetComponent<IRitualTribute>(out var trigger))
 						{
 								amountsOfType.Decrement(trigger.TriggerType);
 
@@ -60,7 +60,7 @@ namespace Assets.Script.Behaviour
 				private void OnTriggerEnter(Collider other)
 				{
 						// a unity was placed inside the ranges
-						if (other.TryGetComponent<IPforteTrigger>(out var trigger))
+						if (other.TryGetComponent<IRitualTribute>(out var trigger))
 						{
 								int amountNew = amountsOfType.TryGetValue(trigger.TriggerType, out int amountCurrent) ? amountCurrent + 1 : 0;
 
@@ -82,12 +82,12 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void OnTriggerValid(PforteTriggerTypeEnum triggerType)
+				private void OnTriggerValid(TributeTypeEnum triggerType)
 				{
 						// play sound?
 				}
 
-				private void OnTriggerGranted(PforteTriggerTypeEnum triggerType)
+				private void OnTriggerGranted(TributeTypeEnum triggerType)
 				{
 						// es war eine idee, dass die gegenstände hingestellt weden müssen
 						// aber warum nicht erlauben, sie einfach nur zu halten - macht
@@ -125,7 +125,7 @@ namespace Assets.Script.Behaviour
 						return readyToOpen;
 				}
 
-				private void PlayGrantedTypeSound(PforteTriggerTypeEnum triggerType)
+				private void PlayGrantedTypeSound(TributeTypeEnum triggerType)
 				{
 						// TODO
 				}

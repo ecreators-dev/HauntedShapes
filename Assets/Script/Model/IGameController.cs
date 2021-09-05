@@ -6,6 +6,8 @@ namespace Assets.Script.Model
 		{
 				IAudioFader AudioFader { get; }
 				bool IsCameraRotateStop { get; }
+				bool IsGamepadDisconnected { get; }
+				CrosshairParameters Crosshair { get; }
 
 				void HideBlackscreen();
 				void ShowBlackscreen();

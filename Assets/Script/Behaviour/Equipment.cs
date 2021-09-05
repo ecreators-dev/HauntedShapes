@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+
+using UnityEngine;
+
+using Debug = UnityEngine.Debug;
 
 namespace Assets.Script.Behaviour
 {
@@ -7,6 +14,11 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		public abstract class Equipment : PickupItem
 		{
+				[Min(0)]
+				[SerializeField] private float toggleTimerSeconds = 15 / 1000f;
+
+				private float toggleTimer;
+
 				public bool IsBroken { get; private set; }
 
 				public bool IsPowered { get; private set; }
@@ -14,6 +26,16 @@ namespace Assets.Script.Behaviour
 				public ShopParameters ShopInfo { get; private set; }
 
 				public PlayerBehaviour Owner { get; private set; }
+
+				protected override void Update()
+				{
+						base.Update();
+
+						if (toggleTimer > 0)
+						{
+								toggleTimer -= Time.deltaTime;
+						}
+				}
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
@@ -29,13 +51,49 @@ namespace Assets.Script.Behaviour
 
 				protected void SetPowered(bool active)
 				{
-						this.IsPowered = active;
+						if (toggleTimer <= 0)
+						{
+								toggleTimer = toggleTimerSeconds;
+								this.IsPowered = active;
+								LogPowerCanged();
+						}
+						else
+						{
+								Debug.LogWarning($"'{GetTargetName()}': Toggle Power not possible: not ready!");
+						}
 				}
+
+				private void LogPowerCanged()
+				{
+						var sb = new StringBuilder();
+						const int max = 3;
+						for (int i = 1; i < max; i++)
+						{
+								StackFrame frame = new StackFrame(i);
+								MethodBase method = frame.GetMethod();
+								string file = method.DeclaringType.Name;
+								int position = i - 1;
+								int number = max - position;
+								string from = $"{number}:{GetTabs(position)}{file}.{method.Name}";
+								sb.AppendLine(from);
+						}
+						Debug.Log($"'{GetTargetName()}': Set Power {!IsPowered} -> {IsPowered}:\ncalled by:\n{sb}");
+				}
+
+				private static string GetTabs(int amount) => string.Join("", new string[amount].Select(_ => "\t"));
 
 				protected void TogglePowered()
 				{
-						this.IsPowered = !this.IsPowered;
-						Debug.Log($"'{GetTargetName()}': Toggled Power {!IsPowered} -> {IsPowered}");
+						if (toggleTimer <= 0)
+						{
+								toggleTimer = toggleTimerSeconds;
+								this.IsPowered = !this.IsPowered;
+								LogPowerCanged();
+						}
+						else
+						{
+								Debug.LogWarning($"'{GetTargetName()}': Toggle Power not possible: not ready!");
+						}
 				}
 
 				[CalledByPlayerBehaviour]

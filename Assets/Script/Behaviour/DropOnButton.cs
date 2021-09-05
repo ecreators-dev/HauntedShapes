@@ -22,7 +22,7 @@ namespace Assets.Script.Behaviour
 						{
 								if (this.InputControls().DropItemButtonPressed)
 								{
-										reference.DropItem(reference.User);
+										reference.DropItemRotated(reference.User);
 								}
 						}
 				}

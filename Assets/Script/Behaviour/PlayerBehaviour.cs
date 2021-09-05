@@ -389,7 +389,7 @@ namespace Assets.Script.Behaviour
 								if (active != null && item != active && item is PickupItem)
 								{
 										// player can only carry one item at the same time!
-										active.DropItem(this);
+										active.DropItemRotated(this);
 								}
 						}
 				}
@@ -552,7 +552,7 @@ namespace Assets.Script.Behaviour
 								Debug.Log($"Drop: {activeEquipment.GetTargetName()}");
 
 								// important! let fall
-								activeEquipment.DropItem(this);
+								activeEquipment.DropItemRotated(this);
 
 								// important! unset reference
 								activeEquipment = null;

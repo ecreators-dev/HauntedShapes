@@ -152,6 +152,17 @@
                 },
                 {
                     "name": "",
+                    "id": "4cfd2848-8ec0-413e-919a-c0ac7161f585",
+                    "path": "<DualShockGamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "52bfa26a-3dbf-4354-a094-393f6f54c0d0",
                     "path": "<Mouse>/delta",
                     "interactions": "",
@@ -163,8 +174,30 @@
                 },
                 {
                     "name": "",
+                    "id": "48b8a3d7-d79b-4878-bfa7-1352f7dac07e",
+                    "path": "<DualShockGamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Looking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "341a3316-8a61-492b-8595-c42ec9f00483",
                     "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Exit Game",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f45cc3a-123e-48a2-9703-0d6c421fa979",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -185,6 +218,17 @@
                 },
                 {
                     "name": "",
+                    "id": "2f6b7225-a6f2-4f22-b71b-97df5caa2840",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Editor Stop Rotate Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ffb63846-b2db-40e9-bfd4-7f87fb22d373",
                     "path": "<Keyboard>/t",
                     "interactions": "",
@@ -196,11 +240,33 @@
                 },
                 {
                     "name": "",
+                    "id": "e0927114-a34e-4f74-9951-2c601e5a8dfe",
+                    "path": "<DualShockGamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Equipment Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "93faaecc-6a7d-485e-8430-83c581937a01",
                     "path": "<Keyboard>/h",
                     "interactions": "",
                     "processors": "",
                     "groups": "Classic",
+                    "action": "Hunt Toggle (Debug)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "afdbc34b-814a-40a1-ad5c-a211968a1187",
+                    "path": "<DualShockGamepad>/touchpadButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Hunt Toggle (Debug)",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -229,6 +295,17 @@
                 },
                 {
                     "name": "",
+                    "id": "b5c7a406-131c-4c46-93cf-2de3fd6b88a1",
+                    "path": "<DualShockGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Equipment Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ac83b9a2-b318-4aa3-8c97-54e560c7fae6",
                     "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
@@ -240,11 +317,33 @@
                 },
                 {
                     "name": "",
+                    "id": "cb114669-1903-4695-b49b-770a3e03866f",
+                    "path": "<DualShockGamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "aeef0dbc-bd60-4823-94ae-f130a5a2bc7c",
                     "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "Classic",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f5a3c3f-7f9d-44c1-b902-5cc9105970d4",
+                    "path": "<DualShockGamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -273,6 +372,17 @@
                 },
                 {
                     "name": "",
+                    "id": "6cf330cd-b1b3-4b77-96f9-4ab5ae9be702",
+                    "path": "<DualShockGamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Place Item",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e3bb9d89-12c3-4d97-b664-09fefb5baf38",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -289,6 +399,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Classic",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e566ac89-27a0-457a-991e-40204231235d",
+                    "path": "<DualShockGamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Interaction",
                     "isComposite": false,
                     "isPartOfComposite": false

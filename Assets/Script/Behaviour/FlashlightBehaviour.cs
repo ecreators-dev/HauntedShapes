@@ -8,7 +8,7 @@ namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(Rigidbody))]
 		[DisallowMultipleComponent]
-		public class FlashlightBehaviour : Equipment, ILightSource
+		public class FlashlightBehaviour : EquipmentPlacable, ILightSource
 		{
 				[SerializeField] private ShopParameters shopInfo;
 				[SerializeField] private Animator animator;
@@ -31,8 +31,10 @@ namespace Assets.Script.Behaviour
 						Transform = transform;
 				}
 
-				private void Start()
+				protected override void Start()
 				{
+						base.Start();
+
 						if (ShopInfo != null)
 								shopInfo = ShopInfo;
 
@@ -42,6 +44,7 @@ namespace Assets.Script.Behaviour
 				protected override void Update()
 				{
 						base.Update();
+
 						animator.SetBool("Hunting", IsHuntingActive);
 						animator.SetBool("PowerOn", IsActive);
 
@@ -146,8 +149,7 @@ namespace Assets.Script.Behaviour
 
 				private void UpdateLookAtCrosshairTarget()
 				{
-						ICrosshairUI instance = CrosshairHitVisual.Instance;
-						(bool actualHit, Vector3 point, Vector3 _) = instance.RaycastCollidersOnly(CameraMoveType.Instance.GetCamera());
+						(bool actualHit, Vector3 point, Vector3 _) = CrosshairHit.RaycastCollidersOnly(CameraMoveType.Instance.GetCamera());
 						if (actualHit)
 						{
 								Vector3 targetDir = point - Transform.position;
@@ -167,7 +169,14 @@ namespace Assets.Script.Behaviour
 				{
 						if (IsBroken is false && IsHuntingActive is false)
 						{
-								TogglePowered();
+								if (IsTakenByPlayer)
+								{
+										TogglePowered();
+								}
+								else
+								{
+										sender.DropThenEquip(this);
+								}
 						}
 				}
 

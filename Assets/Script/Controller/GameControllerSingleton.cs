@@ -3,8 +3,10 @@ using Assets.Script.Model;
 
 using System;
 using System.Collections;
+using System.Linq;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Assets.Script.Controller
 {
@@ -19,6 +21,8 @@ namespace Assets.Script.Controller
 		{
 				public static IGameController Instance { get; private set; }
 
+				[SerializeField] private CrosshairParameters crosshair = new CrosshairParameters();
+
 				[Header("Music/Sounds")]
 				[Tooltip("Plays music in background on game start")]
 				[SerializeField] private AudioPlayInfo ambientMusic = new AudioPlayInfo("Ambient Music");
@@ -32,9 +36,23 @@ namespace Assets.Script.Controller
 				private bool fadeAmbientStartMusic;
 				private bool backgroundMusicInPlayingInLoop;
 				private bool blackscreenFading;
+
 				public IAudioFader AudioFader { get; private set; }
 				
 				public bool IsCameraRotateStop { get; private set; }
+				
+				public bool IsGamepadDisconnected
+				{
+						get
+						{
+								bool controller = InputSystem.devices.Any(
+										dev => dev.displayName.ToLower().Contains("controller"));
+								Gamepad gamepad = Gamepad.current;
+								return controller is false || gamepad == null || !gamepad.IsActuated(0);
+						}
+				}
+
+				public CrosshairParameters Crosshair => crosshair;
 
 				private void Awake()
 				{
