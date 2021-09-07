@@ -67,8 +67,10 @@ namespace Assets.Script.Behaviour
 						activeText = source.LastTextSpoken?.ToUpper() ?? string.Empty;
 				}
 
-				private void Start()
+				protected override void Start()
 				{
+						base.Start();
+
 						canToggleOff = ShopInfo.CanToggleOff;
 						if (runAsToggledOn)
 						{

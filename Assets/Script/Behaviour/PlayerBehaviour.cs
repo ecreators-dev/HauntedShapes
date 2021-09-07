@@ -295,7 +295,7 @@ namespace Assets.Script.Behaviour
 				{
 						float multiplier = 1;
 						if (activeEquipment is ILightSource source
-								&& source.IsActive is false)
+								&& source.IsPowered is false)
 						{
 								multiplier = source.ActiveMultiplier;
 						}
@@ -530,7 +530,7 @@ namespace Assets.Script.Behaviour
 #endif
 				public void DropThenEquip(Equipment item)
 				{
-						if (ActiveEquipment != null)
+						if (activeEquipment is { })
 						{
 								DropEquipment();
 						}
@@ -538,10 +538,8 @@ namespace Assets.Script.Behaviour
 						activeEquipment = item;
 						Transform equipment = item.transform;
 						equipment.SetParent(equipmentHolder);
-						equipment.localPosition = Vector3.zero;
-						equipment.localEulerAngles = Vector3.zero;
-						item.OnPlayer_ItemPickedUp(this);
-						item.OnPlayer_EquippedToHand(this);
+						
+						item.OnPlayer_NotifyItemTaken(this);
 				}
 
 				[ContextMenu("Drop equipped item")]

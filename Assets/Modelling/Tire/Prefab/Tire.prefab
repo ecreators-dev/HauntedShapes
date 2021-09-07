@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1003090863208150}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300000, guid: e474412dbed3c7e49868a79637e16d9e, type: 2}
 --- !u!23 &23930691590365986
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 257
+  m_RenderingLayerMask: 2147483645
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 18038aff46f3206419cc6dfd6e504a64, type: 2}
@@ -98,7 +98,7 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300000, guid: e474412dbed3c7e49868a79637e16d9e, type: 2}
 --- !u!54 &8550766213256200237
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -113,7 +113,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!114 &8550766213256200238
 MonoBehaviour:
@@ -13824,8 +13824,8 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
-  m_Mesh: {fileID: 0}
-  m_VersionIndex: 158
+  m_Mesh: {fileID: 4300000, guid: e474412dbed3c7e49868a79637e16d9e, type: 2}
+  m_VersionIndex: 164
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

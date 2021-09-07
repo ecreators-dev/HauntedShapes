@@ -690,7 +690,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 257
+  m_RenderingLayerMask: 2147483645
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a7dc69f333f89274eb479b734a72fdc9, type: 2}
@@ -1215,7 +1215,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 257
+  m_RenderingLayerMask: 2147483645
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
@@ -1382,7 +1382,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 257
+  m_RenderingLayerMask: 2147483645
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 019466160e4e2f7409f1e582431bf409, type: 2}
@@ -3058,7 +3058,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 3c444c38f0354099bbf49b8b53a734ae
   m_Mesh: {fileID: 4300000, guid: 95ef7c64d374c0746b4e0ed4cd92ee84, type: 2}
-  m_VersionIndex: 379
+  m_VersionIndex: 397
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3085,11 +3085,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   identifier: 4
   locked: 0
-  RigidBody: {fileID: 4860025742392329372}
+  upAxis: 2
+  toggleTimerSeconds: 0.015
+  rigidBody: {fileID: 4860025742392329372}
   shopInfo: {fileID: 11400000, guid: 47c6ebefa4c6ecc4487858aa9f8e9aa4, type: 2}
   animator: {fileID: 874647289}
   brokenText: "Ger\xE4t ist kaputt"
-  placementCheck: {fileID: 1610855582}
 --- !u!95 &874647289
 Animator:
   serializedVersion: 3
@@ -3136,5 +3137,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.31852925, y: 0.22404528, z: 0.31989384}
-  m_Center: {x: 0.0000833869, y: 0.058343604, z: -0.000106334686}
+  m_Size: {x: 0.31852925, y: 0.15570244, z: 0.31989384}
+  m_Center: {x: 0.0000833869, y: 0.07712649, z: -0.000106334686}

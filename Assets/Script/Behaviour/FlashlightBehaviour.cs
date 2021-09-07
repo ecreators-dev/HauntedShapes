@@ -20,16 +20,7 @@ namespace Assets.Script.Behaviour
 				private float activeSeconds;
 				private float breakCoolDownSeconds;
 
-				private Transform Transform { get; set; }
-
-				public bool IsActive => IsPowered;
-
 				public float ActiveMultiplier => activeMultiplier;
-
-				private void Awake()
-				{
-						Transform = transform;
-				}
 
 				protected override void Start()
 				{
@@ -46,7 +37,7 @@ namespace Assets.Script.Behaviour
 						base.Update();
 
 						animator.SetBool("Hunting", IsHuntingActive);
-						animator.SetBool("PowerOn", IsActive);
+						animator.SetBool("PowerOn", IsPowered);
 
 						if (IsTakenByPlayer is false)
 						{
@@ -66,11 +57,11 @@ namespace Assets.Script.Behaviour
 				private void UpdateNotTaken()
 				{
 						// if dropped active: heat up also
-						if (IsBroken is false && IsActive)
+						if (IsBroken is false && IsPowered)
 						{
 								Drain();
 						}
-						if (IsBroken && IsActive is false)
+						if (IsBroken && IsPowered is false)
 						{
 								Cooldown();
 						}
@@ -79,12 +70,12 @@ namespace Assets.Script.Behaviour
 				private void UpdateNotBroken()
 				{
 						// look at hittarget if active or in hunt
-						if (IsActive || IsHuntingActive)
+						if (IsPowered || IsHuntingActive)
 						{
 								UpdateLookAtCrosshairTarget();
 						}
 
-						if (IsActive)
+						if (IsPowered)
 						{
 								if (IsHuntingActive is false)
 								{

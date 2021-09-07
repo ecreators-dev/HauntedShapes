@@ -15,8 +15,6 @@ namespace Assets.Script.Behaviour.GhostTypes
 
 				public float ActiveMultiplier => lightSourceMultiplier;
 
-				public bool IsActive => IsPowered;
-
 				protected override void Start()
 				{
 						base.Start();
@@ -31,7 +29,7 @@ namespace Assets.Script.Behaviour.GhostTypes
 						base.Update();
 
 						animator.SetBool("Hunting", IsHuntingActive);
-						animator.SetBool("PowerOn", IsActive);
+						animator.SetBool("PowerOn", IsPowered);
 				}
 
 				private void RandomAnimation()

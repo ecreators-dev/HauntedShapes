@@ -37,45 +37,56 @@ namespace Assets.Script.Behaviour
 						}
 				}
 				protected Vector3 UpNormal { get; set; } = Vector3.up;
+				protected Transform Transform { get; set; }
+				protected Rigidbody RigidBody { get; set; }
 
 				protected virtual void Start()
 				{
 						UpNormal = GetUpNormalFromAxis(upAxis);
+						Transform = transform;
 				}
 
 				[CalledByPlayerBehaviour]
-				public virtual void OnPlayer_ItemPickedUp(PlayerBehaviour newUser)
+				public virtual void OnPlayer_NotifyItemTaken(PlayerBehaviour newUser)
 				{
-						if (newUser is { })
-						{
-								if (User is null)
-								{
-										User = newUser;
-										IsTakenByPlayer = true;
-										CrosshairHit = CrosshairHitVisual.Instance;
-
-										if (TryGetComponent(out Rigidbody body))
-										{
-												body.isKinematic = true;
-												Debug.Log("Disable physics gravity for pick up");
-										}
-
-										Transform obj = transform;
-										obj.localRotation = Quaternion.identity;
-										obj.localPosition = Vector3.zero;
-
-										Debug.Log($"Picked up: {GetTargetName()}");
-										OnPickedUp();
-								}
-								else
-								{
-										Debug.LogError($"Item already in use of player '{User.gameObject.name}'");
-								}
-						}
-						else
+						CrosshairHit = CrosshairHitVisual.Instance;
+						if (newUser == null)
 						{
 								Debug.LogError($"Parameter \"player\" was null!");
+								return;
 						}
+
+						if (IsTakenByPlayer is true)
+						{
+								Debug.LogError($"Item already in use of player '{User.gameObject.name}'");
+								return;
+						}
+
+						User = newUser;
+						IsTakenByPlayer = true;
+						if (TryGetComponent(out Rigidbody body))
+						{
+								RigidBody = body;
+								DisableGravity();
+						}
+
+						Transform.localPosition = Vector3.zero;
+						Transform.localRotation = Quaternion.identity;
+
+						Debug.Log($"Picked up: {GetTargetName()}");
+						OnPickedUp();
+				}
+
+				protected void DisableGravity()
+				{
+						RigidBody.isKinematic = true;
+						Debug.Log("Disable physics gravity");
+				}
+
+				protected void EnableGravity()
+				{
+						RigidBody.isKinematic = false;
+						Debug.Log("Enable gravity for drop");
 				}
 
 				/// <summary>
@@ -93,20 +104,21 @@ namespace Assets.Script.Behaviour
 								IsTakenByPlayer = false;
 
 								// unsetting parent belongs inside here! Because only after the check, the drop may be done
-								Transform obj = transform;
-								obj.SetParent(null);
 								// updside!
-								obj.rotation = Quaternion.FromToRotation(Vector3.up, UpNormal);
+								float oldPan = Transform.localEulerAngles.y;
+								Transform.localRotation = Quaternion.FromToRotation(Vector3.up, UpNormal);
+								Transform.SetParent(null);
+								var euler = Transform.localEulerAngles;
+								Transform.localEulerAngles = new Vector3(euler.x, oldPan, euler.z);
 
-								if (TryGetComponent(out Rigidbody body))
+								if (RigidBody is { })
 								{
 										if (noForce is false)
 										{
-												body.AddForce(obj.forward * 2, ForceMode.Impulse);
+												Debug.Log("Drop: throw away, forward");
+												RigidBody.AddForce(Transform.forward * 10, ForceMode.Impulse);
 										}
-
-										body.isKinematic = false;
-										Debug.Log("Enable physics for drop: throw forward");
+										EnableGravity();
 								}
 								Debug.Log($"Dropped: {GetTargetName()}");
 								OnPerformedDrop();

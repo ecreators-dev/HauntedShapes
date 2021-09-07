@@ -154,7 +154,7 @@ Light:
   m_BounceIntensity: 0.5
   m_ColorTemperature: 6570
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 1.05e-43, y: 1.8390486e+25, z: 1.589902e+29, w: 1.8617176e+25}
+  m_BoundingSphereOverride: {x: 8e-45, y: 8e-45, z: 8e-45, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 0
   m_ShadowRadius: 0.5
@@ -339,7 +339,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 257
+  m_RenderingLayerMask: 2147483645
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4fa75b6f6ad13da4ea97f6e8ab5e9e9f, type: 2}

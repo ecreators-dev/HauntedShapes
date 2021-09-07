@@ -2,7 +2,7 @@
 {
 		public interface ILightSource
 		{
-				bool IsActive { get; }
+				bool IsPowered { get; }
 
 				float ActiveMultiplier { get; }
 		}

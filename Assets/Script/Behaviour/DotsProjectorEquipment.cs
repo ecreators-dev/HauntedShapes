@@ -4,15 +4,18 @@ namespace Assets.Script.Behaviour
 {
 		public class DotsProjectorEquipment : EquipmentPlacable
 		{
-				[SerializeField] private Rigidbody RigidBody;
+				[SerializeField] private Rigidbody rigidBody;
 				[SerializeField] private ShopParameters shopInfo;
 				[SerializeField] private Animator animator;
 				[SerializeField] private string brokenText = "Gerät ist kaputt";
 
 				private bool CrosshairHovered { get; set; }
 
-				private void Start()
+				protected override void Start()
 				{
+						base.Start();
+
+						RigidBody = rigidBody;
 						SetShopInfo(shopInfo, this);
 				}
 
@@ -51,12 +54,9 @@ namespace Assets.Script.Behaviour
 				protected override void PlaceItem()
 				{
 						base.PlaceItem();
-						DisableFalling();
+						DisableGravity();
 				}
 
-				private void DisableFalling() => RigidBody.isKinematic = true;
-
-				private void EnableFalling() => RigidBody.isKinematic = false;
 
 				protected override void OnEditMode_ToggleOn() => SetPowered(true);
 

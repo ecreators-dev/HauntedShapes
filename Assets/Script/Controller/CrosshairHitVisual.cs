@@ -21,6 +21,8 @@ namespace Assets.Script.Behaviour
 		[DisallowMultipleComponent]
 		public class CrosshairHitVisual : MonoBehaviour, ICrosshairUI
 		{
+				private const int EVERY_LAYER_MASK = ~0;
+
 				[SerializeField] private CrosshairRoot root;
 				[SerializeField] private bool hovered;
 				[SerializeField] private float hitDistance = 4;
@@ -130,7 +132,6 @@ namespace Assets.Script.Behaviour
 								return;
 						}
 						placementRequestor = equipmentNotNull;
-						//placing = SurfacePlacingFactory.FindSurface(showPlacementForEquipment.transform, Vector3.up);
 				}
 
 				/// <summary>
@@ -219,9 +220,10 @@ namespace Assets.Script.Behaviour
 						Transform camera = sourceCamera.transform;
 						Ray ray = new Ray(camera.position, camera.forward);
 						anyTargetHit = Physics.SphereCast(ray, size,
-								out anyTarget, 10000, hitLayers,
+								out anyTarget, 10000, EVERY_LAYER_MASK,
 								// fixes hit no trigger!
 								QueryTriggerInteraction.Ignore);
+						
 						var point = anyTarget.point;
 						if (anyTargetHit is false)
 						{

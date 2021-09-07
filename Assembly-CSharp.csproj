@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,6 +53,9 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Script\Model\IPlayerCam.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
@@ -66,9 +69,11 @@
     <Compile Include="Assets\Script\Behaviour\WorldConstraint.cs" />
     <Compile Include="Assets\Script\Controller\CrosshairRoot.cs" />
     <Compile Include="Assets\Script\Model\IGameController.cs" />
+    <Compile Include="Assets\Script\GameMenu\ShaderMaterialDictionary.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostPropertyAsset.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\PngXmpHelper.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostRoom.cs" />
+    <Compile Include="Assets\Modelling\HeatObj\HeatSource.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\FlashlightBehaviour.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\PlayerMovement.cs" />
@@ -120,7 +125,6 @@
     <Compile Include="Assets\Script\Controller\ShopSingleton.cs" />
     <Compile Include="Assets\Script\Controller\VoiceRecognitionSingleton.cs" />
     <Compile Include="Assets\Script\Behaviour\DotsProjectorEquipment.cs" />
-    <Compile Include="Assets\Script\GameMenu\HauntedShapesGameEditorWindow.cs" />
     <Compile Include="Assets\Script\Components\Util\TributesCounter.cs" />
     <Compile Include="Assets\Script\Model\IMonoBehaviourExtensions.cs" />
     <Compile Include="Assets\Script\Behaviour\PasswayUpDown.cs" />
@@ -154,11 +158,13 @@
     <Compile Include="Assets\Script\Model\Text.cs" />
     <Compile Include="Assets\Script\Components\TeleportationDoor.cs" />
     <Compile Include="Assets\Script\Behaviour\GeisterorbBehaviour.cs" />
+    <Compile Include="Assets\Script\GameMenu\AssetPath.cs" />
     <Compile Include="Assets\Script\Behaviour\IRitualTribute.cs" />
     <Compile Include="Assets\Script\Controller\EditorPlayStatusEventManager.cs" />
     <Compile Include="Assets\Script\Behaviour\SpeechRecognitionIcon.cs" />
     <Compile Include="Assets\Script\Behaviour\TriggerTeleporter.cs" />
     <Compile Include="Assets\Script\Behaviour\FadingMonoBehaviour.cs" />
+    <Compile Include="Assets\DeferredNV\DeferredNightVisionEffect.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\AgeType.cs" />
     <Compile Include="Assets\Script\Behaviour\IGate.cs" />
     <Compile Include="Assets\Script\Behaviour\RemainingCount.cs" />
@@ -167,6 +173,7 @@
     <Compile Include="Assets\Script\Behaviour\CalledByEquipmentBehaviourAttribute.cs" />
     <Compile Include="Assets\Script\Controller\AudioPlayInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\ObjectRayUtils.cs" />
+    <Compile Include="Assets\Modelling\HeatObj\IRCamera.cs" />
     <Compile Include="Assets\Script\Controller\MouseCursorController.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\Panorama360.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentPlacable.cs" />
@@ -182,11 +189,11 @@
     <Compile Include="Assets\Script\Behaviour\HeatCellBehaviour.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupItem.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostEntity.cs" />
+    <Compile Include="Assets\Script\Model\CrosshairParameters.cs" />
     <Compile Include="Assets\Script\Behaviour\LightInteractor.cs" />
-    <Compile Include="Assets\Script\Model\IHeatUp.cs" />
+    <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Model\CrosshairParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />
@@ -222,6 +229,7 @@
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\DeferredNV\DeferredNightVision.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
@@ -1040,10 +1048,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{21D1707E-74B5-6B20-BBC8-578B8D576F64}</Project>
-      <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
     <ProjectReference Include="HauntedShapes.Doors.csproj">
       <Project>{1AC96C1A-830B-B71B-E437-BCA1ED9AA081}</Project>
       <Name>HauntedShapes.Doors</Name>

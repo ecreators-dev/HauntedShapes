@@ -97,15 +97,6 @@ namespace Assets.Script.Behaviour
 				}
 
 				[CalledByPlayerBehaviour]
-				public virtual void OnPlayer_EquippedToHand(PlayerBehaviour owner)
-				{
-						if (User is { } && User == owner)
-						{
-								OnEquip();
-						}
-				}
-
-				[CalledByPlayerBehaviour]
 				public virtual void OnPlayer_PutIntoInventory(PlayerBehaviour owner)
 				{
 						if (User is { } && User == owner)
@@ -123,7 +114,7 @@ namespace Assets.Script.Behaviour
 				/// AFTER the player put this item into his owner inventory
 				/// </summary>
 				protected virtual void OnInventory() { }
-
+				
 				protected virtual void SetBroken()
 				{
 						IsBroken = true;

@@ -11,6 +11,7 @@ TagManager:
   - Room
   - Ground Check
   - Equipment
+  - IR Camera
   layers:
   - Default
   - TransparentFX
@@ -28,8 +29,8 @@ TagManager:
   - GroundCheck
   - Player
   - No Raycast (Info only)
-  - 
-  - 
+  - General Post Processing Volume
+  - IR Post Processing Volume
   - 
   - 
   - 
