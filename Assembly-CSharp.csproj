@@ -87,6 +87,7 @@
     <Compile Include="Assets\Script\Model\IVoiceMaker.cs" />
     <Compile Include="Assets\Script\Behaviour\UnityEventEditorReferenceAttribute.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingStateBean.cs" />
+    <Compile Include="Assets\Script\DLL\DebugArrowDrawer\DrawArrow.cs" />
     <Compile Include="Assets\Script\Behaviour\InventoryBehaviour.cs" />
     <Compile Include="Assets\Beans.cs" />
     <Compile Include="Assets\Script\Behaviour\VoiceMaker.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Assets\Script\Behaviour\GhostTypes\Evidence.cs" />
     <Compile Include="Assets\Script\Components\Model\UnityEventCallByAttribute.cs" />
     <Compile Include="Assets\Script\Behaviour\PlayerBehaviour.cs" />
+    <Compile Include="Assets\Script\Behaviour\CorridorLampSynchronizer.cs" />
     <Compile Include="Assets\Script\Behaviour\InteractionEnum.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\GroundCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\EditorSnapToGround.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Assets\Script\Behaviour\CalledByEquipmentBehaviourAttribute.cs" />
     <Compile Include="Assets\Script\Controller\AudioPlayInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\ObjectRayUtils.cs" />
+    <Compile Include="Assets\Script\Behaviour\DebugShowDirection.cs" />
     <Compile Include="Assets\Modelling\HeatObj\IRCamera.cs" />
     <Compile Include="Assets\Script\Controller\MouseCursorController.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\Panorama360.cs" />
