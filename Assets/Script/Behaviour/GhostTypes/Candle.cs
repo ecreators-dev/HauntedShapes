@@ -6,6 +6,7 @@ namespace Assets.Script.Behaviour.GhostTypes
 		public class Candle : Equipment, IRitualTribute, ILightSource
 		{
 				[SerializeField] private ShopParameters shopInfo;
+				[SerializeField] private bool startEnlit;
 				[SerializeField] private Animator animator;
 				[Min(1)]
 				[SerializeField] private float lightSourceMultiplier = 1.4f;
@@ -22,6 +23,11 @@ namespace Assets.Script.Behaviour.GhostTypes
 						SetShopInfo(shopInfo, this);
 
 						RandomAnimation();
+
+						if (startEnlit)
+						{
+								ToggleOn();
+						}
 				}
 
 				protected override void Update()

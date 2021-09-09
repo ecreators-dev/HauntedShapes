@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1333518108}
   - component: {fileID: 1333518107}
   - component: {fileID: 1333518106}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Docht
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1333518104}
-  m_Mesh: {fileID: 4300000, guid: b2e627f2f3f61b04bb458f3c5491582a, type: 2}
+  m_Mesh: {fileID: 4300000, guid: f7ce21a42ec91114c83c7c504f669082, type: 2}
 --- !u!23 &1333518107
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -978,9 +978,9 @@ MonoBehaviour:
     m_AngleError: 8
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
-  assetGuid: 
-  m_Mesh: {fileID: 4300000, guid: b2e627f2f3f61b04bb458f3c5491582a, type: 2}
-  m_VersionIndex: 535
+  assetGuid: 9dd99b9a2464455a8bbd22a0b0163e91
+  m_Mesh: {fileID: 4300000, guid: f7ce21a42ec91114c83c7c504f669082, type: 2}
+  m_VersionIndex: 568
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1026,7 +1026,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877726083698261411}
-  m_Mesh: {fileID: 4300000, guid: eb05b7b6e032acc4685a087f4204e5c3, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 7c763f721609f6d4bae80eb8d36eec8e, type: 2}
 --- !u!23 &2060070780972683198
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6051,9 +6051,9 @@ MonoBehaviour:
     m_AngleError: 8
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
-  assetGuid: 
-  m_Mesh: {fileID: 4300000, guid: eb05b7b6e032acc4685a087f4204e5c3, type: 2}
-  m_VersionIndex: 199
+  assetGuid: 3586fd7450d342f7b2e3848ea6a3234b
+  m_Mesh: {fileID: 4300000, guid: 7c763f721609f6d4bae80eb8d36eec8e, type: 2}
+  m_VersionIndex: 235
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6070,8 +6070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aee3016a092a714c94bc801fe3c0237, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 0
-  locked: 0
   temperatureDegreesCelsius: 0
   heatMaximumSpot: {fileID: 0}
   heatingSeconds: 0
@@ -6088,7 +6086,7 @@ GameObject:
   - component: {fileID: 6578682946351267861}
   - component: {fileID: 6578682946351267863}
   - component: {fileID: 6578682946351267860}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Dochtlicht
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6166,7 +6164,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 2113
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 1.05e-43, y: -529.7168, z: 6.14e-43, w: 3.8e-44}
+  m_BoundingSphereOverride: {x: 0, y: 6.2e-44, z: 0, w: 3.4e-44}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -6189,10 +6187,10 @@ MonoBehaviour:
   m_InnerSpotPercent: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 16
+  m_VolumetricDimmer: 2
   m_LightUnit: 1
   m_FadeDistance: 10000
-  m_VolumetricFadeDistance: 500000
+  m_VolumetricFadeDistance: 3
   m_AffectDiffuse: 1
   m_AffectSpecular: 1
   m_NonLightmappedOnly: 0
@@ -6345,7 +6343,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   identifier: 2
   locked: 0
+  upAxis: 2
+  toggleTimerSeconds: 0.015
   shopInfo: {fileID: 11400000, guid: 396bce61906480c419cfceaa29479e32, type: 2}
+  startEnlit: 0
   animator: {fileID: 6578682946963451622}
   lightSourceMultiplier: 1.4
   brokenText: abgebrannt
@@ -6409,8 +6410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aee3016a092a714c94bc801fe3c0237, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 2
-  locked: 0
   temperatureDegreesCelsius: 20
   heatMaximumSpot: {fileID: 6578682946963451620}
   heatingSeconds: 5
@@ -6428,7 +6427,7 @@ GameObject:
   - component: {fileID: 2585992395248798069}
   - component: {fileID: 5832430965885714245}
   - component: {fileID: 5066067751626762783}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Candlelight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8510,9 +8509,9 @@ MonoBehaviour:
     m_AngleError: 8
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
-  assetGuid: 
-  m_Mesh: {fileID: 4300000, guid: 6170de3cb702ba2438c5acf7ca38ee0b, type: 2}
-  m_VersionIndex: 3001
+  assetGuid: 4b13cbede24e43c3a01ff8bd0462e603
+  m_Mesh: {fileID: 4300000, guid: 6e657ab5b6e386d4480b63266b6ed723, type: 2}
+  m_VersionIndex: 3037
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -8537,7 +8536,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9e042d2235198d2438a844adf0baea03, type: 2}
+  - {fileID: 2100000, guid: a7dc69f333f89274eb479b734a72fdc9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8566,4 +8565,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7994781315661343515}
-  m_Mesh: {fileID: 4300000, guid: 6170de3cb702ba2438c5acf7ca38ee0b, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 6e657ab5b6e386d4480b63266b6ed723, type: 2}
