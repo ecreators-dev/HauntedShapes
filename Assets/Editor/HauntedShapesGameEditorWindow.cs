@@ -38,6 +38,7 @@ namespace Assets.Script.GameMenu
 						public const string LABEL_GENERAL = "General";
 						public const string LABEL_INTERACTIBLE = "Interactibles";
 						public const string LABEL_MATERIALS = "Materials";
+						public const string LABEL_MISSING_MESHES = "Meshes";
 						public const string LABEL_CLEAN_UP = "Clean Up";
 				}
 
@@ -53,6 +54,7 @@ namespace Assets.Script.GameMenu
 						new Tab(MainTabControlLabels.LABEL_GENERAL, new GeneralTabData(), BuildGeneralTab),
 						new Tab(MainTabControlLabels.LABEL_INTERACTIBLE, new InteractibleTabData(), BuildInteractibleTab),
 						new Tab(MainTabControlLabels.LABEL_MATERIALS, new MaterialsTabData(), BuildMaterialsTab, FetchDataMaterials),
+						new Tab(MainTabControlLabels.LABEL_MISSING_MESHES, new MissingMeshTabData(), BuildMeshesTab),
 						new Tab(MainTabControlLabels.LABEL_CLEAN_UP, new CleanupTabData(), BuildCleanUpTab),
 				});
 
@@ -79,6 +81,89 @@ namespace Assets.Script.GameMenu
 						string AssetFilter = "t:Shader";
 
 						OnGui_CleanUpTab_Render(tabData, headerPlural, usedPaths, AssetFilter);
+				}
+
+				private static void BuildMeshesTab(HauntedShapesGameEditorWindow window, Tab tab, object data)
+				{
+						MissingMeshTabData e = data as MissingMeshTabData;
+
+						OnGui_MissingMeshes_Render(e);
+				}
+
+				private static void OnGui_MissingMeshes_Render(MissingMeshTabData e)
+				{
+						EditorGUILayout.HelpBox($"Fehlende Meshes führen dazu, dass der Spieler durch die Umgebung gehen oder fallen kann",
+								MessageType.Info, wide: true);
+
+						if (GUILayout.Button("Meshes finden"))
+						{
+								e.repairables = new List<(MeshCollider repair, Mesh mesh)>();
+								e.nonRepairables = new List<MeshCollider>();
+
+								var colliders = FindObjectsOfType<MeshCollider>().ToList();
+								for (int i = 0; i < colliders.Count; i++)
+								{
+										MeshCollider a = colliders[i];
+										var others = new List<MeshCollider>(colliders);
+										for (int j = 0; j < others.Count; j++)
+										{
+												MeshCollider b = others[j];
+												if (a == b)
+												{
+														continue;
+												}
+
+												if (a.gameObject == b.gameObject)
+												{
+														Mesh existingMesh = a.sharedMesh is { } ? a.sharedMesh : b.sharedMesh;
+														MeshCollider missedMesh = a.sharedMesh == null ? a : b;
+														if (missedMesh.sharedMesh == null && existingMesh != null)
+														{
+																e.repairables.Add((missedMesh, existingMesh));
+														}
+														else if (missedMesh.sharedMesh == null && existingMesh == null)
+														{
+																e.nonRepairables.Add(missedMesh);
+														}
+														colliders.Remove(b);
+												}
+										}
+								}
+						}
+
+						string number = e.repairables == null ? "?" : e.repairables.Count.ToString();
+						if (GUILayout.Button($"{number} Mesh(es) reparieren"))
+						{
+								for (int i = 0; i < e.repairables.Count; i++)
+								{
+										(MeshCollider repair, Mesh mesh) = e.repairables[i];
+										repair.sharedMesh = mesh;
+										Debug.Log($"Fixed Mesh: {repair.gameObject.name} - (trigger: {repair.isTrigger}, convex: {repair.convex})");
+										e.repairables.RemoveAt(i--);
+								}
+						}
+
+						if (e.repairables != null)
+						{
+								ShowScrollArea(ref e.ScrollPosition, () =>
+								{
+										IndentMore();
+										int index = 0;
+										foreach ((MeshCollider repair, Mesh mesh) in e.repairables)
+										{
+												if (index > 0) HorizonalLine();
+												EditorGUILayout.LabelField($"[{index + 1}] {repair.gameObject.name}");
+												EditorGUILayout.ObjectField("Ziel", repair, typeof(MeshCollider), allowSceneObjects: true);
+												EditorGUILayout.ObjectField("Mesh", repair, typeof(Mesh), allowSceneObjects: true);
+										}
+										IndentLess();
+								});
+						}
+
+						if (e.nonRepairables != null)
+						{
+								EditorGUILayout.HelpBox($"Kann nicht repariert werden: {e.nonRepairables.Count}", MessageType.Warning, wide: true);
+						}
 				}
 
 				private static void BuildCleanUpSubTabMaterials(HauntedShapesGameEditorWindow window, Tab tabOwner, object data)
