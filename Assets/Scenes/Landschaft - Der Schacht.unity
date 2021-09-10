@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.07407816, g: 0.055841655, b: 0.054671764, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4963,17 +4963,17 @@ Transform:
   - {fileID: 928319922}
   - {fileID: 2115480173}
   - {fileID: 2139360564}
-  - {fileID: 343675582}
   - {fileID: 1097430038}
+  - {fileID: 734793364}
+  - {fileID: 731270838}
+  - {fileID: 1943963403}
+  - {fileID: 343675582}
+  - {fileID: 1845077318}
   - {fileID: 535767991}
   - {fileID: 548533374}
   - {fileID: 906433003}
-  - {fileID: 734793364}
   - {fileID: 939451173}
   - {fileID: 952362838}
-  - {fileID: 731270838}
-  - {fileID: 1943963403}
-  - {fileID: 1845077318}
   m_Father: {fileID: 334720268}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15721,7 +15721,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 277810365}
-  m_RootOrder: 28
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &731270840
 MeshCollider:
@@ -15818,7 +15818,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 277810365}
-  m_RootOrder: 25
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &734793365
 MeshCollider:
@@ -23864,7 +23864,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 277810365}
-  m_RootOrder: 21
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1097430039
 MeshCollider:
@@ -38928,7 +38928,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 277810365}
-  m_RootOrder: 30
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1845077319
 MeshCollider:
@@ -40781,7 +40781,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 277810365}
-  m_RootOrder: 29
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1943963405
 MeshCollider:
@@ -48786,7 +48786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3520566635606791296, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
       propertyPath: m_EditorOnlyData
@@ -48798,15 +48798,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
       propertyPath: m_ProbeSettings.influence.m_SphereBlendDistance
-      value: 15
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
       propertyPath: m_ProbeSettings.influence.m_SphereBlendNormalDistance
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.customRenderingSettings
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.frustum.nearClipPlaneRaw
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.bufferClearing.clearDepth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.culling.useOcclusionCulling
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.bufferClearing.clearColorMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
       propertyPath: m_ProbeSettings.proxySettings.useInfluenceVolumeAsProxyVolume
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.renderingPathCustomFrameSettings.bitDatas.data1
+      value: 72198262773251917
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.renderingPathCustomFrameSettingsOverrideMask.mask.data1
+      value: 524288
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520566635606791298, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
+      propertyPath: m_ProbeSettings.cameraSettings.renderingPathCustomFrameSettingsOverrideMask.mask.data2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3520566635606791299, guid: e0a34903360d11d4095c2ccf4b6ba830, type: 3}
       propertyPath: m_Mode
