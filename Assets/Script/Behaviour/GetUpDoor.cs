@@ -1,5 +1,8 @@
+using Assets.Door;
 using Assets.Script.Behaviour;
 using Assets.Script.Components;
+
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -13,10 +16,16 @@ namespace HauntedShapes.Doors
 				[SerializeField] private string openName = "Open";
 				[SerializeField] private Collider passCollider;
 				[SerializeField] private Collider doorCollider;
+				[SerializeField] private Light doorLight;
+				[SerializeField] private TriggerTeleporter doorTeleporter;
 
 				private Animator animator;
 				private bool getup;
 				private bool open;
+				private List<PlayerBehaviour> lastTeleported;
+
+				public List<PlayerBehaviour> TeleportedPlayers { get; private set; }
+				public List<PlayerBehaviour> ReturnedPlayers { get; private set; }
 
 				private void Awake()
 				{
@@ -31,6 +40,31 @@ namespace HauntedShapes.Doors
 				protected override void Update()
 				{
 						base.Update();
+
+						List<PlayerBehaviour> teleported = new List<PlayerBehaviour>();
+						List<PlayerBehaviour> returned = new List<PlayerBehaviour>();
+
+						foreach (PlayerBehaviour current in doorTeleporter.TeleportedPlayers)
+						{
+								if (lastTeleported == null || lastTeleported.Contains(current) is false)
+								{
+										teleported.Add(current);
+								}
+						}
+						if (lastTeleported != null)
+						{
+								foreach (PlayerBehaviour current in lastTeleported)
+								{
+										if (doorTeleporter.TeleportedPlayers == null || doorTeleporter.TeleportedPlayers.Contains(current) is false)
+										{
+												returned.Add(current);
+										}
+								}
+						}
+
+						lastTeleported = new List<PlayerBehaviour>(doorTeleporter.TeleportedPlayers);
+						TeleportedPlayers = teleported;
+						ReturnedPlayers = returned;
 				}
 
 				[ContextMenu("Animation/Reset")]

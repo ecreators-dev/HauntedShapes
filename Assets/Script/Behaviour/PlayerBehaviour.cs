@@ -74,6 +74,7 @@ namespace Assets.Script.Behaviour
 				private bool ButtonDropPressed { get; set; }
 				private bool ButtonCrosshairTargetInteractionPressed { get; set; }
 				public bool InteractedInFrame { get; private set; }
+				public bool IsTeleported { get; private set; }
 
 				private void Awake()
 				{
@@ -84,6 +85,10 @@ namespace Assets.Script.Behaviour
 				{
 						FindEquipment();
 				}
+
+				public void SetTeleported() => IsTeleported = true;
+
+				public void SetReturnedFromTeleport() => IsTeleported = false;
 
 				public bool CheckCanBuy(ShopParameters equipmentInfo, uint quantity = 1)
 				{
@@ -538,7 +543,7 @@ namespace Assets.Script.Behaviour
 						activeEquipment = item;
 						Transform equipment = item.transform;
 						equipment.SetParent(equipmentHolder);
-						
+
 						item.OnPlayer_NotifyItemTaken(this);
 				}
 

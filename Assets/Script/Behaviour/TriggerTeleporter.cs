@@ -3,6 +3,7 @@ using Assets.Script.Behaviour.FirstPerson;
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using UnityEditor;
@@ -17,6 +18,7 @@ namespace Assets.Door
 				[SerializeField] private Transform exitTransform;
 
 				private Collider passCollider;
+				public List<PlayerBehaviour> TeleportedPlayers { get; } = new List<PlayerBehaviour>();
 
 				private void Awake()
 				{
@@ -56,9 +58,11 @@ namespace Assets.Door
 
 				private void OnTriggerEnter(Collider other)
 				{
-						if (other.TryGetComponent(out PlayerBehaviour behaviour))
+						if (other.TryGetComponent(out PlayerBehaviour player))
 						{
-								TeleportTo(behaviour, exitTransform);
+								TeleportedPlayers.Add(player);
+								player.SetTeleported();
+								TeleportTo(player, exitTransform);
 						}
 				}
 
