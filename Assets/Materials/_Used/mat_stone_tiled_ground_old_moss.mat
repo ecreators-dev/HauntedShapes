@@ -98,7 +98,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
-        m_Texture: {fileID: 2800000, guid: bd49ebd79ca977449ab17b5b5237fb60, type: 3}
+        m_Texture: {fileID: 2800000, guid: 705fa0d2e831a424aaec72625f584b6d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -165,7 +165,7 @@ Material:
     m_Floats:
     - Metal: 0
     - Smoothness: 0
-    - _AORemapMax: 0.105668604
+    - _AORemapMax: 0.07815072
     - _AORemapMin: 0
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
@@ -226,11 +226,11 @@ Material:
     - _LinkDetailsWithBase: 1
     - _MaterialID: 1
     - _Metallic: 0
-    - _MetallicRemapMax: 1
-    - _MetallicRemapMin: 0.57787573
+    - _MetallicRemapMax: 0.6697853
+    - _MetallicRemapMin: 0.29811049
     - _Mode: 0
     - _NormalMapSpace: 0
-    - _NormalScale: 2
+    - _NormalScale: 0.51
     - _OcclusionStrength: 1
     - _OpaqueCullMode: 2
     - _PPDLodThreshold: 5
@@ -246,7 +246,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _Smoothness: 0.091
-    - _SmoothnessRemapMax: 0.17446333
+    - _SmoothnessRemapMax: 0
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularAAScreenSpaceVariance: 0.1
