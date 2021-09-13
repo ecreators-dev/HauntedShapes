@@ -43,6 +43,7 @@ namespace Assets.Script.Behaviour.Animals
 				// don't select next position be the same again
 				private int lastPositionIndex = -1;
 				private bool inJob;
+				private Transform followRat;
 
 				private void Start()
 				{
@@ -112,7 +113,16 @@ namespace Assets.Script.Behaviour.Animals
 				{
 						if (agent.pathStatus == NavMeshPathStatus.PathComplete && !inJob)
 						{
-								NavigateNext();
+								// nicht wenn sie warten "idle"
+								if (Status == AnimationStatus.WALK)
+								{
+										NavigateNext();
+								}
+						}
+						else if (followRat is { })
+						{
+								// update destination
+								agent.SetDestination(followRat.transform.position);
 						}
 				}
 
@@ -149,10 +159,41 @@ namespace Assets.Script.Behaviour.Animals
 				{
 						AnimateIdle();
 						yield return new WaitForSeconds(waitingTimeoutSeconds);
-						agent.SetDestination(walkPositions[nextPosition].position);
+						Vector3 position = walkPositions[nextPosition].position;
+						if (WillFollowOtherRat())
+						{
+								// cannot follow itself
+								// cannot follow other rat that follows this rat
+								var otherRats = FindObjectsOfType<RatMovement>()
+										.SkipWhile(rat => rat != this && rat.followRat == this)
+										.ToList();
+								if (otherRats.Any())
+								{
+										RatMovement otherRat = otherRats[UnityEngine.Random.Range(0, otherRats.Count)];
+										followRat = otherRat.transform;
+										agent.SetDestination(position);
+										Debug.Log($"Follow Rat: {gameObject.name} follows {followRat.gameObject.name}");
+								}
+								// could not find other rat -> default behaviour
+								else
+								{
+										followRat = null;
+										agent.SetDestination(position);
+								}
+						}
+						else
+						{
+								followRat = null;
+								agent.SetDestination(position);
+						}
 						AnimateWalk();
 						inJob = false;
 						yield break;
+				}
+
+				private static bool WillFollowOtherRat()
+				{
+						return UnityEngine.Random.Range(0, 3) == UnityEngine.Random.Range(0, 3);
 				}
 		}
 }

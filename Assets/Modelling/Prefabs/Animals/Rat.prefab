@@ -317,10 +317,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 8832422151784313122}
   animator: {fileID: 6224344408333923376}
-  walkSpeedMultiplier: 5
+  walkSpeedMultiplier: 10
   idleSpeedMultiplier: 1
   dieSpeedMultiplier: 1
-  volume: 0.2
+  volume: 0.4
   stepSound: {fileID: 8300000, guid: c7306a56d2469f04a82183d6ef4d47b4, type: 3}
   leftFrontAudio: {fileID: 1588435044}
   leftBackAudio: {fileID: 1588435064}
@@ -480,10 +480,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -1372625422
   m_Radius: 0.2
-  m_Speed: 6
+  m_Speed: 4
   m_Acceleration: 5
   avoidancePriority: 50
-  m_AngularSpeed: 360
+  m_AngularSpeed: 30
   m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
