@@ -78,12 +78,14 @@
     <Compile Include="Assets\Script\Model\IAlphaFader.cs" />
     <Compile Include="Assets\Script\Components\DoorInteractible.cs" />
     <Compile Include="Assets\IInputControls.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingOffline.cs" />
     <Compile Include="Assets\Script\Model\IFlashlight.cs" />
     <Compile Include="Assets\Script\Controller\AudioFaderSingleton.cs" />
     <Compile Include="Assets\Script\Model\IEquipment.cs" />
     <Compile Include="Assets\Script\Model\IVoiceMaker.cs" />
     <Compile Include="Assets\Script\Behaviour\UnityEventEditorReferenceAttribute.cs" />
+    <Compile Include="Assets\Script\Behaviour\Animals\RatMovement.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingStateBean.cs" />
     <Compile Include="Assets\Script\DLL\DebugArrowDrawer\DrawArrow.cs" />
     <Compile Include="Assets\Script\Behaviour\InventoryBehaviour.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Assets\Script\Behaviour\GetUpDoor.cs" />
     <Compile Include="Assets\Script\Behaviour\InteractibleChild.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\TransformData.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshSurface.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognition.cs" />
     <Compile Include="Assets\Script\Behaviour\WalkingSoundsEffector.cs" />
     <Compile Include="Assets\Script\Model\RecognitionProxy.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="Assets\Script\Behaviour\IStepSoundProvider.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\Gender.cs" />
     <Compile Include="Assets\Script\Behaviour\ConsoleOutputBehaviour.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifier.cs" />
     <Compile Include="Assets\Modelling\IgniteCoders\Simple Water Shader\Resources\WaterReflection.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingAnimationProxy.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\FirstPersonAudio.cs" />
@@ -198,6 +202,7 @@
     <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraMoveType.cs" />
     <Compile Include="Assets\Script\Behaviour\MissingSwitchCaseException.cs" />
     <Compile Include="Assets\Script\Behaviour\HeatCellBehaviour.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshLink.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupItem.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostEntity.cs" />
     <Compile Include="Assets\Script\Model\CrosshairParameters.cs" />
@@ -205,11 +210,9 @@
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Behaviour\Animals\RatMovement.cs" />
-    <Compile Include="Assets\Script\NavMeshComponents\NavMeshSurface.cs" />
-    <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifierVolume.cs" />
-    <Compile Include="Assets\Script\NavMeshComponents\NavMeshLink.cs" />
-    <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifier.cs" />
+    <Compile Include="Assets\Script\Behaviour\Animals\NavMeshAgentTurnInsantStrategy.cs" />
+    <Compile Include="Assets\Script\Behaviour\Wobble.cs" />
+    <Compile Include="Assets\Scenes\Modelling Feuerzeug + Liquid Test\LighterBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />
@@ -514,17 +517,14 @@
     <Reference Include="RandomNameGeneratorLibrary">
       <HintPath>Assets\Script\DLL\NameGenerator\RandomNameGeneratorLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="clipper_library">
-      <HintPath>Library\PackageCache\com.unity.cinemachine@2.7.8\Runtime\ThirdParty\clipper_library.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CognitiveServices.Speech.csharp">
       <HintPath>Assets\Plugins\Microsoft.CognitiveServices.Speech.csharp.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\Unity.Analytics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.6.1\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
@@ -532,11 +532,14 @@
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Burst.Unsafe">
-      <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Cecil.Pdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="clipper_library">
+      <HintPath>Library\PackageCache\com.unity.cinemachine@2.7.8\Runtime\ThirdParty\clipper_library.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Mdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
@@ -967,11 +970,17 @@
     <Reference Include="Unity.XR.Management">
       <HintPath>Library\ScriptAssemblies\Unity.XR.Management.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Monetization">
       <HintPath>Library\ScriptAssemblies\UnityEngine.Monetization.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.HighDefinition.Config.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.HighDefinition.Config.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Animation.Rigging.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
@@ -1003,6 +1012,9 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Burst.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.HighDefinition.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath>
     </Reference>
@@ -1018,11 +1030,11 @@
     <Reference Include="Unity.Subsystem.Registration">
       <HintPath>Library\ScriptAssemblies\Unity.Subsystem.Registration.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.ProBuilder.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Postprocessing.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PlasticSCM.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
@@ -1039,6 +1051,15 @@
     <Reference Include="Unity.VisualScripting.Core">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Animation.Rigging">
+      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Purchasing.SecurityCore">
       <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityCore.dll</HintPath>
     </Reference>
@@ -1051,11 +1072,11 @@
     <Reference Include="UnityEngine.XR.LegacyInputHelpers">
       <HintPath>Library\ScriptAssemblies\UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Purchasing.Stores">
       <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
@@ -1077,24 +1098,6 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Burst">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Animation.Rigging">
-      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Animation.Rigging.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Burst.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -45,8 +45,12 @@ namespace Assets.Script.Behaviour.Animals
 				private bool inJob;
 				private Transform followRat;
 
+				private readonly NavMeshAgentTurnInsantStrategy agentStrategy = new NavMeshAgentTurnInsantStrategy();
+
 				private void Start()
 				{
+						agentStrategy.Start(agent);
+						
 						NavigateNext();
 				}
 
@@ -124,6 +128,11 @@ namespace Assets.Script.Behaviour.Animals
 								// update destination
 								agent.SetDestination(followRat.transform.position);
 						}
+				}
+
+				private void LateUpdate()
+				{
+						agentStrategy.LateUpdate();
 				}
 
 				private void NavigateNext()
