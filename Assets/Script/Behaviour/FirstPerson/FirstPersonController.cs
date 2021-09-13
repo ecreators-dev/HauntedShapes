@@ -1,7 +1,7 @@
 ﻿using Assets.Door;
 using Assets.Script.Controller;
 
-using System;
+using System.IO;
 
 using UnityEditor;
 
@@ -11,8 +11,11 @@ namespace Assets.Script.Behaviour.FirstPerson
 {
 		[RequireComponent(typeof(Rigidbody))]
 		[DisallowMultipleComponent]
-		public class FirstPersonController : MonoBehaviour
+		public class FirstPersonController : MonoBehaviour, ISaveLoad
 		{
+				[Tooltip("Fixed player id on load/save")]
+				[SerializeField] private int id;
+
 				[SerializeField] private CameraMoveType camType = new CameraMoveType(CameraMoveType.TypeEnum.NOT_BUMPING);
 				private Camera cam;
 
@@ -79,7 +82,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				private void FixedUpdate()
 				{
 						IInputControls inputControls = this.InputControls();
-						if(inputControls == null)
+						if (inputControls == null)
 						{
 								return;
 						}
@@ -98,6 +101,48 @@ namespace Assets.Script.Behaviour.FirstPerson
 						{
 								Transform.position = teleportedPosition;
 								teleportedSource = null;
+						}
+				}
+
+				[ContextMenu("Save")]
+				public void Save()
+				{
+						PlayerData data = new PlayerData();
+						data.Camera.Update(cam);
+						data.Update(this);
+
+						string json = JsonUtility.ToJson(data);
+						string path = GetSaveFilePath();
+						CreateDirectory(path);
+						File.WriteAllText(path, json);
+				}
+
+				[ContextMenu("Load")]
+				public void Load()
+				{
+						string path = GetSaveFilePath();
+						if (File.Exists(path))
+						{
+								string json = File.ReadAllText(path);
+								PlayerData data = JsonUtility.FromJson<PlayerData>(json);
+								data.Load(this);
+
+								Debug.Log("Player data loaded");
+						}
+						else
+						{
+								Debug.LogWarning("No player data loaded");
+						}
+				}
+
+				private string GetSaveFilePath() => Application.persistentDataPath + $"/data/player_{id}.json";
+
+				private static void CreateDirectory(string path)
+				{
+						FileInfo fileInfo = new FileInfo(path);
+						if (!fileInfo.Directory.Exists)
+						{
+								fileInfo.Directory.Create();
 						}
 				}
 

@@ -1,4 +1,5 @@
 using Assets.Script.Behaviour;
+using Assets.Script.Controller.SaveLoad;
 using Assets.Script.Model;
 
 using System;
@@ -26,7 +27,7 @@ namespace Assets.Script.Controller
 				[Header("Music/Sounds")]
 				[Tooltip("Plays music in background on game start")]
 				[SerializeField] private AudioPlayInfo ambientMusic = new AudioPlayInfo("Ambient Music");
-				
+
 				[Space]
 				[SerializeField] private FadeUIElement blackscreenUI;
 				[SerializeField] private ShopSingleton shop;
@@ -38,9 +39,9 @@ namespace Assets.Script.Controller
 				private bool blackscreenFading;
 
 				public IAudioFader AudioFader { get; private set; }
-				
+
 				public bool IsCameraRotateStop { get; private set; }
-				
+
 				public bool IsGamepadDisconnected
 				{
 						get
@@ -106,11 +107,23 @@ namespace Assets.Script.Controller
 						}
 				}
 
+				[ContextMenu("Game/Save All")]
+				public void SaveAll()
+				{
+						SaveLoadController.SaveAll(null);
+				}
+
+				[ContextMenu("Game/Load All")]
+				public void LoadALl()
+				{
+						SaveLoadController.LoadAll(null);
+				}
+
 				private void GameReady_StartPlayBackgroundAmbientMusic()
 				{
 						ambientMusic.VerifyClipOrThrow();
 
-						if(ambientMusic.CanPlay is false)
+						if (ambientMusic.CanPlay is false)
 						{
 								Debug.Log($"Play ambient music is set 'off' in {gameObject.name}");
 								return;

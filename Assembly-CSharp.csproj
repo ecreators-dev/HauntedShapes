@@ -73,6 +73,7 @@
     <Compile Include="Assets\Modelling\HeatObj\HeatSource.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\FlashlightBehaviour.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\ISaveLoad.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Script\Model\IAlphaFader.cs" />
     <Compile Include="Assets\Script\Components\DoorInteractible.cs" />
@@ -88,9 +89,11 @@
     <Compile Include="Assets\Script\Behaviour\InventoryBehaviour.cs" />
     <Compile Include="Assets\Beans.cs" />
     <Compile Include="Assets\Script\Behaviour\VoiceMaker.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\PositionData.cs" />
     <Compile Include="Assets\Script\Behaviour\Thermal\ThermalBody.cs" />
     <Compile Include="Assets\Script\Behaviour\GetUpDoor.cs" />
     <Compile Include="Assets\Script\Behaviour\InteractibleChild.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\TransformData.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognition.cs" />
     <Compile Include="Assets\Script\Behaviour\WalkingSoundsEffector.cs" />
     <Compile Include="Assets\Script\Model\RecognitionProxy.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Assets\Script\Behaviour\FirstPerson\FirstPersonController.cs" />
     <Compile Include="Assets\Script\Components\Interactible.cs" />
     <Compile Include="Assets\Script\Controller\SurfacePlacingFactory.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\ScaleData.cs" />
     <Compile Include="Assets\Script\Behaviour\BehaviourExtensions.cs" />
     <Compile Include="Assets\Script\Model\Fade.cs" />
     <Compile Include="Assets\Script\Model\IAudioFader.cs" />
@@ -129,8 +133,10 @@
     <Compile Include="Assets\Script\Behaviour\PasswayUpDown.cs" />
     <Compile Include="Assets\Script\Controller\CrosshairHitVisual.cs" />
     <Compile Include="Assets\Script\Components\Model\Tribute.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraData.cs" />
     <Compile Include="Assets\Script\Behaviour\CalledByPlayerBehaviourAttribute.cs" />
     <Compile Include="Assets\Script\Behaviour\DropOnButton.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\RotationData.cs" />
     <Compile Include="Assets\Modelling\Asteroids Pack\Assets\Scripts\RandomRotator.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Zoom.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Crouch.cs" />
@@ -138,6 +144,7 @@
     <Compile Include="Assets\Script\Behaviour\GhostTypes\DeathType.cs" />
     <Compile Include="Assets\Script\Behaviour\TributeTypeEnum.cs" />
     <Compile Include="Assets\Script\BaseCoroutinesYields\MoveLocalPositionToLocalPosition.cs" />
+    <Compile Include="Assets\Script\Behaviour\NightVision\NightVisionCameraEquipment.cs" />
     <Compile Include="Assets\Script\Behaviour\Equipment.cs" />
     <Compile Include="Assets\Script\Model\ProgressValue.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyDependingOnBooleanAttribute.cs" />
@@ -152,9 +159,11 @@
     <Compile Include="Assets\Script\BaseCoroutinesYields\CoroutineCommand.cs" />
     <Compile Include="Assets\Script\Components\Model\EObjectType.cs" />
     <Compile Include="Assets\Modelling\HeatObj\HeatViewFX.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\PlayerData.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\FirstPersonLook.cs" />
     <Compile Include="Assets\Script\Model\IMonoBehaviour.cs" />
     <Compile Include="Assets\Script\Model\Text.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\JsonComponentExtensions.cs" />
     <Compile Include="Assets\Script\Components\TeleportationDoor.cs" />
     <Compile Include="Assets\Script\Behaviour\GeisterorbBehaviour.cs" />
     <Compile Include="Assets\Script\GameMenu\AssetPath.cs" />
@@ -167,6 +176,7 @@
     <Compile Include="Assets\Script\Behaviour\GhostTypes\AgeType.cs" />
     <Compile Include="Assets\Script\Behaviour\IGate.cs" />
     <Compile Include="Assets\Script\Behaviour\RemainingCount.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\ColorData.cs" />
     <Compile Include="Assets\Script\UI\KeepSizeChild.cs" />
     <Compile Include="Assets\Script\Components\Model\AnimationWithSoundTrigger.cs" />
     <Compile Include="Assets\Script\Behaviour\CalledByEquipmentBehaviourAttribute.cs" />
@@ -179,6 +189,7 @@
     <Compile Include="Assets\Script\Behaviour\EquipmentPlacable.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\MoodType.cs" />
     <Compile Include="Assets\Script\Behaviour\PforteCondition.cs" />
+    <Compile Include="Assets\Script\Controller\SaveLoad\SaveLoadController.cs" />
     <Compile Include="Assets\Script\Behaviour\PforteTriggerBehaviour.cs" />
     <Compile Include="Assets\Script\Model\IMouseCursor.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\Candle.cs" />
@@ -194,6 +205,11 @@
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
+    <Compile Include="Assets\Script\Behaviour\Animals\RatMovement.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshSurface.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifierVolume.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshLink.cs" />
+    <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />
@@ -243,6 +259,7 @@
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.extension.lu.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.core.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\Music\Clips\Animals\Read.txt" />
     <None Include="Assets\Modelling\Verschiedenes\mixamo.com.txt" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\x64\Microsoft.CognitiveServices.Speech.core.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM64\Microsoft.CognitiveServices.Speech.extension.silk_codec.dll" />
@@ -514,6 +531,21 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Pdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Mdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Rocks">
+      <HintPath>Library\PackageCache\com.unity.burst@1.5.4\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.1.16f1\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\mscorlib.dll</HintPath>
@@ -1045,6 +1077,24 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Animation.Rigging">
+      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Animation.Rigging.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

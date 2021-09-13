@@ -12,6 +12,7 @@ TagManager:
   - Ground Check
   - Equipment
   - IR Camera
+  - Walkpoint
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - No Raycast (Info only)
   - General Post Processing Volume
   - IR Post Processing Volume
-  - 
+  - Walkable (NavMesh)
   - 
   - 
   - 
