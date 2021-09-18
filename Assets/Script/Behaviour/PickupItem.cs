@@ -167,5 +167,10 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
+				protected bool IsUserOrNotTaken(PlayerBehaviour playerSender)
+				{
+						return User == null || User == playerSender;
+				}
+
 		}
 }

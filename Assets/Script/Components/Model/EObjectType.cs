@@ -6,6 +6,7 @@
 				DOOR,
 				CANDLE,
 				FLASHLIGHT,
+				LIGHTER,
 				DOTS_PRJECTOR
 		}
 }

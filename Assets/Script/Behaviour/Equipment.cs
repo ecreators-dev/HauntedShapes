@@ -19,6 +19,8 @@ namespace Assets.Script.Behaviour
 
 				private float toggleTimer;
 
+				protected bool IsPowerToggled { get; private set; }
+				
 				public bool IsBroken { get; private set; }
 
 				public bool IsPowered { get; private set; }
@@ -49,11 +51,12 @@ namespace Assets.Script.Behaviour
 						return result;
 				}
 
-				protected void SetPowered(bool active)
+				protected void SetPowered(bool active, bool force = false)
 				{
-						if (toggleTimer <= 0)
+						if (toggleTimer <= 0 || force)
 						{
 								toggleTimer = toggleTimerSeconds;
+								IsPowerToggled = active != IsPowered;
 								this.IsPowered = active;
 								LogPowerCanged();
 						}
@@ -82,9 +85,9 @@ namespace Assets.Script.Behaviour
 
 				private static string GetTabs(int amount) => string.Join("", new string[amount].Select(_ => "\t"));
 
-				protected void TogglePowered()
+				protected void TogglePowered(bool ignoreTimer = false)
 				{
-						if (toggleTimer <= 0)
+						if (toggleTimer <= 0 || ignoreTimer)
 						{
 								toggleTimer = toggleTimerSeconds;
 								this.IsPowered = !this.IsPowered;

@@ -9,6 +9,12 @@ namespace Assets.Script.Components
 				[SerializeField] protected EObjectType identifier = EObjectType.UNDEFINED;
 				[SerializeField] private bool locked;
 
+				[Header("Sound Toggle On")]
+				[SerializeField] private AudioSource soundPlayer3d;
+				[SerializeField] private AudioClip[] toggleOnSounds;
+				[Range(0, 1)]
+				[SerializeField] private float soundVolumeOn = 1;
+
 				private bool oldHuntingStatus;
 
 				public EObjectType ObjectType => identifier;
@@ -96,5 +102,18 @@ namespace Assets.Script.Components
 				protected virtual void OnHuntStop() { }
 
 				public abstract string GetTargetName();
+
+				protected void PlayToggleOnSound()
+				{
+						if (toggleOnSounds.Length > 0)
+						{
+								AudioClip clip = toggleOnSounds[Random.Range(0, toggleOnSounds.Length)];
+								soundPlayer3d.PlayOneShot(clip, soundVolumeOn);
+						}
+						else
+						{
+								Debug.LogWarning($"{GetTargetName()}: no toggle-on-sound!");
+						}
+				}
 		}
 }

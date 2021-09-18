@@ -54,6 +54,12 @@ namespace Assets.Script.Behaviour
 				private bool mouseDown;
 				private float litIntensity;
 				private IInputControls inputControls;
+
+				/// <summary>
+				/// TODO - Handle show messages for a certain amount of time in a coroutine
+				/// </summary>
+				private readonly Stack<string> messagesToShow = new Stack<string>();
+				
 				private readonly List<LightInteractor> litLights = new List<LightInteractor>();
 
 				public Camera Cam => playerCam;
@@ -69,6 +75,9 @@ namespace Assets.Script.Behaviour
 
 				// for scoring
 				public float PlayerDarknessTimeFactorized { get; private set; }
+
+				public void AddMessage(string message) => messagesToShow.Push(message);
+
 				private bool ButtonEquipmentTogglePressed { get; set; }
 				private bool ButtonPlacePressed { get; set; }
 				private bool ButtonDropPressed { get; set; }

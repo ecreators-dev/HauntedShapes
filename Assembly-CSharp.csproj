@@ -71,6 +71,7 @@
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\PngXmpHelper.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostRoom.cs" />
     <Compile Include="Assets\Modelling\HeatObj\HeatSource.cs" />
+    <Compile Include="Assets\Script\Behaviour\Wobble.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\FlashlightBehaviour.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\ISaveLoad.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Zoom.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Crouch.cs" />
     <Compile Include="Assets\Script\BaseCoroutinesYields\MoveWorldPositionToWorldPosition.cs" />
+    <Compile Include="Assets\Script\Behaviour\Animals\NavMeshAgentTurnInsantStrategy.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\DeathType.cs" />
     <Compile Include="Assets\Script\Behaviour\TributeTypeEnum.cs" />
     <Compile Include="Assets\Script\BaseCoroutinesYields\MoveLocalPositionToLocalPosition.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Assets\Script\Behaviour\FirstPerson\ColorData.cs" />
     <Compile Include="Assets\Script\UI\KeepSizeChild.cs" />
     <Compile Include="Assets\Script\Components\Model\AnimationWithSoundTrigger.cs" />
+    <Compile Include="Assets\Script\Behaviour\LighterBehaviour.cs" />
     <Compile Include="Assets\Script\Behaviour\CalledByEquipmentBehaviourAttribute.cs" />
     <Compile Include="Assets\Script\Controller\AudioPlayInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\ObjectRayUtils.cs" />
@@ -201,7 +204,7 @@
     <Compile Include="Assets\Script\Behaviour\PlacementCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraMoveType.cs" />
     <Compile Include="Assets\Script\Behaviour\MissingSwitchCaseException.cs" />
-    <Compile Include="Assets\Script\Behaviour\HeatCellBehaviour.cs" />
+    <Compile Include="Assets\Script\Behaviour\PowerbankConsumable.cs" />
     <Compile Include="Assets\Script\NavMeshComponents\NavMeshLink.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupItem.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostEntity.cs" />
@@ -210,9 +213,10 @@
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Behaviour\Animals\NavMeshAgentTurnInsantStrategy.cs" />
-    <Compile Include="Assets\Script\Behaviour\Wobble.cs" />
-    <Compile Include="Assets\Scenes\Modelling Feuerzeug + Liquid Test\LighterBehaviour.cs" />
+    <Compile Include="Assets\Script\Behaviour\Consumable.cs" />
+    <Compile Include="Assets\Script\Behaviour\ConsumableChild.cs" />
+    <Compile Include="Assets\Script\Behaviour\IPowerbankSupport.cs" />
+    <Compile Include="Assets\Script\Behaviour\ChildVisibleControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

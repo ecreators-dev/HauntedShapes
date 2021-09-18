@@ -8,19 +8,29 @@ namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(Rigidbody))]
 		[DisallowMultipleComponent]
-		public class FlashlightBehaviour : EquipmentPlacable, ILightSource
+		public class FlashlightBehaviour : EquipmentPlacable, ILightSource, IPowerbankSupport
 		{
 				[SerializeField] private ShopParameters shopInfo;
 				[SerializeField] private Animator animator;
 				[Min(1)]
 				[SerializeField] private float activeMultiplier = 2;
 				[SerializeField] private string cooldownText = "Gerät kühlt ab";
+				[Header("Powerbank")]
+				[Min(0)]
+				[SerializeField] private float power = 100;
+				[Min(0)]
+				[SerializeField] private int maxPower = 100;
 
-				private bool canToggleActiveState = true;
 				private float activeSeconds;
 				private float breakCoolDownSeconds;
+				// TODO not yet shown!
+				private float powerVisual;
 
 				public float ActiveMultiplier => activeMultiplier;
+
+				public int MaxPower => maxPower;
+
+				public int Power => Mathf.RoundToInt(power);
 
 				protected override void Start()
 				{
@@ -153,7 +163,7 @@ namespace Assets.Script.Behaviour
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
 						// on ground or in hand
-						return IsLocked is false && (User == null || User == sender);
+						return IsLocked is false && IsUserOrNotTaken(sender);
 				}
 
 				public override void Interact(PlayerBehaviour sender)
@@ -189,6 +199,22 @@ namespace Assets.Script.Behaviour
 										TimerText = $"{activeSeconds:0} s"
 								};
 						}
+				}
+
+				public bool LoadPower(int power)
+				{
+						bool canLoad = this.power < this.maxPower;
+						if (canLoad)
+						{
+								this.power += Mathf.Min(power, this.maxPower - this.power);
+								this.power = Mathf.Min(this.power, this.maxPower);
+						}
+						return canLoad;
+				}
+
+				public void VisualizePowerLoadUpdate(float actualPowerDelta, int maxPowerDelta)
+				{
+						this.powerVisual = (this.Power + actualPowerDelta) / this.maxPower;
 				}
 		}
 }
