@@ -15,8 +15,6 @@ namespace Assets.Script.Behaviour.NightVision
 				[SerializeField] private Material screenOff;
 				[SerializeField] private MeshRenderer Renderer;
 
-				private bool IsAnchorred { get; set; }
-
 				protected override void Start()
 				{
 						SetShopInfo(shopInfo, this);
@@ -40,7 +38,8 @@ namespace Assets.Script.Behaviour.NightVision
 						base.Update();
 
 						Renderer.material = IsPowered ? screenOn : screenOff;
-
+						//Transform.localScale = new Vector3(1, 1, 0.3f);
+						
 						if (IsPlaced)
 						{
 								if (IsCrosshairHovered)
