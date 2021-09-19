@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,7 +53,11 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Script\Model\IPlayerCam.cs" />
+    <Compile Include="Assets\Script\Behaviour\Consumable.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\BeginGroupAttribute.cs" />
@@ -113,8 +117,9 @@
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\FirstPersonAudio.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\Evidence.cs" />
     <Compile Include="Assets\Script\Components\Model\UnityEventCallByAttribute.cs" />
+    <Compile Include="Assets\Script\Behaviour\IPowerbankSupport.cs" />
     <Compile Include="Assets\Script\Behaviour\PlayerBehaviour.cs" />
-    <Compile Include="Assets\Script\Behaviour\CorridorLampSynchronizer.cs" />
+    <Compile Include="Assets\Script\Behaviour\CorridorLampSynchronizerOnlyEditor.cs" />
     <Compile Include="Assets\Script\Behaviour\InteractionEnum.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\GroundCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\EditorSnapToGround.cs" />
@@ -153,6 +158,7 @@
     <Compile Include="Assets\Script\Behaviour\NightVision\NightVisionCameraEquipment.cs" />
     <Compile Include="Assets\Script\Behaviour\Equipment.cs" />
     <Compile Include="Assets\Script\Model\ProgressValue.cs" />
+    <Compile Include="Assets\Script\Behaviour\PlayerVisibleRange.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyDependingOnBooleanAttribute.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\InputControlManagerSingleton.cs" />
@@ -193,6 +199,7 @@
     <Compile Include="Assets\Modelling\HeatObj\IRCamera.cs" />
     <Compile Include="Assets\Script\Controller\MouseCursorController.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\Panorama360.cs" />
+    <Compile Include="Assets\Script\Behaviour\ConsumableChild.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentPlacable.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\MoodType.cs" />
     <Compile Include="Assets\Script\Behaviour\PforteCondition.cs" />
@@ -213,10 +220,6 @@
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Behaviour\Consumable.cs" />
-    <Compile Include="Assets\Script\Behaviour\ConsumableChild.cs" />
-    <Compile Include="Assets\Script\Behaviour\IPowerbankSupport.cs" />
-    <Compile Include="Assets\Script\Behaviour\ChildVisibleControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

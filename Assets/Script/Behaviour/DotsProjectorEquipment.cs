@@ -24,7 +24,7 @@ namespace Assets.Script.Behaviour
 						base.Update();
 						animator.SetBool("Hunting", IsHuntingActive);
 						animator.SetBool("PowerOn", IsPowered);
-						
+
 						CrosshairHovered = IsCrosshairHovered;
 
 						// cannot interact, when locked
@@ -34,20 +34,25 @@ namespace Assets.Script.Behaviour
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						return IsLocked is false;
+						return base.CanInteract(sender) && (User == null || sender == User);
 				}
 
 				public override void Interact(PlayerBehaviour sender)
 				{
 						if (IsTakenByPlayer)
 						{
-								if (sender == User)
-										TogglePowered();
+								TogglePowered();
 						}
 						else
 						{
-								if (IsPlaced && CrosshairHovered)
+								if (IsPlaced is false)
+								{
+										CrosshairHit.ShowPlacementPointer(this);
+								}
+								else if (CrosshairHovered)
+								{
 										TogglePowered();
+								}
 						}
 				}
 

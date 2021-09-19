@@ -18,8 +18,10 @@ namespace Assets.Script.Behaviour.Animals
 				[Header("Animation Settings")]
 				[Space]
 				[SerializeField] private Animator animator;
-				[Range(0, 25)]
-				[SerializeField] private float walkSpeedMultiplier = 1;
+				[Range(0, 3)]
+				[SerializeField] private float walkSpeedMultiplierMin = 1;
+				[Range(0, 3)]
+				[SerializeField] private float walkSpeedMultiplierMax = 1;
 				[Range(0, 25)]
 				[SerializeField] private float idleSpeedMultiplier = 1;
 				[Range(0, 25)]
@@ -44,13 +46,15 @@ namespace Assets.Script.Behaviour.Animals
 				private int lastPositionIndex = -1;
 				private bool inJob;
 				private Transform followRat;
-
+				private float agentInitSpeed;
 				private readonly NavMeshAgentTurnInsantStrategy agentStrategy = new NavMeshAgentTurnInsantStrategy();
 
 				private void Start()
 				{
 						agentStrategy.Start(agent);
-						
+
+						agentInitSpeed = agent.speed;
+
 						NavigateNext();
 				}
 
@@ -91,6 +95,9 @@ namespace Assets.Script.Behaviour.Animals
 
 				public void AnimateWalk()
 				{
+						// random different speed
+						float walkSpeedMultiplier = UnityEngine.Random.Range(walkSpeedMultiplierMin, walkSpeedMultiplierMax);
+						agent.speed = agentInitSpeed * walkSpeedMultiplier;
 						animator.SetFloat("AnimationSpeedFactor_walking", walkSpeedMultiplier);
 						animator.SetBool("Walking", true);
 						animator.SetBool("Dead", false);

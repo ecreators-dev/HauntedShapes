@@ -20,7 +20,7 @@ namespace Assets.Script.Behaviour
 				private float toggleTimer;
 
 				protected bool IsPowerToggled { get; private set; }
-				
+
 				public bool IsBroken { get; private set; }
 
 				public bool IsPowered { get; private set; }
@@ -44,21 +44,26 @@ namespace Assets.Script.Behaviour
 						return base.CanInteract(sender) && !IsBroken;
 				}
 
-				public bool TryGetCrosshairHitInfo(out PlacementEnum type)
-				{
-						bool result = CrosshairHit.GetPlacementInfo(out PlacementCheck.HitCheck? info) != PlacementEnum.NONE;
-						type = result ? info.Value.PlacementType : PlacementEnum.NONE;
-						return result;
-				}
-
 				protected void SetPowered(bool active, bool force = false)
 				{
 						if (toggleTimer <= 0 || force)
 						{
 								toggleTimer = toggleTimerSeconds;
 								IsPowerToggled = active != IsPowered;
-								this.IsPowered = active;
+								IsPowered = active;
 								LogPowerCanged();
+
+								if (IsPowerToggled)
+								{
+										if (active)
+										{
+												PlayToggleOnSound();
+										}
+										else
+										{
+												PlayToggleOffSound();
+										}
+								}
 						}
 						else
 						{
@@ -89,8 +94,9 @@ namespace Assets.Script.Behaviour
 				{
 						if (toggleTimer <= 0 || ignoreTimer)
 						{
+								SetPowered(!IsPowered, ignoreTimer);
+								
 								toggleTimer = toggleTimerSeconds;
-								this.IsPowered = !this.IsPowered;
 								LogPowerCanged();
 						}
 						else
@@ -117,7 +123,7 @@ namespace Assets.Script.Behaviour
 				/// AFTER the player put this item into his owner inventory
 				/// </summary>
 				protected virtual void OnInventory() { }
-				
+
 				protected virtual void SetBroken()
 				{
 						IsBroken = true;
@@ -168,7 +174,7 @@ namespace Assets.Script.Behaviour
 
 				public void SetShopInfo(ShopParameters shopInfo, Equipment prefab)
 				{
-						this.ShopInfo = shopInfo;
+						ShopInfo = shopInfo;
 						shopInfo.SetPrefab(prefab);
 				}
 

@@ -49,6 +49,12 @@ namespace Assets.Script.Behaviour
 						animator.SetBool("Hunting", IsHuntingActive);
 						animator.SetBool("PowerOn", IsPowered);
 
+						if (IsTakenByPlayer)
+						{
+								// look at hittarget if active or in hunt
+								UpdateLookAtCrosshairTarget();
+						}
+
 						if (IsTakenByPlayer is false)
 						{
 								UpdateNotTaken();
@@ -56,7 +62,11 @@ namespace Assets.Script.Behaviour
 						else if (IsBroken)
 						{
 								Cooldown();
-								SetPowered(false);
+
+								if (IsPowered)
+								{
+										SetPowered(false);
+								}
 						}
 						else
 						{
@@ -79,12 +89,6 @@ namespace Assets.Script.Behaviour
 
 				private void UpdateNotBroken()
 				{
-						// look at hittarget if active or in hunt
-						if (IsPowered || IsHuntingActive)
-						{
-								UpdateLookAtCrosshairTarget();
-						}
-
 						if (IsPowered)
 						{
 								if (IsHuntingActive is false)

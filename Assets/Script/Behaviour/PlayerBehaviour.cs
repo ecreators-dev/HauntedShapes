@@ -1,3 +1,4 @@
+using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Behaviour.GhostTypes;
 using Assets.Script.Components;
 
@@ -59,7 +60,7 @@ namespace Assets.Script.Behaviour
 				/// TODO - Handle show messages for a certain amount of time in a coroutine
 				/// </summary>
 				private readonly Stack<string> messagesToShow = new Stack<string>();
-				
+
 				private readonly List<LightInteractor> litLights = new List<LightInteractor>();
 
 				public Camera Cam => playerCam;
@@ -200,6 +201,8 @@ namespace Assets.Script.Behaviour
 
 				private void FindEquipment()
 				{
+						// avoid camera as equipment here!
+
 						var foundEquipment = equipmentHolder.GetComponentInChildren<Equipment>(true);
 						if (foundEquipment is { })
 						{
@@ -434,7 +437,7 @@ namespace Assets.Script.Behaviour
 				private void OnCrosshairHoverInteractible_PlaceButtonPressed((Equipment equipment, PickupItem item, Interactible any) match)
 				{
 						// grab from anywhere, but not from other player
-						if (match.equipment.IsTakenByPlayer is false && match.any.IsLocked is false)
+						if (match.equipment != null && match.equipment.IsTakenByPlayer is false && match.any.IsLocked is false)
 						{
 								DropThenEquip(match.equipment);
 								Debug.Log($"'{gameObject.name}' equipped a placed '{match.equipment.GetTargetName()}'");
@@ -551,9 +554,21 @@ namespace Assets.Script.Behaviour
 
 						activeEquipment = item;
 						Transform equipment = item.transform;
-						equipment.SetParent(equipmentHolder);
+						equipment.SetParent(GetEquipmentHolder(item));
 
 						item.OnPlayer_NotifyItemTaken(this);
+				}
+
+				private Transform GetEquipmentHolder(Equipment item)
+				{
+						if (item.ObjectType == EObjectType.CAMERA)
+						{
+								// insert equipment as child!
+								return CameraMoveType.Instance.GetCamera().transform.GetChild(0);
+						}
+
+						// default holder
+						return equipmentHolder;
 				}
 
 				[ContextMenu("Drop equipped item")]

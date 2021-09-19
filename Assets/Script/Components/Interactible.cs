@@ -1,5 +1,7 @@
 ﻿using Assets.Script.Behaviour;
 
+using System;
+
 using UnityEngine;
 
 namespace Assets.Script.Components
@@ -9,11 +11,31 @@ namespace Assets.Script.Components
 				[SerializeField] protected EObjectType identifier = EObjectType.UNDEFINED;
 				[SerializeField] private bool locked;
 
-				[Header("Sound Toggle On")]
+				[Header("Sound Effects")]
 				[SerializeField] private AudioSource soundPlayer3d;
-				[SerializeField] private AudioClip[] toggleOnSounds;
-				[Range(0, 1)]
-				[SerializeField] private float soundVolumeOn = 1;
+				[SerializeField] private SoundEffect toggleOn = new SoundEffect();
+				[SerializeField] private SoundEffect toggleOff = new SoundEffect();
+
+				[Serializable]
+				public class SoundEffect
+				{
+						public AudioClip[] randomSounds;
+						[Range(0, 1)]
+						public float volume = 1;
+
+						public void PlayRandomOnce(string ownerName, string effectName, AudioSource soundPlayer3d)
+						{
+								if (randomSounds is { } && randomSounds.Length > 0)
+								{
+										AudioClip clip = randomSounds[UnityEngine.Random.Range(0, randomSounds.Length)];
+										soundPlayer3d.PlayOneShot(clip, volume);
+								}
+								else
+								{
+										Debug.LogWarning($"{ownerName}: no {effectName}-sounds!");
+								}
+						}
+				}
 
 				private bool oldHuntingStatus;
 
@@ -105,14 +127,25 @@ namespace Assets.Script.Components
 
 				protected void PlayToggleOnSound()
 				{
-						if (toggleOnSounds.Length > 0)
+						if (soundPlayer3d is { })
 						{
-								AudioClip clip = toggleOnSounds[Random.Range(0, toggleOnSounds.Length)];
-								soundPlayer3d.PlayOneShot(clip, soundVolumeOn);
+								toggleOn.PlayRandomOnce(GetTargetName(), "toggle on", soundPlayer3d);
 						}
 						else
 						{
-								Debug.LogWarning($"{GetTargetName()}: no toggle-on-sound!");
+								Debug.LogWarning($"{GetTargetName()}: missing Audio Source (Component)!");
+						}
+				}
+
+				protected void PlayToggleOffSound()
+				{
+						if (soundPlayer3d is { })
+						{
+								toggleOff.PlayRandomOnce(GetTargetName(), "toggle off", soundPlayer3d);
+						}
+						else
+						{
+								Debug.LogWarning($"{GetTargetName()}: missing Audio Source (Component)!");
 						}
 				}
 		}

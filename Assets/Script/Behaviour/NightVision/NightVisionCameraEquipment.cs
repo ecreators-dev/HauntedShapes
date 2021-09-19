@@ -1,5 +1,3 @@
-using Assets.Script.Behaviour.FirstPerson;
-
 using System;
 
 using UnityEngine;
@@ -13,23 +11,42 @@ namespace Assets.Script.Behaviour.NightVision
 		public class NightVisionCameraEquipment : EquipmentPlacable
 		{
 				[SerializeField] private ShopParameters shopInfo;
-				[SerializeField] private NightVisionCameraModelHandEquipment handModelPrefab;
+				[SerializeField] private Material screenOn;
+				[SerializeField] private Material screenOff;
+				[SerializeField] private MeshRenderer Renderer;
 
-				private bool instanced;
+				private bool IsAnchorred { get; set; }
 
 				protected override void Start()
 				{
-						base.Start();
 						SetShopInfo(shopInfo, this);
+						base.Start();
+
+						ToggleOff();
+				}
+
+				private void ToggleOff()
+				{
+						SetPowered(false, true);
+				}
+
+				private void ToggleOn()
+				{
+						SetPowered(true, true);
 				}
 
 				protected override void Update()
 				{
 						base.Update();
 
-						if (Transform.parent == null)
+						Renderer.material = IsPowered ? screenOn : screenOff;
+
+						if (IsPlaced)
 						{
-								instanced = false;
+								if (IsCrosshairHovered)
+								{
+										// TODO - rotate
+								}
 						}
 				}
 
@@ -37,81 +54,27 @@ namespace Assets.Script.Behaviour.NightVision
 				{
 						return new EquipmentInfo
 						{
-								Text = ShopInfo.DisplayName,
+								Text = $"{ShopInfo.DisplayName}",
 								TimerText = null
 						};
 				}
 
-				protected override void OnEquip()
+				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						base.OnEquip();
-
-						// camera need to be a child of player camera
-						// it need also to be in Hand! - now it is in Hand
-						// put to camera and put camera to hand
-
-						if (instanced is false)
-						{
-								instanced = true;
-								NightVisionCameraModelHandEquipment instance = Instantiate(handModelPrefab, CameraMoveType.Instance.GetCamera().transform);
-								instance.SetReference(this);
-
-								// orientate with main camera
-								instance.transform.rotation = Quaternion.identity;
-								instance.transform.localPosition = Vector3.zero;
-						}
+						return base.CanInteract(sender) && (User == null || User == sender);
 				}
 
 				public override void Interact(PlayerBehaviour sender)
 				{
-						// on ground or in hand
 						if (IsTakenByPlayer)
 						{
-
+								TogglePowered();
 						}
-				}
-		}
-
-		/// <summary>
-		/// A model in hand to let night vision camera stay model, but hide rendering surface to avoid camera at face and in hand.
-		/// Its only a reference for intacting with camera true model in placer camera
-		/// </summary>
-		[DisallowMultipleComponent]
-		public class NightVisionCameraModelHandEquipment : EquipmentPlacable
-		{
-				[SerializeField] private MeshRenderer Renderer;
-				private NightVisionCameraEquipment Camera;
-
-				public override EquipmentInfo GetEquipmentInfo()
-				{
-						return Camera.GetEquipmentInfo();
-				}
-
-				protected override void OnPerformedDrop()
-				{
-						base.OnPerformedDrop();
-
-						// this reference need to be the camera again
-						Camera.transform.SetParent(null);
-						Camera.DropItemRotated(Camera.User, true);
-
-						Destroy(gameObject);
-				}
-
-				public override void Interact(PlayerBehaviour sender)
-				{
-						Camera.Interact(sender);
-				}
-
-				public void SetReference(NightVisionCameraEquipment camera)
-				{
-						this.Camera = camera;
-						DisableVisible();
-				}
-
-				private void DisableVisible()
-				{
-						Renderer.enabled = false;
+						// click if placed
+						else if (IsPlaced)
+						{
+								TogglePowered();
+						}
 				}
 		}
 }

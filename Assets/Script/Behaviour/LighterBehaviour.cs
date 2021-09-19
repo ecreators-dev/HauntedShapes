@@ -67,8 +67,6 @@ namespace Assets.Script.Behaviour
 								SetPowered(true);
 								LightCandle.SetActive(true);
 								animator.enabled = true;
-
-								PlayToggleOnSound();
 						}
 				}
 

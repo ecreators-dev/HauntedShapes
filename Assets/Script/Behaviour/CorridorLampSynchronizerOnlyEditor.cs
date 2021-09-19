@@ -4,7 +4,7 @@ using UnityEngine.Rendering.HighDefinition;
 namespace Assets.Script.Behaviour
 {
 		[ExecuteInEditMode]
-		public class CorridorLampSynchronizer : MonoBehaviour
+		public class CorridorLampSynchronizerOnlyEditor : MonoBehaviour
 		{
 #if UNITY_EDITOR
 				[SerializeField] Light Light;

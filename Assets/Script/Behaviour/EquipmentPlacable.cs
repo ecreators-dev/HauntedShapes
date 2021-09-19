@@ -7,6 +7,8 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		public abstract class EquipmentPlacable : Equipment, IPlacableEquipment
 		{
+				private bool oldIsTaken;
+
 				public bool IsPlaced { get; private set; }
 				protected bool IsPlacing { get; private set; }
 				protected bool ButtonPlacingPressed { get; private set; }
@@ -25,18 +27,46 @@ namespace Assets.Script.Behaviour
 
 						if (IsTakenByPlayer && IsPlaced is false)
 						{
-								// once:
-								if (IsPlacing is false)
-								{
-										IsPlacing = true;
-										CrosshairHit.ShowPlacementPointer(this);
-								}
+								OnPlacing();
+						}
 
-								// found place:
-								if (ButtonPlacingPressed)
+						Update_HandleToResetPlacing();
+						
+						oldIsTaken = IsTakenByPlayer;
+				}
+
+				private void Update_HandleToResetPlacing()
+				{
+						bool changedTaken = oldIsTaken != IsTakenByPlayer && IsTakenByPlayer is true;
+						if (changedTaken)
+						{
+								// now can place again: reset!
+								if (IsPlaced)
 								{
-										PlaceItem();
+										IsPlaced = false;
 								}
+						}
+				}
+
+				protected virtual void OnPlacing()
+				{
+						StartPlacing();
+
+						// found place:
+						if (ButtonPlacingPressed)
+						{
+								PlaceItem();
+						}
+				}
+
+				private void StartPlacing()
+				{
+						// once!
+						if (IsPlacing is false)
+						{
+								IsPlacing = true;
+								CrosshairHit.ShowPlacementPointer(this);
+								Debug.Log($"{GetTargetName()}: Start placing");
 						}
 				}
 
@@ -47,21 +77,23 @@ namespace Assets.Script.Behaviour
 						IsPlaced = false;
 				}
 
-				protected virtual void CompletePlacing()
-				{
-						IsPlacing = false;
-						IsPlaced = true;
-				}
-
 				protected virtual void PlaceItem()
 				{
 						if (IsPlacing)
 						{
-								// do placing
-								DropItemRotated(User, noForce: true);
-								CrosshairHit.PlaceEquipment(this, UpNormal, true, this.GetGameController().Crosshair.PlacementOffsetNormal);
-								CompletePlacing();
+								OnPlaced();
 						}
+				}
+
+				protected virtual void OnPlaced()
+				{
+						// do placing
+						DropItemRotated(User, noForce: true);
+						CrosshairHit.PlaceEquipment(this, UpNormal, true, this.GetGameController().Crosshair.PlacementOffsetNormal);
+
+						IsPlacing = false;
+						IsPlaced = true;
+						Debug.Log($"{GetTargetName()}: End placing");
 				}
 		}
 }

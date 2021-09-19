@@ -81,6 +81,7 @@
     <Compile Include="Assets\Editor\InteractibleTabData.cs" />
     <Compile Include="Assets\Editor\Navmesh\NavMeshComponentsGUIUtility.cs" />
     <Compile Include="Assets\Editor\Navmesh\NavMeshAssetManager.cs" />
+    <Compile Include="Assets\Editor\ChainBuilderEditorWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

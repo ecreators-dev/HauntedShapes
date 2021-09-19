@@ -19,7 +19,6 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 				(bool hit, Vector3 point, Vector3 normal) RaycastCollidersOnly(Camera camera);
 				Transform GetPlacementPosition();
-				PlacementEnum GetPlacementInfo(out PlacementCheck.HitCheck? info);
 				Vector3 GetPlacementNormal();
 		}
 }

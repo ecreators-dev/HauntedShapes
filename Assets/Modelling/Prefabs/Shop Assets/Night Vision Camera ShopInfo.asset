@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
   displayName: Nachtsicht Kamera
-  description: 
-  cost: 10
-  sellPrice: 0
+  description: "Eine Kamera, die das Restlicht verst\xE4rkt. So k\xF6nnen dunkle
+    Bereiche ausgeleuchtet betrachtet werden. Da man nur Infrarot-Licht sehen kann,
+    ist die Ansicht Schwarz-Wei\xDF."
+  cost: 199
+  sellPrice: 150
   canBeSold: 1
   isElectrial: 1
   canToggleOff: 1
   activeSeconds: 0
   coolDownSeconds: 0
-  playerLevelMinimum: 0
+  playerLevelMinimum: 10
   dragImage: {fileID: 0}
   shopImageSmall: {fileID: 0}
   shopImageBig: {fileID: 0}

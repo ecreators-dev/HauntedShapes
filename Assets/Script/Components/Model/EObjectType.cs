@@ -7,6 +7,8 @@
 				CANDLE,
 				FLASHLIGHT,
 				LIGHTER,
-				DOTS_PRJECTOR
+				DOTS_PRJECTOR,
+				POWER_UP,
+				CAMERA
 		}
 }

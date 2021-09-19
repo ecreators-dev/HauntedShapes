@@ -37,8 +37,7 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private TMP_Text tooFarTextUI;
 				[SerializeField] private LayerMask hitLayers;
 				[SerializeField] private GameObject placementSprite;
-				[SerializeField] private LayerMask placementLayers = ~0;
-				[SerializeField] private PlacementCheck placementCheck;
+				[SerializeField] private LayerMask[] placementLayers;
 				[SerializeField] private Transform crosshairDot;
 
 				private RawImage image;
@@ -156,11 +155,6 @@ namespace Assets.Script.Behaviour
 						placementRequestor = null;
 				}
 
-				public PlacementEnum GetPlacementInfo(out PlacementCheck.HitCheck? info)
-				{
-						return placementCheck.GetPlacementType(out info);
-				}
-
 				public Transform GetPlacementPosition()
 				{
 						return placementSprite.transform;
@@ -223,7 +217,7 @@ namespace Assets.Script.Behaviour
 								out anyTarget, 10000, EVERY_LAYER_MASK,
 								// fixes hit no trigger!
 								QueryTriggerInteraction.Ignore);
-						
+
 						var point = anyTarget.point;
 						if (anyTargetHit is false)
 						{
@@ -264,9 +258,14 @@ namespace Assets.Script.Behaviour
 										| IsInteractibleHit(clickInRange, out hitAny));
 
 						// place anywhere:
-						PlacementHitFound =
-								Physics.Raycast(new Ray(camera.position, camera.forward),
-								out placementHit, hitDistance, placementLayers, QueryTriggerInteraction.Ignore);
+						foreach (var placementLayer in placementLayers)
+						{
+								PlacementHitFound =
+										Physics.Raycast(new Ray(camera.position, camera.forward),
+										out placementHit, hitDistance, placementLayer, QueryTriggerInteraction.Ignore);
+
+								if (PlacementHitFound) break;
+						}
 
 						clickableRange = hovered && clickInRange.distance <= hitDistance;
 						matchColor = root.GetColor(GetActionType(hitEquipment, hitAny));

@@ -635,7 +635,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2508423695735044798}
-  m_LocalRotation: {x: -0.80775154, y: -0.0031010304, z: -0.58891803, w: 0.026524518}
+  m_LocalRotation: {x: -0.65363, y: -0.026690029, z: 0.756343, w: -0.00089936145}
   m_LocalPosition: {x: -0.056, y: 0.179, z: 0.063}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1359,6 +1359,7 @@ GameObject:
   - component: {fileID: 4990787288825231745}
   - component: {fileID: 4990787288825231747}
   - component: {fileID: 766867404}
+  - component: {fileID: 485950763}
   m_Layer: 14
   m_Name: Player (James)
   m_TagString: Player
@@ -1409,14 +1410,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: affae0b5b0dbf364f80989a392d4cd8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 1
   camType:
     camBumping: {fileID: 4990787288491400423}
     camNotBumping: {fileID: 1111544049044930722}
     type: 0
   fieldOfView: 65
   canMove: 1
-  moveSpeed: 2
-  runSpeed: 4
+  moveSpeed: 3
+  runSpeed: 5
   characterController: {fileID: 4990787288825231747}
   animator: {fileID: 1452484759308882724}
   crouchBooleanName: Crouch
@@ -1566,7 +1568,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2.9
-  m_Radius: 0.5
+  m_Radius: 0.55
   m_SlopeLimit: 90
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -1589,6 +1591,22 @@ MonoBehaviour:
   heatingSeconds: 5
   coolingSeconds: 20
   maxDistance: 15
+--- !u!208 &485950763
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4990787288825231748}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.8, y: 2.095, z: 0.8}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -0.41, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &4990787289039253691
 GameObject:
   m_ObjectHideFlags: 0
@@ -2718,7 +2736,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2902,6 +2920,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4812219235163670878}
   m_RootOrder: 38
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7816343984396689470
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7816343984396689442}
+  m_Layer: 0
+  m_Name: Camera Holder
+  m_TagString: IR Camera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7816343984396689442
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7816343984396689470}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0.30000004}
+  m_Children: []
+  m_Father: {fileID: 8983889887667214511}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7896637353833201762
 GameObject:
@@ -3189,7 +3237,8 @@ Transform:
   m_LocalRotation: {x: 0.1456435, y: -0, z: 0.0000000037252903, w: 0.9893372}
   m_LocalPosition: {x: -0.0030955598, y: 2.9232388, z: 0.16603321}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 7816343984396689442}
   m_Father: {fileID: 4812219235163670878}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 16.749, y: 0, z: 0}
@@ -3218,13 +3267,13 @@ Camera:
     height: 1
   near clip plane: 0.2
   far clip plane: 1000
-  field of view: 60
+  field of view: 65
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294950847
+    m_Bits: 4294819775
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3257,11 +3306,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clearColorMode: 1
-  backgroundColorHDR: {r: 0.025, g: 0.07, b: 0.19, a: 0}
+  backgroundColorHDR: {r: 0, g: 0, b: 0, a: 0}
   clearDepth: 1
   volumeLayerMask:
     serializedVersion: 2
-    m_Bits: 114623
+    m_Bits: 2147483647
   volumeAnchorOverride: {fileID: 0}
   antialiasing: 1
   SMAAQuality: 2
@@ -3285,7 +3334,7 @@ MonoBehaviour:
   xrRendering: 1
   fullscreenPassthrough: 0
   allowDynamicResolution: 1
-  customRenderingSettings: 1
+  customRenderingSettings: 0
   invertFaceCulling: 0
   probeLayerMask:
     serializedVersion: 2
@@ -3294,8 +3343,8 @@ MonoBehaviour:
   exposureTarget: {fileID: 0}
   m_RenderingPathCustomFrameSettings:
     bitDatas:
-      data1: 72127415980097357
-      data2: 13763000467510460440
+      data1: 72127433863593805
+      data2: 13763000469666332696
     lodBias: 1
     lodBiasMode: 0
     lodBiasQualityLevel: 0
@@ -3308,8 +3357,8 @@ MonoBehaviour:
     materialQuality: 0
   renderingPathCustomFrameSettingsOverrideMask:
     mask:
-      data1: 493128783003649
-      data2: 3988783104
+      data1: 422350843576320
+      data2: 0
   defaultFrameSettings: 0
   m_Version: 7
   m_ObsoleteRenderingPath: 0
