@@ -165,7 +165,7 @@ Material:
     m_Floats:
     - Metal: 0
     - Smoothness: 0
-    - _AORemapMax: 0
+    - _AORemapMax: 0.009176411
     - _AORemapMin: 0
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
@@ -246,7 +246,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _Smoothness: 0.091
-    - _SmoothnessRemapMax: 0.21564578
+    - _SmoothnessRemapMax: 0
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularAAScreenSpaceVariance: 0.1
