@@ -16,6 +16,7 @@ namespace Assets.Script.Behaviour
 		{
 				[Min(0)]
 				[SerializeField] private float toggleTimerSeconds = 15 / 1000f;
+				[SerializeField] private SoundEffect ambientLoopOff;
 
 				private float toggleTimer;
 
@@ -37,6 +38,17 @@ namespace Assets.Script.Behaviour
 						{
 								toggleTimer -= Time.deltaTime;
 						}
+
+						if (CanPlayAmbientOffState())
+						{
+								// plays once:
+								ambientLoopOff.PlayRandomLoop(GetTargetName(), "Ambient off sound loop", soundPlayer3dAmbient);
+						}
+				}
+
+				private bool CanPlayAmbientOffState()
+				{
+						return IsPowered is false && ambientLoopOff != null && ambientLoopOff.IsLooping is false;
 				}
 
 				public override bool CanInteract(PlayerBehaviour sender)
@@ -95,7 +107,7 @@ namespace Assets.Script.Behaviour
 						if (toggleTimer <= 0 || ignoreTimer)
 						{
 								SetPowered(!IsPowered, ignoreTimer);
-								
+
 								toggleTimer = toggleTimerSeconds;
 								LogPowerCanged();
 						}

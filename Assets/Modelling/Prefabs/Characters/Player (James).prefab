@@ -1423,6 +1423,7 @@ MonoBehaviour:
   animator: {fileID: 1452484759308882724}
   crouchBooleanName: Crouch
   moveSpeedName: Speed
+  stepEventReference: {fileID: 1620714801}
 --- !u!114 &4990787288825231758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1460,6 +1461,12 @@ MonoBehaviour:
   crosshair: {fileID: 0}
   infoText: {fileID: 0}
   timerText: {fileID: 0}
+  stepSoundsRandom:
+    randomSounds:
+    - {fileID: 8300000, guid: d17e2e790ab2c184b8b29d5e0df32573, type: 3}
+    - {fileID: 8300000, guid: a5e91de300c193d4e8bc6f750f22e902, type: 3}
+    volume: 1
+    loop: 0
 --- !u!82 &4990787288825231745
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2021,6 +2028,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4812219235163670878}
   - component: {fileID: 1452484759308882724}
+  - component: {fileID: 1620714801}
   m_Layer: 14
   m_Name: Player (James).old2
   m_TagString: Untagged
@@ -2133,6 +2141,18 @@ Animator:
   m_HasTransformHierarchy: 0
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1620714801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297287908977005540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c68c1fca79a71242a76d920feddffb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5536792863206730240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2945,8 +2965,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7816343984396689470}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0.30000004}
+  m_LocalPosition: {x: 0.21, y: -0.37, z: 1.24}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8983889887667214511}
   m_RootOrder: 0

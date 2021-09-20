@@ -1,11 +1,15 @@
 ﻿using Assets.Door;
 using Assets.Script.Controller;
 
+using System;
 using System.IO;
+using System.Linq;
 
 using UnityEditor;
 
 using UnityEngine;
+
+using static Assets.Script.Components.Interactible;
 
 namespace Assets.Script.Behaviour.FirstPerson
 {

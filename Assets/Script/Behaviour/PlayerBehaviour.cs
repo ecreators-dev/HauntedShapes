@@ -3,6 +3,7 @@ using Assets.Script.Behaviour.GhostTypes;
 using Assets.Script.Components;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using TMPro;
@@ -10,7 +11,8 @@ using TMPro;
 using UnityEditor;
 
 using UnityEngine;
-using UnityEngine.InputSystem;
+
+using static Assets.Script.Components.Interactible;
 
 using Debug = UnityEngine.Debug;
 
@@ -49,6 +51,9 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private TMP_Text infoText;
 				[SerializeField] private TMP_Text timerText;
 
+				[Header("Steps Fallback Audio")]
+				[SerializeField] private SoundEffect stepSoundsRandom;
+
 				private float money = 0;
 				private Equipment activeEquipment;
 				private AudioClip stepSoundClip;
@@ -85,7 +90,7 @@ namespace Assets.Script.Behaviour
 				private bool ButtonCrosshairTargetInteractionPressed { get; set; }
 				public bool InteractedInFrame { get; private set; }
 				public bool IsTeleported { get; private set; }
-
+				
 				private void Awake()
 				{
 						Transform = transform;
@@ -94,6 +99,10 @@ namespace Assets.Script.Behaviour
 				private void Start()
 				{
 						FindEquipment();
+
+						var stepsComponent = GetComponentInChildren<StepAnimationEventReference>();
+						stepsComponent.StepAnimationEvent -= OnWalkingAnimation_OnStep;
+						stepsComponent.StepAnimationEvent += OnWalkingAnimation_OnStep;
 				}
 
 				public void SetTeleported() => IsTeleported = true;
@@ -626,6 +635,18 @@ namespace Assets.Script.Behaviour
 								return "<no name>";
 						}
 						return $"'{clip.name}'";
+				}
+
+				public void OnWalkingAnimation_OnStep()
+				{
+						if (stepSoundClip == null)
+						{
+								stepSoundsRandom.PlayRandomOnce(gameObject.name, "Step Fallback", playerAudioSource3d);
+						}
+						else
+						{
+								//playerAudioSource3d.PlayOneShot(stepSoundClip);
+						}
 				}
 		}
 }

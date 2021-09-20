@@ -1,41 +1,20 @@
 ﻿using Assets.Script.Behaviour;
 
-using System;
-
 using UnityEngine;
 
 namespace Assets.Script.Components
 {
-		public abstract class Interactible : MonoBehaviour
+		public abstract partial class Interactible : MonoBehaviour
 		{
 				[SerializeField] protected EObjectType identifier = EObjectType.UNDEFINED;
 				[SerializeField] private bool locked;
 
 				[Header("Sound Effects")]
 				[SerializeField] private AudioSource soundPlayer3d;
+				[SerializeField] protected AudioSource soundPlayer3dAmbient;
 				[SerializeField] private SoundEffect toggleOn = new SoundEffect();
 				[SerializeField] private SoundEffect toggleOff = new SoundEffect();
-
-				[Serializable]
-				public class SoundEffect
-				{
-						public AudioClip[] randomSounds;
-						[Range(0, 1)]
-						public float volume = 1;
-
-						public void PlayRandomOnce(string ownerName, string effectName, AudioSource soundPlayer3d)
-						{
-								if (randomSounds is { } && randomSounds.Length > 0)
-								{
-										AudioClip clip = randomSounds[UnityEngine.Random.Range(0, randomSounds.Length)];
-										soundPlayer3d.PlayOneShot(clip, volume);
-								}
-								else
-								{
-										Debug.LogWarning($"{ownerName}: no {effectName}-sounds!");
-								}
-						}
-				}
+				[SerializeField] private SoundEffect ambientLoopOn = new SoundEffect();
 
 				private bool oldHuntingStatus;
 
@@ -130,6 +109,7 @@ namespace Assets.Script.Components
 						if (soundPlayer3d is { })
 						{
 								toggleOn.PlayRandomOnce(GetTargetName(), "toggle on", soundPlayer3d);
+								ambientLoopOn.PlayRandomLoop(GetTargetName(), "toggle on ambient", soundPlayer3dAmbient);
 						}
 						else
 						{
@@ -142,6 +122,7 @@ namespace Assets.Script.Components
 						if (soundPlayer3d is { })
 						{
 								toggleOff.PlayRandomOnce(GetTargetName(), "toggle off", soundPlayer3d);
+								ambientLoopOn.StopLoop();
 						}
 						else
 						{
