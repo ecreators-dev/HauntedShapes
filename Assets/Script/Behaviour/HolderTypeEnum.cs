@@ -4,8 +4,6 @@
 		{
 				RIGHT_HAND,
 				LEFT_HAND,
-				HEAD,
-				BACK,
-				BELLY
+				HEAD
 		}
 }

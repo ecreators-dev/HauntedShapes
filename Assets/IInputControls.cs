@@ -16,7 +16,7 @@ namespace Assets
 
 				bool InteractButtonPressed { get; }
 
-				bool DropItemButtonPressed { get; }
+				bool DropEquipmentButtonPressed { get; }
 
 				bool DebugHuntToggleOnOff { get; }
 

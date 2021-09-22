@@ -179,5 +179,10 @@ namespace Assets.Script.Behaviour
 				{
 						Transform.SetParent(parent);
 				}
+
+				public virtual bool CanPickUp(PlayerBehaviour player)
+				{
+						return IsUnlocked && User == null;
+				}
 		}
 }

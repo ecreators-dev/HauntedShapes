@@ -11,100 +11,83 @@ using UnityEditor;
 
 using UnityEngine;
 
-using static Assets.Script.Components.Interactible;
-
 using Debug = UnityEngine.Debug;
 
 namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(CrosshairTargetInfo))]
 		[DisallowMultipleComponent]
-		public class PlayerBehaviour : MonoBehaviour, IPlayerCam, IStepSoundProvider
+		public class PlayerBehaviour : MonoBehaviour, IStepSoundProvider
 		{
 				[SerializeField] private PlayerInfo playerData = new PlayerInfo();
-				[SerializeField] private Transform equipmentHolder;
-				[SerializeField] private Transform pickupHolder;
-				[SerializeField] private Camera playerCam;
+				[Space]
+				[SerializeField] private ItemHolder equipmentHolder;
+				[SerializeField] private ItemHolder pickupHolder;
+				[SerializeField] private ItemHolder cameraHolder;
+				[Space]
 				[SerializeField] private AudioSource playerAudioSource3d;
 				[SerializeField] private InventoryBehaviour inventory;
-				[SerializeField] private TMP_Text infoText;
-				[SerializeField] private TMP_Text timerText;
-
+				
 				[Header("Steps Fallback Audio")]
 				[SerializeField] private SoundEffect stepSoundsRandom;
 
-				public PlayerInfo PlayerData => playerData;
-
 				private float money = 0;
-				private Equipment activeEquipment;
 				private AudioClip stepSoundClip;
 				private bool mouseDown;
-				private float litIntensity;
-				private IInputControls inputControls;
-
 				/// <summary>
 				/// TODO - Handle show messages for a certain amount of time in a coroutine
 				/// </summary>
 				private readonly Stack<string> messagesToShow = new Stack<string>();
-
-				private readonly List<LightInteractor> litLights = new List<LightInteractor>();
-
-				public Camera Cam => playerCam;
+				
+				public PlayerInfo PlayerData => playerData;
 
 				private Transform Transform { get; set; }
-				private ICrosshairInfo PlacingInfo { get; set; }
 
-				public Equipment ActiveEquipment => activeEquipment;
+				private ICrosshairInfo CrosshairTargetInfo { get; set; }
 
-				public bool IsPlayerInDark { get; private set; }
+				public IEquipment ActiveEquipment => equipmentHolder is IItemHolder holder ? holder.CurrentItem as Equipment : null;
 
-				// for statistics
-				public float PlayerDarknessTime { get; private set; }
-
-				// for scoring
-				public float PlayerDarknessTimeFactorized { get; private set; }
-
-				public void AddMessage(string message) => messagesToShow.Push(message);
-
-				private bool ButtonEquipmentTogglePressed { get; set; }
-				private bool ButtonPlacePressed { get; set; }
-				private bool ButtonDropPressed { get; set; }
-				private bool ButtonCrosshairTargetInteractionPressed { get; set; }
 				public bool InteractedInFrame { get; private set; }
+
 				public bool IsTeleported { get; private set; }
+
+				private bool IsButtonPlacingPressed => this.InputControls().PlaceEquipmentButtonPressed;
+
+				private bool IsButtonInteractionPressed => this.InputControls().CrosshairTargetInteractionButtonPressed;
 
 				private void Awake()
 				{
 						Transform = transform;
-						PlacingInfo = GetComponent<CrosshairTargetInfo>();
+						CrosshairTargetInfo = GetComponent<CrosshairTargetInfo>();
 				}
 
 				private void Start()
 				{
-						FindEquipment();
-
 						var stepsComponent = GetComponentInChildren<StepAnimationEventReference>();
 						stepsComponent.StepAnimationEvent -= OnWalkingAnimation_OnStep;
 						stepsComponent.StepAnimationEvent += OnWalkingAnimation_OnStep;
 				}
 
+				private void Update()
+				{
+						InteractedInFrame = false;
+
+						HandleCrosshairTarget();
+				}
+
+				public void AddMessage(string message) => messagesToShow.Push(message);
+
 				public void SetTeleported() => IsTeleported = true;
 
 				public void SetReturnedFromTeleport() => IsTeleported = false;
 
-				public bool CheckCanBuy(ShopParameters equipmentInfo, uint quantity = 1)
-				{
-						return money >= equipmentInfo.Cost * quantity;
-				}
+				public bool CheckCanBuy(ShopParameters equipmentInfo, uint quantity = 1) => money >= equipmentInfo.Cost * quantity;
 
 				/// <summary>
 				/// Counts the quantity for this item to buy, depends to the <see cref="money"/> 
 				/// and <see cref="ShopParameters.cost"/>
 				/// </summary>
-				public int CountMaximumForMoney(ShopParameters item)
-				{
-						return Mathf.FloorToInt(money / item.Cost);
-				}
+				public int CountMaximumForMoney(ShopParameters item) => Mathf.FloorToInt(money / item.Cost);
 
 				public int CountOwnedEquipment(ShopParameters item) => inventory.Count(item);
 
@@ -127,12 +110,6 @@ namespace Assets.Script.Behaviour
 
 				private void OnEquipmentSold(ShopParameters shopInfo)
 				{
-				}
-
-				public void InLightUpdate(LightInteractor lightInteractor, float intensity)
-				{
-						this.litLights.Add(lightInteractor);
-						this.litIntensity += intensity;
 				}
 
 				public void TakeEquipment(PlayerBehaviour diedPlayer)
@@ -191,17 +168,6 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void FindEquipment()
-				{
-						// avoid camera as equipment here!
-
-						var foundEquipment = equipmentHolder.GetComponentInChildren<Equipment>(true);
-						if (foundEquipment is { })
-						{
-								DropThenEquip(foundEquipment);
-						}
-				}
-
 				[CalledByEquipmentBehaviour]
 				public void OnEquipment_Broken(Equipment equipment)
 				{
@@ -221,217 +187,42 @@ namespace Assets.Script.Behaviour
 						// wanna play a sound?s
 				}
 
-				private void Update()
-				{
-						InteractedInFrame = false;
-						inputControls ??= this.InputControls();
-						ButtonEquipmentTogglePressed = inputControls.InteractButtonPressed;
-						ButtonPlacePressed = inputControls.PlaceEquipmentButtonPressed;
-						ButtonDropPressed = inputControls.DropItemButtonPressed;
-						ButtonCrosshairTargetInteractionPressed = inputControls.CrosshairTargetInteractionButtonPressed;
-
-						HandleHuntToggleDebug();
-
-						HandleCrosshairTarget();
-						HandleToggleOnEquippedItem();
-						HandleDropButton();
-
-						HandleEquipmentInfoGui();
-						UpdatePlayerInDark();
-						HandlePlayerInDarkness();
-				}
-
-				private void HandleEquipmentInfoGui()
-				{
-						if (ActiveEquipment is { })
-						{
-								EquipmentInfo info = ActiveEquipment.GetEquipmentInfo();
-								if (info is { })
-								{
-										ShowEquipmentInfo(info);
-								}
-								else
-								{
-										HideEquipmentInfo();
-								}
-						}
-						else
-						{
-								HideEquipmentInfo();
-						}
-				}
-
-				private void ShowEquipmentInfo(EquipmentInfo info)
-				{
-						if (info.Text != null)
-						{
-								infoText.gameObject.SetActive(true);
-								infoText.text = info.Text;
-						}
-						else
-						{
-								infoText.gameObject.SetActive(false);
-						}
-
-						if (info.TimerText != null)
-						{
-								timerText.gameObject.SetActive(true);
-								timerText.text = info.TimerText;
-						}
-						else
-						{
-								timerText.gameObject.SetActive(false);
-						}
-				}
-
-				private void HideEquipmentInfo()
-				{
-						infoText.gameObject.SetActive(false);
-						timerText.gameObject.SetActive(false);
-				}
-
-				private void HandlePlayerInDarkness()
-				{
-						if (IsPlayerInDark)
-						{
-								PlayerDarknessTime += Time.deltaTime;
-								float multiplier = GetLightSourceEquipmentMultiplier();
-								PlayerDarknessTimeFactorized = Time.deltaTime * multiplier;
-						}
-				}
-
-				private float GetLightSourceEquipmentMultiplier()
-				{
-						float multiplier = 1;
-						if (activeEquipment is ILightSource source
-								&& source.IsPowered is false)
-						{
-								multiplier = source.ActiveMultiplier;
-						}
-						return multiplier;
-				}
-
-				private void UpdatePlayerInDark()
-				{
-						IsPlayerInDark = true;
-						if (litLights.Count > 0)
-						{
-								float averageIntensity = litIntensity / litLights.Count;
-								if (averageIntensity >= 0.1f)
-								{
-										IsPlayerInDark = false;
-								}
-
-								// reset at end of frame!
-								litLights.Clear();
-								litIntensity = 0;
-						}
-				}
-
-				/// <summary>
-				/// Handles only to drop the actual equipment
-				/// </summary>
-				private void HandleDropButton()
-				{
-						if (activeEquipment is { } && ButtonDropPressed)
-						{
-								DropEquipment();
-						}
-				}
-
-				private void HandleHuntToggleDebug()
-				{
-						if (inputControls.DebugHuntToggleOnOff)
-						{
-								HuntingStateBean hunt = HuntingStateBean.Instance;
-								if (hunt.InHunt is false)
-								{
-										hunt.StartHunt();
-								}
-								else
-								{
-										hunt.StopHunt();
-								}
-						}
-				}
-
-				private void HandleToggleOnEquippedItem()
-				{
-						if (activeEquipment == null)
-						{
-								// no equipment - everything is fine
-								FindEquipment();
-								return;
-						}
-
-						// fixes double toggled by input via crosshair target clicked
-						// when hovered = true -> end
-						// hovered interaction is priorized
-
-						// try to toggle on/off held equipment
-						if (ButtonEquipmentTogglePressed)
-						{
-								Debug.Log("interaction-button pressed for equipment");
-								OnActiveEquipment_ToggleInteractibleButtonPressed();
-						}
-				}
-
-				private void OnActiveEquipment_ToggleInteractibleButtonPressed()
-				{
-						HandleInteractible(ActiveEquipment);
-				}
-
-				private void PickUp(PickupItem item)
+				private void PickUp(IPickupItem item)
 				{
 						// Handle: is already in hand of any player?
-						item.transform.SetParent(pickupHolder, true);
-						OnPickUp_HandleActivePickupItem(item);
-						Debug.Log($"Item pickup: {item.gameObject.name}");
-				}
-
-				private void OnPickUp_HandleActivePickupItem(Interactible item)
-				{
-						Transform parent = pickupHolder;
-						PickupItem active = parent.GetComponentInChildren<PickupItem>();
-						if (active != null)
-						{
-								if (active != null && item != active && item is PickupItem)
-								{
-										// player can only carry one item at the same time!
-										active.DropItemRotated(this);
-								}
-						}
+						pickupHolder.DropThenPut(this, item, false);
+						Debug.Log($"Item pickup: {item.GetTargetName()}");
 				}
 
 				private void HandleCrosshairTarget()
 				{
 						// an (any) interactible must be in interactible layer mask
 						// to be clickable with name
-						if (PlacingInfo.Info.InClickRange.IsHit)
+						if (CrosshairTargetInfo.Info.InClickRange.IsHit)
 						{
-								ObjectHitInfo objectInClickRange = PlacingInfo.ObjectInfo.InClickRange;
-								var match = (
-										objectInClickRange.GetEquipment(),
-										objectInClickRange.GetPickupItem(),
-										objectInClickRange.GetInteractible());
-
-								if (objectInClickRange.HasTargetItem && objectInClickRange.TargetItem.IsUnlocked)
+								ObjectHitInfo clickRangeInfo = CrosshairTargetInfo.ObjectInfo.InClickRange;
+								if (clickRangeInfo.HasTargetItem && clickRangeInfo.TargetItem.IsUnlocked)
 								{
+										var match = (
+												clickRangeInfo.GetEquipment(),
+												clickRangeInfo.GetPickupItem(),
+												clickRangeInfo.GetInteractible());
+
 										// an (any) interactible must be in interactible layer mask
 										// to be clickable with name
-										if (ButtonCrosshairTargetInteractionPressed)
+										if (IsButtonInteractionPressed)
 										{
 												Debug.Log("interaction-button pressed for hovered target");
 												OnCrosshairHoverInteractible_InteractionButtonPressed(match);
 										}
-										else if (ButtonPlacePressed)
+										else if (IsButtonPlacingPressed)
 										{
 												Debug.Log("place-button pressed for hovered target");
 												OnCrosshairHoverInteractible_PlaceButtonPressed(match);
 										}
 								}
 						}
-						else if (PlacingInfo.Info.InHoverRange.IsHit)
+						else if (CrosshairTargetInfo.Info.InHoverRange.IsHit)
 						{
 
 						}
@@ -439,30 +230,9 @@ namespace Assets.Script.Behaviour
 						{
 
 						}
-
-						return;
-#if false
-						if (((CrosshairHitVisual)CrosshairHitVisual.Instance).TryGetItem(out bool inClickRange, out (Equipment equipment, PickupItem item, Interactible any) match)
-																				&& inClickRange
-																				&& match.any.IsUnlocked)
-						{
-								// an (any) interactible must be in interactible layer mask
-								// to be clickable with name
-								if (ButtonCrosshairTargetInteractionPressed)
-								{
-										Debug.Log("interaction-button pressed for hovered target");
-										OnCrosshairHoverInteractible_InteractionButtonPressed(match);
-								}
-								else if (ButtonPlacePressed)
-								{
-										Debug.Log("place-button pressed for hovered target");
-										OnCrosshairHoverInteractible_PlaceButtonPressed(match);
-								}
-						}
-#endif
 				}
 
-				private void OnCrosshairHoverInteractible_PlaceButtonPressed((Equipment equipment, PickupItem item, Interactible any) match)
+				private void OnCrosshairHoverInteractible_PlaceButtonPressed((IEquipment equipment, IPickupItem item, IInteractibleBase any) match)
 				{
 						// grab from anywhere, but not from other player
 						if (match.equipment != null && match.equipment.IsTakenByPlayer is false && match.any.IsLocked is false)
@@ -472,7 +242,7 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void OnCrosshairHoverInteractible_InteractionButtonPressed((Equipment equipment, PickupItem item, Interactible any) match)
+				private void OnCrosshairHoverInteractible_InteractionButtonPressed((IEquipment equipment, IPickupItem item, IInteractible any) match)
 				{
 						// equipment is an pickupitem
 						// pickupitem is an interactible
@@ -498,19 +268,15 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void HandlePickupItem(PickupItem item)
+				private void HandlePickupItem(IPickupItem item)
 				{
 						if (item.IsTakenByPlayer is false)
 						{
 								PickUp(item);
 						}
-						else
-						{
-								HandleInteractible(item);
-						}
 				}
 
-				private void HandleEquipment(Equipment equipment)
+				private void HandleEquipment(IEquipment equipment)
 				{
 						if (equipment.CanInteract(this))
 						{
@@ -528,7 +294,7 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void HandleInteractible(Interactible any)
+				private void HandleInteractible(IInteractible any)
 				{
 						// inside only Interact! No check from outside behaviour!
 						if (any.CanInteract(this) && !InteractedInFrame)
@@ -548,9 +314,13 @@ namespace Assets.Script.Behaviour
 #if UNITY_EDITOR
 				private void OnGUI()
 				{
-						EditorGUILayout.HelpBox("Toggle On/Off = T", MessageType.Info);
-						EditorGUILayout.HelpBox("Hunt Fx On/Off = H", MessageType.Info);
-						EditorGUILayout.HelpBox("Mouse On/Off = Backspace", MessageType.Info);
+						EditorGUILayout.HelpBox("T = Interagieren", MessageType.Info);
+						EditorGUILayout.HelpBox("H = Hunt", MessageType.Info);
+						EditorGUILayout.HelpBox("Backspace = Drehen Aus", MessageType.Info);
+						EditorGUILayout.HelpBox("W,A,S,D = Laufen", MessageType.Info);
+						EditorGUILayout.HelpBox("Maus = Sehen", MessageType.Info);
+						EditorGUILayout.HelpBox("C = Ducken", MessageType.Info);
+						EditorGUILayout.HelpBox("G = Platzieren", MessageType.Info);
 				}
 
 				private void OnDrawGizmos()
@@ -573,45 +343,24 @@ namespace Assets.Script.Behaviour
 						}
 				}
 #endif
-				public void DropThenEquip(Equipment item)
-				{
-						if (activeEquipment is { })
-						{
-								DropEquipment();
-						}
 
-						activeEquipment = item;
-						Transform equipment = item.transform;
-						equipment.SetParent(GetEquipmentHolder(item));
+				private IItemHolder EquipmentHolder => equipmentHolder;
 
-						item.OnPlayer_NotifyItemTaken(this);
-				}
+				private IItemHolder CameraHolder => cameraHolder;
 
-				private Transform GetEquipmentHolder(Equipment item)
+				public void DropThenEquip(IEquipment item)
 				{
 						if (item.ObjectType == EObjectType.CAMERA)
 						{
 								// insert equipment as child!
-								return CameraMoveType.Instance.GetCamera().transform.GetChild(0);
+								CameraHolder.DropThenPut(this, item, false);
 						}
-
-						// default holder
-						return equipmentHolder;
-				}
-
-				[ContextMenu("Drop equipped item")]
-				public void DropEquipment()
-				{
-						if (activeEquipment is { })
+						else
 						{
-								Debug.Log($"Drop: {activeEquipment.GetTargetName()}");
-
-								// important! let fall
-								activeEquipment.DropItemRotated(this);
-
-								// important! unset reference
-								activeEquipment = null;
+								EquipmentHolder.DropThenPut(this, item, false);
 						}
+
+						item.OnPlayer_NotifyItemTaken(this);
 				}
 
 				public void Die()

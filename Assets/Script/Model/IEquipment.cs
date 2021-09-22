@@ -1,9 +1,8 @@
-﻿
-using UnityEngine;
+﻿using Assets.Script.Components;
 
 namespace Assets.Script.Behaviour
 {
-		public interface IEquipment : IPickupItem
+		public interface IEquipment : IInteractible, IPickupItem
 		{
 				bool IsBroken { get; }
 				

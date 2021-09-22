@@ -53,6 +53,11 @@ namespace Assets.Script.Behaviour
 						return IsPowered is false && ambientLoopOff != null && ambientLoopOff.IsLooping is false;
 				}
 
+				public override bool CanPickUp(PlayerBehaviour player)
+				{
+						return base.CanPickUp(player);
+				}
+
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
 						return base.CanInteract(sender) && !IsBroken;
@@ -197,10 +202,7 @@ namespace Assets.Script.Behaviour
 						return ShopInfo.DisplayName;
 				}
 
-				public abstract EquipmentInfo GetEquipmentInfo();
-
 				public void Destroy() => Destroy(gameObject);
-
-				public void SetParent(Transform parent) => Transform.SetParent(parent);
+				public abstract EquipmentInfo GetEquipmentInfo();
 		}
 }

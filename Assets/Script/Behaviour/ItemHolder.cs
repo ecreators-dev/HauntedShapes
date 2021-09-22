@@ -1,3 +1,4 @@
+using Assets.Script.Components;
 
 using System.Collections.Generic;
 
@@ -10,20 +11,44 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private HolderTypeEnum type = HolderTypeEnum.RIGHT_HAND;
 				[SerializeField] private InventoryBehaviour inventory;
 				[SerializeField] private Transform holderParent;
+				[SerializeField] private PlayerBehaviour playerOwner;
+
+				public HolderTypeEnum HolderType => type;
 
 				public IPickupItem CurrentItem { get; private set; }
+
 				private IInventory Inventory { get; set; }
 				private bool HasInventory => Inventory != null;
 				private bool CanPutIntoInventory => CurrentItem is IEquipment e && Inventory.CheckCanPutAny(e.ShopInfo, 1);
 
-				public HolderTypeEnum Type => type;
-
-				private void Start()
+				private void Awake()
 				{
 						Inventory = inventory;
 				}
 
-				public void Put(PlayerBehaviour user, IPickupItem item, bool fromInventory)
+				private void Update()
+				{
+						IInputControls inputControls = this.InputControls();
+						if (inputControls.DropEquipmentButtonPressed)
+						{
+								if (CurrentItem is IEquipment)
+								{
+										Drop();
+								}
+						}
+						else if (inputControls.InteractButtonPressed)
+						{
+								if (CurrentItem is IInteractible item)
+								{
+										if (item.CanInteract(playerOwner))
+										{
+												item.Interact(playerOwner);
+										}
+								}
+						}
+				}
+
+				public void DropThenPut(PlayerBehaviour user, IPickupItem item, bool fromInventory)
 				{
 						if (CurrentItem != null)
 						{
@@ -65,15 +90,13 @@ namespace Assets.Script.Behaviour
 						}
 
 						Inventory.PutAllEquipment(equipment.ShopInfo, 1);
-						equipment.OnPlayer_PutIntoInventory(CurrentItem.User);
+						equipment.OnPlayer_PutIntoInventory(equipment.User);
 						equipment.Destroy();
 						CurrentItem = null;
 				}
 
 				public void Drop()
 				{
-						if (CurrentItem == null) return;
-
 						CurrentItem.DropItemRotated(CurrentItem.User);
 						CurrentItem = null;
 				}

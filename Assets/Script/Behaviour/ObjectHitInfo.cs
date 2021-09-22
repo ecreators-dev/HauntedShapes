@@ -31,13 +31,13 @@ namespace Assets.Script.Behaviour
 
 				public InteractionType Type { get; }
 
-				public Interactible TargetItem { get; }
+				public IInteractibleBase TargetItem { get; }
 
-				public Interactible GetInteractible() => TargetItem;
+				public IInteractible GetInteractible() => TargetItem as IInteractible;
 
-				public PickupItem GetPickupItem() => TargetItem as PickupItem;
+				public IPickupItem GetPickupItem() => TargetItem as PickupItem;
 
-				public Equipment GetEquipment() => TargetItem as Equipment;
+				public IEquipment GetEquipment() => TargetItem as Equipment;
 
 				public EquipmentPlacable GetPlaceableItem() => TargetItem as EquipmentPlacable;
 

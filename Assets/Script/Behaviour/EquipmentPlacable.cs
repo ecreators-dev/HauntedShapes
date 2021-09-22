@@ -98,5 +98,10 @@ namespace Assets.Script.Behaviour
 				{
 
 				}
+
+				public override bool CanPickUp(PlayerBehaviour player)
+				{
+						return base.CanPickUp(player);
+				}
 		}
 }

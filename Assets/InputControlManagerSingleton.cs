@@ -38,7 +38,7 @@ namespace Assets
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
 
-				public bool DropItemButtonPressed => inputActions.Player.EquipmentDrop.triggered;
+				public bool DropEquipmentButtonPressed => inputActions.Player.EquipmentDrop.triggered;
 
 				public bool CrosshairTargetInteractionButtonPressed => inputActions.Player.Interaction.triggered;
 
@@ -154,7 +154,7 @@ namespace Assets
 
 				public bool InteractButtonPressed => inputActions.Player.EquipmentToggle.triggered;
 				
-				public bool DropItemButtonPressed => inputActions.Player.EquipmentDrop.triggered;
+				public bool DropEquipmentButtonPressed => inputActions.Player.EquipmentDrop.triggered;
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.triggered;
 

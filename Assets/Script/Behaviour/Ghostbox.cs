@@ -36,7 +36,6 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private Light displayFaceLight;
 				[SerializeField] private Light buttonLightOn;
 				[SerializeField] private AudioSource whiteSmokeSoundLoop;
-				[SerializeField] private Rigidbody RigidBody;
 				[SerializeField] private string brokenText = "Akku leer";
 
 				private readonly Queue<string> recognizedTextQueue = new Queue<string>();

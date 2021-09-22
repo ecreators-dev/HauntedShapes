@@ -1,14 +1,17 @@
-﻿namespace Assets.Script.Behaviour
+﻿using Assets.Script.Components;
+
+namespace Assets.Script.Behaviour
 {
 		public interface IItemHolder
 		{
 				IPickupItem CurrentItem { get; }
-				HolderTypeEnum Type { get; }
+				
+				HolderTypeEnum HolderType { get; }
 
 				void Drop();
 				
 				void PutIntoInventory();
 
-				void Put(PlayerBehaviour user, IPickupItem item, bool fromInventory);
+				void DropThenPut(PlayerBehaviour user, IPickupItem item, bool fromInventory);				
 		}
 }

@@ -53,10 +53,10 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\Model\IPlayerCam.cs" />
     <Compile Include="Assets\Script\Behaviour\Consumable.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
+    <Compile Include="Assets\Script\Behaviour\IInventory.cs" />
     <Compile Include="Assets\Script\InspectorAttibutes\BeginGroupAttribute.cs" />
     <Compile Include="Assets\Script\Components\RitualArea.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostBehaviour.cs" />
@@ -75,6 +75,7 @@
     <Compile Include="Assets\Script\Behaviour\Wobble.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\FlashlightBehaviour.cs" />
+    <Compile Include="Assets\Script\Behaviour\ICrosshairInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\ISaveLoad.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Script\Model\IAlphaFader.cs" />
@@ -83,6 +84,8 @@
     <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingOffline.cs" />
     <Compile Include="Assets\Script\Behaviour\StepAnimationEventReference.cs" />
+    <Compile Include="Assets\Script\Controller\HitInfo.cs" />
+    <Compile Include="Assets\Script\Behaviour\HolderTypeEnum.cs" />
     <Compile Include="Assets\Script\Model\IFlashlight.cs" />
     <Compile Include="Assets\Script\Controller\AudioFaderSingleton.cs" />
     <Compile Include="Assets\Script\Model\IEquipment.cs" />
@@ -103,8 +106,10 @@
     <Compile Include="Assets\Script\Model\IVoiceRecognition.cs" />
     <Compile Include="Assets\Script\Behaviour\WalkingSoundsEffector.cs" />
     <Compile Include="Assets\Script\Model\RecognitionProxy.cs" />
+    <Compile Include="Assets\Script\Behaviour\IItemHolder.cs" />
     <Compile Include="Assets\Script\EditorPhysics.cs" />
     <Compile Include="Assets\Control Mapping (Input Action).cs" />
+    <Compile Include="Assets\Script\Controller\LayerMaskUtils.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\PhysicalEvidence.cs" />
     <Compile Include="Assets\Script\Behaviour\IStepSoundProvider.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\Gender.cs" />
@@ -122,6 +127,7 @@
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\GroundCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\EditorSnapToGround.cs" />
     <Compile Include="Assets\Script\Behaviour\ShopParameters.cs" />
+    <Compile Include="Assets\Script\Controller\IHuntAction.cs" />
     <Compile Include="Assets\Script\Behaviour\Room.cs" />
     <Compile Include="Assets\Script\Behaviour\CrosshairTargetInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\Ghostbox.cs" />
@@ -129,6 +135,7 @@
     <Compile Include="Assets\Script\Components\Interactible.cs" />
     <Compile Include="Assets\Script\Controller\SurfacePlacingFactory.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\ScaleData.cs" />
+    <Compile Include="Assets\Script\Behaviour\IPickupItem.cs" />
     <Compile Include="Assets\Script\Behaviour\BehaviourExtensions.cs" />
     <Compile Include="Assets\Script\Model\Fade.cs" />
     <Compile Include="Assets\Script\Model\IAudioFader.cs" />
@@ -145,6 +152,7 @@
     <Compile Include="Assets\Script\Behaviour\CalledByPlayerBehaviourAttribute.cs" />
     <Compile Include="Assets\Script\Behaviour\DropOnButton.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\RotationData.cs" />
+    <Compile Include="Assets\Script\Controller\HuntActionControl.cs" />
     <Compile Include="Assets\Modelling\Asteroids Pack\Assets\Scripts\RandomRotator.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Zoom.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Crouch.cs" />
@@ -164,6 +172,7 @@
     <Compile Include="Assets\Script\Behaviour\DictionaryExtensions.cs" />
     <Compile Include="Assets\Script\Behaviour\Door.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostBoxTrigger.cs" />
+    <Compile Include="Assets\FirstPersonLook.cs" />
     <Compile Include="Assets\Script\Behaviour\IPlacableEquipment.cs" />
     <Compile Include="Assets\Modelling\IgniteCoders\Simple Water Shader\Info\Scripts\Readme.cs" />
     <Compile Include="Assets\Script\BaseCoroutinesYields\CoroutineCommand.cs" />
@@ -173,17 +182,21 @@
     <Compile Include="Assets\Script\Model\IMonoBehaviour.cs" />
     <Compile Include="Assets\Script\Components\SoundEffect.cs" />
     <Compile Include="Assets\Script\Model\Text.cs" />
+    <Compile Include="Assets\Script\Behaviour\PlayerInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\JsonComponentExtensions.cs" />
     <Compile Include="Assets\Script\Components\TeleportationDoor.cs" />
     <Compile Include="Assets\Script\Behaviour\GeisterorbBehaviour.cs" />
     <Compile Include="Assets\Script\GameMenu\AssetPath.cs" />
     <Compile Include="Assets\Script\Behaviour\IRitualTribute.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\MovementForPlayer.cs" />
     <Compile Include="Assets\Script\Controller\EditorPlayStatusEventManager.cs" />
     <Compile Include="Assets\Script\Behaviour\SpeechRecognitionIcon.cs" />
     <Compile Include="Assets\Script\Behaviour\TriggerTeleporter.cs" />
     <Compile Include="Assets\Script\Behaviour\FadingMonoBehaviour.cs" />
     <Compile Include="Assets\DeferredNV\DeferredNightVisionEffect.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraFirstPerson.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\AgeType.cs" />
+    <Compile Include="Assets\Script\Behaviour\ObjectHitInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\IGate.cs" />
     <Compile Include="Assets\Script\Behaviour\RemainingCount.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\ColorData.cs" />
@@ -197,6 +210,7 @@
     <Compile Include="Assets\Modelling\HeatObj\IRCamera.cs" />
     <Compile Include="Assets\Script\Controller\MouseCursorController.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\Panorama360.cs" />
+    <Compile Include="Assets\Script\Behaviour\ItemHolder.cs" />
     <Compile Include="Assets\Script\Behaviour\ConsumableChild.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentPlacable.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\MoodType.cs" />
@@ -208,6 +222,7 @@
     <Compile Include="Assets\Script\Behaviour\InventorySlot.cs" />
     <Compile Include="Assets\Script\Behaviour\PlacementCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraMoveType.cs" />
+    <Compile Include="Assets\Script\Components\IInteractible.cs" />
     <Compile Include="Assets\Script\Behaviour\MissingSwitchCaseException.cs" />
     <Compile Include="Assets\Script\Behaviour\PowerbankConsumable.cs" />
     <Compile Include="Assets\Script\NavMeshComponents\NavMeshLink.cs" />
@@ -218,20 +233,9 @@
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\FirstPersonLook.cs" />
-    <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraFirstPerson.cs" />
-    <Compile Include="Assets\Script\Behaviour\FirstPerson\MovementForPlayer.cs" />
-    <Compile Include="Assets\Script\Behaviour\PlayerInfo.cs" />
-    <Compile Include="Assets\Script\Behaviour\ICrosshairInfo.cs" />
-    <Compile Include="Assets\Script\Controller\LayerMaskUtils.cs" />
-    <Compile Include="Assets\Script\Controller\HitInfo.cs" />
-    <Compile Include="Assets\Script\Behaviour\ObjectHitInfo.cs" />
-    <Compile Include="Assets\Script\Behaviour\ItemHolder.cs" />
-    <Compile Include="Assets\Script\Behaviour\IInventory.cs" />
-    <Compile Include="Assets\Script\Components\IInteractible.cs" />
-    <Compile Include="Assets\Script\Behaviour\IPickupItem.cs" />
-    <Compile Include="Assets\Script\Behaviour\IItemHolder.cs" />
-    <Compile Include="Assets\Script\Behaviour\HolderTypeEnum.cs" />
+    <Compile Include="Assets\Script\Behaviour\ItemHolderInfoGui.cs" />
+    <Compile Include="Assets\Script\Behaviour\DarknessInfo.cs" />
+    <Compile Include="Assets\Script\Behaviour\IDarknessInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />
