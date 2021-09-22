@@ -11,7 +11,7 @@ namespace Assets.Script.Behaviour
 		/// <summary>
 		/// You can pickup and drop
 		/// </summary>
-		public abstract class PickupItem : Interactible
+		public abstract class PickupItem : Interactible, IPickupItem
 		{
 				[SerializeField] private SnapAxis upAxis = SnapAxis.Y;
 
@@ -46,7 +46,10 @@ namespace Assets.Script.Behaviour
 						Transform = transform;
 				}
 
-				[CalledByPlayerBehaviour]
+				/// <summary>
+				/// <b>Need to be placed in a parent if taken before calling this method!</b>
+				/// <br/>Resets local position and rotation
+				/// </summary>
 				public virtual void OnPlayer_NotifyItemTaken(PlayerBehaviour newUser)
 				{
 						CrosshairHit = CrosshairHitVisual.Instance;
@@ -172,5 +175,9 @@ namespace Assets.Script.Behaviour
 						return User == null || User == playerSender;
 				}
 
+				public void SetParent(Transform parent)
+				{
+						Transform.SetParent(parent);
+				}
 		}
 }

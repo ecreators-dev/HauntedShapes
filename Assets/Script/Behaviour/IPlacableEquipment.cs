@@ -1,8 +1,8 @@
 ﻿namespace Assets.Script.Behaviour
 {
-		public interface IPlacableEquipment
+		public interface IPlacableEquipment : IEquipment
 		{
-				Equipment Self { get; }
+				IEquipment Self { get; }
 
 				bool IsPlaced { get; }
 		}

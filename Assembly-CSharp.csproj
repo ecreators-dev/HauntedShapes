@@ -82,6 +82,7 @@
     <Compile Include="Assets\IInputControls.cs" />
     <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingOffline.cs" />
+    <Compile Include="Assets\Script\Behaviour\StepAnimationEventReference.cs" />
     <Compile Include="Assets\Script\Model\IFlashlight.cs" />
     <Compile Include="Assets\Script\Controller\AudioFaderSingleton.cs" />
     <Compile Include="Assets\Script\Model\IEquipment.cs" />
@@ -120,11 +121,11 @@
     <Compile Include="Assets\Script\Behaviour\InteractionEnum.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\GroundCheck.cs" />
     <Compile Include="Assets\Script\Behaviour\EditorSnapToGround.cs" />
-    <Compile Include="Assets\Script\Behaviour\FirstPerson\LookAtTargetDynamic.cs" />
     <Compile Include="Assets\Script\Behaviour\ShopParameters.cs" />
     <Compile Include="Assets\Script\Behaviour\Room.cs" />
+    <Compile Include="Assets\Script\Behaviour\CrosshairTargetInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\Ghostbox.cs" />
-    <Compile Include="Assets\Script\Behaviour\FirstPerson\FirstPersonController.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\FirstPersonView.cs" />
     <Compile Include="Assets\Script\Components\Interactible.cs" />
     <Compile Include="Assets\Script\Controller\SurfacePlacingFactory.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\ScaleData.cs" />
@@ -169,7 +170,6 @@
     <Compile Include="Assets\Script\Components\Model\EObjectType.cs" />
     <Compile Include="Assets\Modelling\HeatObj\HeatViewFX.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\PlayerData.cs" />
-    <Compile Include="Assets\Mini First Person Controller\Scripts\FirstPersonLook.cs" />
     <Compile Include="Assets\Script\Model\IMonoBehaviour.cs" />
     <Compile Include="Assets\Script\Components\SoundEffect.cs" />
     <Compile Include="Assets\Script\Model\Text.cs" />
@@ -218,7 +218,20 @@
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Behaviour\StepAnimationEventReference.cs" />
+    <Compile Include="Assets\FirstPersonLook.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraFirstPerson.cs" />
+    <Compile Include="Assets\Script\Behaviour\FirstPerson\MovementForPlayer.cs" />
+    <Compile Include="Assets\Script\Behaviour\PlayerInfo.cs" />
+    <Compile Include="Assets\Script\Behaviour\ICrosshairInfo.cs" />
+    <Compile Include="Assets\Script\Controller\LayerMaskUtils.cs" />
+    <Compile Include="Assets\Script\Controller\HitInfo.cs" />
+    <Compile Include="Assets\Script\Behaviour\ObjectHitInfo.cs" />
+    <Compile Include="Assets\Script\Behaviour\ItemHolder.cs" />
+    <Compile Include="Assets\Script\Behaviour\IInventory.cs" />
+    <Compile Include="Assets\Script\Components\IInteractible.cs" />
+    <Compile Include="Assets\Script\Behaviour\IPickupItem.cs" />
+    <Compile Include="Assets\Script\Behaviour\IItemHolder.cs" />
+    <Compile Include="Assets\Script\Behaviour\HolderTypeEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />

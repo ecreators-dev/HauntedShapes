@@ -68,8 +68,9 @@ namespace Assets.Door
 
 				private void TeleportTo(Component teleporterObject, Transform exit)
 				{
-						teleporterObject.transform.position = exit.position;
-						teleporterObject.transform.rotation = exit.rotation;
+						Transform target = teleporterObject.transform;
+						target.position = exit.position;
+						target.rotation = exit.rotation;
 						if (teleporterObject.TryGetComponent(out Rigidbody body))
 						{
 								body.useGravity = false;
@@ -77,10 +78,6 @@ namespace Assets.Door
 								{
 										body.useGravity = true;
 								});
-						}
-						if (teleporterObject.TryGetComponent(out FirstPersonController fpc))
-						{
-								fpc.SetTeleported(this);
 						}
 						Debug.Log($"Teleportation: '{teleporterObject.gameObject.name}' to '{exit.gameObject.name}'");
 				}

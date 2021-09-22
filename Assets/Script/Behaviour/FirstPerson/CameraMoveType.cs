@@ -33,12 +33,12 @@ namespace Assets.Script.Behaviour.FirstPerson
 						{
 								if (Type == TypeEnum.BUMPING)
 								{
-										SwichCamera(camBumping, camNotBumping);
+										SwitchCamera(camBumping, camNotBumping);
 										current = camBumping;
 								}
 								else
 								{
-										SwichCamera(camNotBumping, camBumping);
+										SwitchCamera(camNotBumping, camBumping);
 										current = camNotBumping;
 								}
 						}
@@ -46,7 +46,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 						return current;
 				}
 
-				private void SwichCamera(Camera enable, Camera disable)
+				private void SwitchCamera(Camera enable, Camera disable)
 				{
 						if (neverLoad)
 						{

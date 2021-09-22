@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Script.Components
 {
-		public abstract partial class Interactible : MonoBehaviour
+		public abstract class Interactible : MonoBehaviour, IInteractible
 		{
 				[SerializeField] protected EObjectType identifier = EObjectType.UNDEFINED;
 				[SerializeField] private bool locked;

@@ -1003,10 +1003,6 @@ namespace Assets.Script.Behaviour
 						// nothing yet
 				}
 
-				protected override void OnEditMode_ToggleOn() => SetPowered(true);
-
-				protected override void OnEditMode_ToggleOff() => SetPowered(false);
-
 				public override EquipmentInfo GetEquipmentInfo()
 				{
 						if (IsBroken)

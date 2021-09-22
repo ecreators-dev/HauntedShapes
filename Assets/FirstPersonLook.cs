@@ -15,7 +15,7 @@ public class FirstPersonLook : MonoBehaviour
 
 		private Vector2 velocity;
 		private Vector2 frameVelocity;
-		private FirstPersonController fpsController;
+		private FirstPersonView fpsController;
 
 		private Transform Transform { get; set; }
 		
@@ -25,7 +25,7 @@ public class FirstPersonLook : MonoBehaviour
 		{
 				// Get the character from the FirstPersonMovement in parents.
 				character = GetComponentInParent<PlayerMovement>().transform;
-				fpsController = GetComponentInParent<FirstPersonController>();
+				fpsController = GetComponentInParent<FirstPersonView>();
 		}
 
 		private void Awake()

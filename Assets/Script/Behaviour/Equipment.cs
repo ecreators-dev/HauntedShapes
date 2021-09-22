@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using Assets.Script.Components;
+
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,7 +14,7 @@ namespace Assets.Script.Behaviour
 		/// <summary>
 		/// Extends Items: you can put it into your inventory and take it off from it
 		/// </summary>
-		public abstract class Equipment : PickupItem
+		public abstract class Equipment : PickupItem, IEquipment
 		{
 				[Min(0)]
 				[SerializeField] private float toggleTimerSeconds = 15 / 1000f;
@@ -184,30 +186,11 @@ namespace Assets.Script.Behaviour
 				/// </summary>
 				protected virtual void OnOwnerOwnedEquipment() { }
 
-				public void SetShopInfo(ShopParameters shopInfo, Equipment prefab)
+				protected void SetShopInfo(ShopParameters shopInfo, Equipment prefab)
 				{
 						ShopInfo = shopInfo;
 						shopInfo.SetPrefab(prefab);
 				}
-
-#if UNITY_EDITOR
-				[ContextMenu("Toggle ON (EDIT-MODE only )")]
-				public void EditorToggleOn()
-				{
-						OnEditMode_ToggleOn();
-				}
-
-
-				[ContextMenu("Toggle OFF (EDIT-MODE only )")]
-				public void EditorToggleOff()
-				{
-						OnEditMode_ToggleOff();
-				}
-#endif
-
-				protected virtual void OnEditMode_ToggleOn() { }
-
-				protected virtual void OnEditMode_ToggleOff() { }
 
 				public override string GetTargetName()
 				{
@@ -215,5 +198,9 @@ namespace Assets.Script.Behaviour
 				}
 
 				public abstract EquipmentInfo GetEquipmentInfo();
+
+				public void Destroy() => Destroy(gameObject);
+
+				public void SetParent(Transform parent) => Transform.SetParent(parent);
 		}
 }

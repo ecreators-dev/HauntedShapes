@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using System.Linq;
 
+using UnityEditor;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,7 +33,6 @@ namespace Assets.Script.Controller
 				[Space]
 				[SerializeField] private FadeUIElement blackscreenUI;
 				[SerializeField] private ShopSingleton shop;
-
 
 				private float musicStartGameVolume;
 				private bool fadeAmbientStartMusic;
@@ -66,6 +67,31 @@ namespace Assets.Script.Controller
 								Destroy(this);
 								Debug.LogError($"Doppelter {nameof(GameControllerSingleton)}. Wird gelöscht.");
 						}
+				}
+
+				private void OnValidate()
+				{
+#if UNITY_EDITOR
+						FindAndDestroyMissingSceneIdMap();
+
+						static void FindAndDestroyMissingSceneIdMap()
+						{
+								GameObject found = GameObject.Find("SceneIDMap");
+								if (found == null)
+										return;
+
+								MonoBehaviour[] allComponents = found.GetComponents<MonoBehaviour>();
+								foreach (MonoBehaviour component in allComponents)
+								{
+										if (component == null)
+										{
+												Debug.LogWarning("Destroyed missing SceneIDMap GameObject with missing component (== null)");
+												Destroy(found);
+												break;
+										}
+								}
+						}
+#endif
 				}
 
 				/// <summary>
@@ -105,6 +131,37 @@ namespace Assets.Script.Controller
 
 								GameReady_StartPlayBackgroundAmbientMusic();
 						}
+
+						HandleExitGameOrPlaymode();
+				}
+
+				private void HandleExitGameOrPlaymode()
+				{
+						if (this.InputControls().ExitGameButton)
+						{
+#if UNITY_EDITOR
+								EditorApplication.ExitPlaymode();
+#else
+								Application.Quit();
+#endif
+						}
+				}
+
+				private void HandleCameraEditorStopOnButton()
+				{
+						if (this.InputControls().EditorStopCamera && IsPlayMode())
+						{
+								SetStopCameraEdit(!IsCameraRotateStop);
+						}
+				}
+
+				private bool IsPlayMode()
+				{
+#if UNITY_EDITOR
+						return EditorApplication.isPlaying;
+#else
+						return true;
+#endif
 				}
 
 				[ContextMenu("Game/Save All")]

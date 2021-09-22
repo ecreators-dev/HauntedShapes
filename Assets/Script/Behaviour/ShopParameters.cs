@@ -10,6 +10,8 @@ namespace Assets.Script.Behaviour
 		public class ShopParameters : ScriptableObject
 		{
 				[SerializeField] private Equipment prefab;
+				[Min(1)]
+				[SerializeField] private int slotSize = 1;
 
 				[SerializeField] private string displayName;
 				[SerializeField] private string description;
@@ -60,6 +62,10 @@ namespace Assets.Script.Behaviour
 				public AnimationWithSoundTrigger SwitchOffAnimation { get => switchOffAnimation; }
 				public AnimationWithSoundTrigger HuntAnimation { get => huntAnimation; }
 				public Equipment Prefab { get => prefab; }
+
+				public EObjectType ObjectType => Prefab.ObjectType;
+
+				public int SlotSize => slotSize;
 
 				public void SetPrefab(Equipment instancePrefab)
 				{

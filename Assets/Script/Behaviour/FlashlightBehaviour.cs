@@ -1,6 +1,7 @@
 using Assets.Script.Behaviour.FirstPerson;
 
 using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -154,7 +155,12 @@ namespace Assets.Script.Behaviour
 
 				private void UpdateLookAtCrosshairTarget()
 				{
-						(bool actualHit, Vector3 point, Vector3 _) = CrosshairHit.RaycastCollidersOnly(CameraMoveType.Instance.GetCamera());
+						// any mask
+						Camera cam = CameraMoveType.Instance.GetCamera();
+						(HitInfo clickRange, HitInfo _) = CrosshairHit.RaycastCollidersOnlyAllLayers(cam);
+						bool actualHit = clickRange.IsHit;
+						Vector3 point = clickRange.HitPoint;
+
 						if (actualHit)
 						{
 								Vector3 targetDir = point - Transform.position;

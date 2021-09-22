@@ -63,10 +63,6 @@ namespace Assets.Script.Behaviour.GhostTypes
 						}
 				}
 
-				protected override void OnEditMode_ToggleOn() => ToggleOn();
-
-				protected override void OnEditMode_ToggleOff() => ToggleOff();
-
 				public override EquipmentInfo GetEquipmentInfo()
 				{
 						if (IsBroken)

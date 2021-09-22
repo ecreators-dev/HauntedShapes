@@ -2,9 +2,8 @@ using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Behaviour.GhostTypes;
 using Assets.Script.Components;
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using TMPro;
 
@@ -18,41 +17,23 @@ using Debug = UnityEngine.Debug;
 
 namespace Assets.Script.Behaviour
 {
+		[RequireComponent(typeof(CrosshairTargetInfo))]
 		[DisallowMultipleComponent]
 		public class PlayerBehaviour : MonoBehaviour, IPlayerCam, IStepSoundProvider
 		{
-				public string playerFirstName;
-				public string playerLastName;
-				public int playerAge;
-				public Gender gender;
-				public DateTime birthDay;
-				public DateTime deathDay;
-				public string murderName;
-				public string motherName;
-				public string fatherName;
-				public List<(string firstName, bool male)> sisters;
-				public MoodType mood;
-				public AgeType ageType;
-				public bool reserectable = true;
-				public int level;
-				public long levelExpirience;
-
-				private GhostEntity ghostType;
-				private bool isDead;
-
+				[SerializeField] private PlayerInfo playerData = new PlayerInfo();
 				[SerializeField] private Transform equipmentHolder;
 				[SerializeField] private Transform pickupHolder;
 				[SerializeField] private Camera playerCam;
 				[SerializeField] private AudioSource playerAudioSource3d;
-				[SerializeField] private AudioClip[] silentHurtClipsRandom;
-				[SerializeField] private LayerMask interactibleDoorMask;
 				[SerializeField] private InventoryBehaviour inventory;
-				[SerializeField] private CrosshairHitVisual crosshair;
 				[SerializeField] private TMP_Text infoText;
 				[SerializeField] private TMP_Text timerText;
 
 				[Header("Steps Fallback Audio")]
 				[SerializeField] private SoundEffect stepSoundsRandom;
+
+				public PlayerInfo PlayerData => playerData;
 
 				private float money = 0;
 				private Equipment activeEquipment;
@@ -71,6 +52,7 @@ namespace Assets.Script.Behaviour
 				public Camera Cam => playerCam;
 
 				private Transform Transform { get; set; }
+				private ICrosshairInfo PlacingInfo { get; set; }
 
 				public Equipment ActiveEquipment => activeEquipment;
 
@@ -90,10 +72,11 @@ namespace Assets.Script.Behaviour
 				private bool ButtonCrosshairTargetInteractionPressed { get; set; }
 				public bool InteractedInFrame { get; private set; }
 				public bool IsTeleported { get; private set; }
-				
+
 				private void Awake()
 				{
 						Transform = transform;
+						PlacingInfo = GetComponent<CrosshairTargetInfo>();
 				}
 
 				private void Start()
@@ -133,7 +116,7 @@ namespace Assets.Script.Behaviour
 						{
 								if (inventory.Count(ownedEquipment.ShopInfo) > 0)
 								{
-										inventory.Take(ownedEquipment.ShopInfo, 1);
+										inventory.Take(ownedEquipment.ShopInfo, 1, out List<(Equipment item, int amount)> taken);
 										float sellPrice = ownedEquipment.ShopInfo.SellPrice * 1;
 										money += sellPrice;
 										Debug.Log($"Sold {1} x {ownedEquipment.ShopInfo.DisplayName} for {sellPrice}");
@@ -154,9 +137,9 @@ namespace Assets.Script.Behaviour
 
 				public void TakeEquipment(PlayerBehaviour diedPlayer)
 				{
-						if (diedPlayer.isDead)
+						if (diedPlayer.playerData.isDead)
 						{
-								var oneItem = inventory.GetRandomEquipment();
+								var oneItem = inventory.TakeRandomItem();
 								if (oneItem is { } && inventory.CheckCanPutAll(oneItem.ShopInfo, 1))
 								{
 										PutEquipmentIntoInventory(oneItem);
@@ -249,7 +232,7 @@ namespace Assets.Script.Behaviour
 
 						HandleHuntToggleDebug();
 
-						HandleCrosshairHoverTarget();
+						HandleCrosshairTarget();
 						HandleToggleOnEquippedItem();
 						HandleDropButton();
 
@@ -420,11 +403,46 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				private void HandleCrosshairHoverTarget()
+				private void HandleCrosshairTarget()
 				{
 						// an (any) interactible must be in interactible layer mask
 						// to be clickable with name
-						if (crosshair.TryGetItem(out bool inClickRange, out var match)
+						if (PlacingInfo.Info.InClickRange.IsHit)
+						{
+								ObjectHitInfo objectInClickRange = PlacingInfo.ObjectInfo.InClickRange;
+								var match = (
+										objectInClickRange.GetEquipment(),
+										objectInClickRange.GetPickupItem(),
+										objectInClickRange.GetInteractible());
+
+								if (objectInClickRange.HasTargetItem && objectInClickRange.TargetItem.IsUnlocked)
+								{
+										// an (any) interactible must be in interactible layer mask
+										// to be clickable with name
+										if (ButtonCrosshairTargetInteractionPressed)
+										{
+												Debug.Log("interaction-button pressed for hovered target");
+												OnCrosshairHoverInteractible_InteractionButtonPressed(match);
+										}
+										else if (ButtonPlacePressed)
+										{
+												Debug.Log("place-button pressed for hovered target");
+												OnCrosshairHoverInteractible_PlaceButtonPressed(match);
+										}
+								}
+						}
+						else if (PlacingInfo.Info.InHoverRange.IsHit)
+						{
+
+						}
+						else
+						{
+
+						}
+
+						return;
+#if false
+						if (((CrosshairHitVisual)CrosshairHitVisual.Instance).TryGetItem(out bool inClickRange, out (Equipment equipment, PickupItem item, Interactible any) match)
 																				&& inClickRange
 																				&& match.any.IsUnlocked)
 						{
@@ -441,6 +459,7 @@ namespace Assets.Script.Behaviour
 										OnCrosshairHoverInteractible_PlaceButtonPressed(match);
 								}
 						}
+#endif
 				}
 
 				private void OnCrosshairHoverInteractible_PlaceButtonPressed((Equipment equipment, PickupItem item, Interactible any) match)
@@ -597,23 +616,23 @@ namespace Assets.Script.Behaviour
 
 				public void Die()
 				{
-						if (isDead is false && ghostType is null)
+						if (playerData.isDead is false && playerData.ghostType is null)
 						{
-								isDead = true;
-								ghostType = gameObject.AddComponent<GhostEntity>();
-								ghostType.CopyPersonality(this);
+								playerData.isDead = true;
+								playerData.ghostType = gameObject.AddComponent<GhostEntity>();
+								playerData.ghostType.CopyPersonality(this);
 						}
 				}
 
 				public void Reserect()
 				{
-						if (isDead && reserectable)
+						if (playerData.isDead && playerData.reserectable)
 						{
-								isDead = false;
-								Destroy(ghostType);
+								playerData.isDead = false;
+								Destroy(playerData.ghostType);
 
 								// das geht nur einmal bei einem Ritual
-								reserectable = false;
+								playerData.reserectable = false;
 						}
 				}
 

@@ -63,13 +63,13 @@ namespace Assets.Script.Behaviour.GhostTypes
 
 				public void CopyPersonality(PlayerBehaviour playerBehaviour)
 				{
-						this.age = playerBehaviour.playerAge;
+						this.age = playerBehaviour.PlayerData.playerAge;
 						this.birthDate = DateTime.Now.AddYears(-age);
 						this.deathDate = DateTime.Today;
 						this.deathType = DeathType.ZU_TODE_GEFOLTERT;
 						this.diedHere = true;
 						this.evilMultiplicator = 1;
-						this.gender = playerBehaviour.gender;
+						this.gender = playerBehaviour.PlayerData.gender;
 						this.starsign = GetStarSign(birthDate);
 				}
 

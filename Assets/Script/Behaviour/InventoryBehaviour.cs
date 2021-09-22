@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Script.Components;
+
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -6,10 +8,10 @@ using UnityEngine;
 namespace Assets.Script.Behaviour
 {
 		[DisallowMultipleComponent]
-		public class InventoryBehaviour : MonoBehaviour
+		public class InventoryBehaviour : MonoBehaviour, IInventory
 		{
-				[Header("Slots")] 
-				
+				[Header("Slots")]
+
 				[Tooltip("Define a size of slots, so the player can put equipments to it.")]
 				[SerializeField] private List<InventorySlot> slots;
 
@@ -17,104 +19,78 @@ namespace Assets.Script.Behaviour
 
 				public RemainingCount PutAllEquipment(ShopParameters equipment, uint quantity)
 				{
-						(int remaining, List<InventorySlot> slotsTake) slotsResult = FindUsableSlotToAdd(equipment, quantity);
-						if (slotsResult.slotsTake.Any() is false)
+						List<InventorySlot> slotsResult = FindSuitableSlots(equipment, quantity);
+						if (slotsResult.Any() is false)
 						{
 								Debug.LogWarning("No inventory slot free for adding");
 								return (int)quantity;
 						}
 
-						if (slotsResult.remaining > 0)
-						{
-								Debug.LogError("Not every item will fit in this inventory. Remaining: " + slotsResult.remaining);
-						}
-
 						int remaining = (int)quantity;
-						foreach (var slot in slotsResult.slotsTake)
+						foreach (InventorySlot slot in slotsResult)
 						{
-								uint insert = (uint)(quantity % slot.Maximum);
-								slot.Put(equipment, insert);
-								remaining -= (int)insert;
-								if (remaining <= 0)
-										break;
+								int sizeBefore = slot.UsedSpace;
+								if (slot.Put(equipment, (uint)remaining))
+								{
+										remaining += slot.UsedSpace - sizeBefore;
+										if (remaining <= 0)
+												break;
+								}
 						}
-
-						return slotsResult.remaining;
+						return Mathf.Max(0, remaining);
 				}
 
-				private (int remaining, List<InventorySlot> slots) FindUsableSlotToAdd(ShopParameters shopInfo, uint quantity)
+				private List<InventorySlot> FindSuitableSlots(ShopParameters shopInfo, uint quantity)
 				{
-						int remaining = (int)quantity;
-						List<InventorySlot> result = new List<InventorySlot>();
-						foreach (InventorySlot slot in slots)
-						{
-								if (slot.IsFull) continue;
-
-								if (slot.Contains(shopInfo))
-								{
-
-								}
-
-								if (slot.RemainingSpace <= remaining)
-								{
-										int insert = slot.RemainingSpace;
-										remaining -= (int)insert;
-										result.Add(slot);
-								}
-
-								if (remaining <= 0)
-										break;
-						}
-						return (remaining, result);
+						return slots.Where(slot => slot.CheckFitSize((uint)shopInfo.SlotSize, quantity)).ToList();
 				}
 
-				public int Count(ShopParameters item) => slots.Sum(slot => slot.CountItem(item));
+				public int Count(ShopParameters item) => slots.Sum(slot => slot.CountItem(item.ObjectType));
 
 				/// <summary>
 				/// Takes only 1 equipment from a inventory. Not matter what equipment.
 				/// </summary>
-				public Equipment GetRandomEquipment()
+				public Equipment TakeRandomItem()
 				{
 						List<InventorySlot> randomSlots = slots.Where(slot => slot.IsEmpty is false).ToList();
 						if (randomSlots.Any() is false)
 								return null;
 
-						InventorySlot slot = randomSlots[UnityEngine.Random.Range(0, randomSlots.Count)];
-						return slot.TakePrefab(1);
+						InventorySlot nonEmptySlot = randomSlots[Random.Range(0, randomSlots.Count)];
+						EObjectType[] randomTypes = nonEmptySlot.GetObjectsTypes();
+						EObjectType randomType = randomTypes[Random.Range(0, randomTypes.Length)];
+						var prefab = nonEmptySlot.TakePrefab(randomType, 1);
+						return prefab.HasValue ? prefab.Value.prefab : null;
 				}
 
 				public bool CheckCanPutAll(ShopParameters shopInfo, uint quantity)
 				{
-						return FindUsableSlotToAdd(shopInfo, quantity).remaining == 0;
+						return FindSuitableSlots(shopInfo, quantity).All(slot => slot.CheckFitSize((uint)shopInfo.SlotSize, quantity));
 				}
 
 				public bool CheckCanPutAny(ShopParameters shopInfo, uint quantity)
 				{
-						return FindUsableSlotToAdd(shopInfo, quantity).slots.Any();
+						return FindSuitableSlots(shopInfo, quantity).Any();
 				}
 
-				public void Take(ShopParameters itemInInventory, int count)
+				public RemainingCount Take(ShopParameters item, int count, out List<(Equipment item, int amount)> taken)
 				{
+						taken = new List<(Equipment item, int amount)>();
 						if (count <= 0)
-								return;
-
-						foreach (var slot in this.slots.Where(slot => slot.Contains(itemInInventory)))
 						{
+								return 0;
+						}
+
+						foreach (var slot in slots.Where(slot => slot.Contains(item)))
+						{
+								List<(Equipment item, int amount)> prefabs = slot.TakeAmount((uint)count);
+								taken.AddRange(prefabs);
+								count -= prefabs.Sum(val => val.amount);
+
 								if (count <= 0)
 										break;
-
-								int countIn = slot.CountItem(itemInInventory);
-								if (countIn < count)
-								{
-										(int amount, Equipment prefab) = slot.TakeAll();
-										count -= amount;
-								}
-								else
-								{
-										slot.TakePrefab((uint)count);
-										count = 0;
-								}
-						};
+						}
+						return count;
 				}
 		}
 }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 namespace Assets.Script.Behaviour.FirstPerson
 {
@@ -7,7 +9,12 @@ namespace Assets.Script.Behaviour.FirstPerson
 				/// <summary>
 				/// Does placement position and rotation upward from surface and hides placement sprite
 				/// </summary>
-				void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal, float normalOffset);
+				void PlaceEquipment(Equipment equipment, Vector3 up, float normalOffset);
+				
+				/// <summary>
+				/// Does placement position and rotation upward from surface and hides placement sprite
+				/// </summary>
+				void PlaceEquipment(Equipment equipment, float normalOffset);
 
 				/// <summary>
 				/// Sets an equipment active for beeing placed. Shows a placement sprite at target surface and
@@ -17,8 +24,14 @@ namespace Assets.Script.Behaviour.FirstPerson
 
 				(bool actualHit, RaycastHit hit) GetRaycastCollidersOnlyResult();
 
-				(bool hit, Vector3 point, Vector3 normal) RaycastCollidersOnly(Camera camera);
+				(HitInfo clickRange, HitInfo hoverRange) RaycastCollidersOnlyAllLayers(Camera camera, float clickDistance = 6, float hoverDistance = 8);
+
+				(HitInfo clickRange, HitInfo hoverRange) RaycastCollidersOnly(Camera camera, ISet<LayerMask> hitMasks, ISet<LayerMask> avoidMasks, float clickDistance = 6, float hoverDistance = 8);
+				
 				Transform GetPlacementPosition();
 				Vector3 GetPlacementNormal();
+				void HidePlacementPointer();
+
+				bool TryGetResult(out bool inRange, out GameObject target, out Vector3 hitPoint, out Vector3 normal);
 		}
 }

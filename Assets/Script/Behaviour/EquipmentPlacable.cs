@@ -13,7 +13,7 @@ namespace Assets.Script.Behaviour
 				protected bool IsPlacing { get; private set; }
 				protected bool ButtonPlacingPressed { get; private set; }
 				protected IInputControls InputControls { get; private set; }
-				public Equipment Self => this;
+				public IEquipment Self => this;
 
 				protected override void Update()
 				{
@@ -31,7 +31,7 @@ namespace Assets.Script.Behaviour
 						}
 
 						Update_HandleToResetPlacing();
-						
+
 						oldIsTaken = IsTakenByPlayer;
 				}
 
@@ -81,19 +81,22 @@ namespace Assets.Script.Behaviour
 				{
 						if (IsPlacing)
 						{
+								// do placing
+								DropItemRotated(User, noForce: true);
+								
+								float placementOffsetAtNormal = this.GetGameController().Crosshair.PlacementOffsetNormal;
+								CrosshairHit.PlaceEquipment(this, UpNormal, placementOffsetAtNormal);
+
+								IsPlacing = false;
+								IsPlaced = true;
+								Debug.Log($"{GetTargetName()}: End placing");
 								OnPlaced();
 						}
 				}
 
 				protected virtual void OnPlaced()
 				{
-						// do placing
-						DropItemRotated(User, noForce: true);
-						CrosshairHit.PlaceEquipment(this, UpNormal, true, this.GetGameController().Crosshair.PlacementOffsetNormal);
 
-						IsPlacing = false;
-						IsPlaced = true;
-						Debug.Log($"{GetTargetName()}: End placing");
 				}
 		}
 }

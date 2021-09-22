@@ -3,14 +3,13 @@ using Assets.Script.Components;
 using Assets.Script.Controller;
 
 using System;
+using System.Collections.Generic;
 
 using TMPro;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
-using static Assets.Script.Behaviour.SurfacePlacingFactory;
 
 namespace Assets.Script.Behaviour
 {
@@ -21,8 +20,6 @@ namespace Assets.Script.Behaviour
 		[DisallowMultipleComponent]
 		public class CrosshairHitVisual : MonoBehaviour, ICrosshairUI
 		{
-				private const int EVERY_LAYER_MASK = ~0;
-
 				[SerializeField] private CrosshairRoot root;
 				[SerializeField] private bool hovered;
 				[SerializeField] private float hitDistance = 4;
@@ -49,21 +46,20 @@ namespace Assets.Script.Behaviour
 				private RaycastHit anyTarget;
 				private bool anyTargetHit;
 				private Vector3 hitBefore;
-				private Equipment placementRequestor;
 				private RaycastHit placementHit;
 				private float initSize;
 
 				public static ICrosshairUI Instance { get; private set; }
 
-				private Transform Transform { get; set; }
-
-				public bool PlacementHitFound { get; set; }
+				private bool IsInteractionPressed { get; set; }
 
 				private bool GamepadConnected { get; set; }
 
-				public void SetHitActive() => hovered = true;
+				private Equipment PlacementRequestor { get; set; }
 
-				public void SetHitInactive() => hovered = false;
+				private Transform Transform { get; set; }
+
+				public bool PlacementHitFound { get; private set; }
 
 				private void Awake()
 				{
@@ -88,6 +84,8 @@ namespace Assets.Script.Behaviour
 
 				private void Update()
 				{
+
+						IsInteractionPressed = this.InputControls().CrosshairTargetInteractionButtonPressed;
 						GamepadConnected = !this.GetGameController().IsGamepadDisconnected;
 						size = GamepadConnected ? sizeGamepad : initSize;
 
@@ -102,25 +100,22 @@ namespace Assets.Script.Behaviour
 
 						// CLICK:
 						tooFarTextUI.enabled = false;
-						if (IsInteractionPressed())
+						if (IsInteractionPressed)
 						{
 								// show only when want to interact
 								tooFarTextUI.enabled = hovered && !clickableRange;
 						}
-
 						image.enabled = hovered;
 
 						//! Click Action is handled in Player Behaviour
 				}
-
-
 
 				/// <summary>
 				/// See also <seealso cref="PlaceEquipment"/>
 				/// </summary>
 				public void ShowPlacementPointer(Equipment equipmentNotNull)
 				{
-						if (placementRequestor != null && placementRequestor != equipmentNotNull)
+						if (PlacementRequestor != null && PlacementRequestor != equipmentNotNull)
 						{
 								Debug.LogError($"You must call {nameof(PlaceEquipment)} from the original quipment first");
 								return;
@@ -130,15 +125,17 @@ namespace Assets.Script.Behaviour
 								Debug.LogError($"Only allowed for equipments not null!");
 								return;
 						}
-						placementRequestor = equipmentNotNull;
+
+						PlacementRequestor = equipmentNotNull;
+						PlacementHitFound = false;
 				}
 
 				/// <summary>
 				/// See also <seealso cref="ShowPlacementPointer"/>
 				/// </summary>
-				public void PlaceEquipment(Equipment equipment, Vector3 up, bool useHitNormal, float normalOffset)
+				public void PlaceEquipment(Equipment equipment, Vector3 up, float normalOffset)
 				{
-						if (placementRequestor == null || placementRequestor != equipment)
+						if (PlacementRequestor == null || PlacementRequestor != equipment)
 						{
 								Debug.LogWarning("You must call this from the quipment, when placed or aborted");
 								return;
@@ -148,11 +145,26 @@ namespace Assets.Script.Behaviour
 						Vector3 normal = placementHit.normal;
 						Vector3 position = placementHit.point;
 						equipment.transform.position = position + normal * normalOffset;
-						if (useHitNormal)
+						equipment.transform.rotation = Quaternion.FromToRotation(up, placementHit.normal);
+						HidePlacementPointer();
+				}
+
+				/// <summary>
+				/// See also <seealso cref="ShowPlacementPointer"/>
+				/// </summary>
+				public void PlaceEquipment(Equipment equipment, float normalOffset)
+				{
+						if (PlacementRequestor == null || PlacementRequestor != equipment)
 						{
-								equipment.transform.rotation = Quaternion.FromToRotation(up, placementHit.normal);
+								Debug.LogWarning("You must call this from the quipment, when placed or aborted");
+								return;
 						}
-						placementRequestor = null;
+
+						equipment.transform.SetParent(null);
+						Vector3 normal = placementHit.normal;
+						Vector3 position = placementHit.point;
+						equipment.transform.position = position + normal * normalOffset;
+						HidePlacementPointer();
 				}
 
 				public Transform GetPlacementPosition()
@@ -168,14 +180,14 @@ namespace Assets.Script.Behaviour
 				private void UpdatePlacementTarget()
 				{
 						// now placed: reset (only placeable equipments can be placed)
-						if (placementRequestor != null && placementRequestor is IPlacableEquipment p
+						if (PlacementRequestor != null && PlacementRequestor is IPlacableEquipment p
 								&& p.IsPlaced)
 						{
-								placementRequestor = null;
+								HidePlacementPointer();
 						}
 
 						// show or hide
-						bool hoveredOnEnvironment = placementRequestor != null && PlacementHitFound;
+						bool hoveredOnEnvironment = PlacementRequestor != null && PlacementHitFound;
 						if (hoveredOnEnvironment)
 						{
 								// put sprite to wall:
@@ -192,7 +204,7 @@ namespace Assets.Script.Behaviour
 						Vector3 normal = placementHit.normal;
 						Vector3 position = placementHit.point;
 
-						Vector3 dir = (position - placementRequestor.transform.position).normalized;
+						Vector3 dir = (position - PlacementRequestor.transform.position).normalized;
 						if (dir.y < 0)
 						{
 								normal = new Vector3(normal.x, normal.y * -1, normal.z);
@@ -207,33 +219,43 @@ namespace Assets.Script.Behaviour
 						return (anyTargetHit, anyTarget);
 				}
 
-				public (bool hit, Vector3 point, Vector3 normal) RaycastCollidersOnly(Camera sourceCamera)
+				public (HitInfo clickRange, HitInfo hoverRange) RaycastCollidersOnlyAllLayers(Camera camera, float clickDistance = 6, float hoverDistance = 8)
+				{
+						// every layer
+						return RaycastCollidersOnly(camera, new HashSet<LayerMask>(new[] { LayerMaskUtils.EVERY_LAYER }), null, clickDistance, hoverDistance);
+				}
+
+				public (HitInfo clickRange, HitInfo hoverRange) RaycastCollidersOnly(Camera sourceCamera, ISet<LayerMask> hitMasks, ISet<LayerMask> avoidMasks, float clickDistance = 6, float hoverDistance = 8)
 				{
 						// layerMask = cam.cullingMask means:
 						// takes only visible targets in view, not player (for example)
 						Transform camera = sourceCamera.transform;
 						Ray ray = new Ray(camera.position, camera.forward);
-						anyTargetHit = Physics.SphereCast(ray, size,
-								out anyTarget, 10000, EVERY_LAYER_MASK,
+
+						int masks = LayerMaskUtils.CombineLayerMasks(hitMasks, avoidMasks);
+
+						bool anyTargetHit = Physics.SphereCast(ray, size,
+								out anyTarget, clickDistance, masks,
 								// fixes hit no trigger!
 								QueryTriggerInteraction.Ignore);
 
-						var point = anyTarget.point;
-						if (anyTargetHit is false)
-						{
-								point = hitBefore;
-						}
-						else
-						{
-								hitBefore = point;
-						}
-						return (anyTargetHit, point, anyTarget.normal);
-				}
+						bool anyTargetHover = Physics.SphereCast(ray, size,
+								out RaycastHit anyHover, hoverDistance, masks,
+								// fixes hit no trigger!
+								QueryTriggerInteraction.Ignore);
 
-				private bool IsInteractionPressed()
-				{
-						return Mouse.current.leftButton.isPressed
-								|| this.InputControls().CrosshairTargetInteractionButtonPressed;
+						if (anyTargetHit)
+						{
+								hitBefore = anyTarget.point;
+						}
+
+						return (
+								new HitInfo(anyTargetHit, anyTargetHit ? anyTarget.point : hitBefore, anyTarget.normal, 
+								anyTargetHit ? anyTarget.collider.gameObject : null),
+								new HitInfo(anyTargetHover, anyTargetHover ? anyHover.point : hitBefore, 
+								anyHover.normal,
+								anyTargetHover ? anyHover.collider.gameObject : null)
+								);
 				}
 
 				private void UpdateHoveredTarget(Transform camera)
@@ -325,6 +347,27 @@ namespace Assets.Script.Behaviour
 				{
 						result = (hitEquipment, hitItem, hitAny);
 						inRange = clickableRange;
+						return hovered;
+				}
+
+				public void HidePlacementPointer()
+				{
+						PlacementRequestor = null;
+						PlacementHitFound = false;
+				}
+
+				public bool TryGetResult(out bool inRange, out GameObject target, out Vector3 hitPoint, out Vector3 normal)
+				{
+						inRange = this.clickableRange;
+						target = null;
+						hitPoint = Vector3.zero;
+						normal = Vector3.zero;
+						if (hovered)
+						{
+								target = placementHit.collider.gameObject;
+								hitPoint = placementHit.point;
+								normal = placementHit.normal;
+						}
 						return hovered;
 				}
 		}

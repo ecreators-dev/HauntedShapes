@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Assets.Script.Components;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 
@@ -7,94 +11,147 @@ namespace Assets.Script.Behaviour
 		[Serializable]
 		public sealed class InventorySlot
 		{
-				[SerializeField] ShopParameters shopItemInfo;
-				[Min(0)]
-				[SerializeField] int quantity;
-				[Min(1)]
-				[SerializeField] int maximumQuantity;
+				[Tooltip("Summe von Raum, in diesem Slot. Beispiel: 1 x Baseball passt in Größe 1. 2 x Baseball past nicht in Größe von 1 und 1 x Baseballschläger benötigt 3, passt auch nicht.")]
+				[SerializeField] private int capacitySize = 1 * 1;
 
-				public int Quanity => quantity;
+				private readonly Dictionary<EObjectType, (ShopParameters info, int quantity)> items = new Dictionary<EObjectType, (ShopParameters info, int quantity)>();
 
-				public int Maximum => maximumQuantity;
+				public bool IsEmpty => items.Any() is false || items.Values.Sum(val => val.quantity) == 0;
 
-				public bool IsEmpty => quantity is 0;
+				public bool IsFull => RemainingSpace == 0;
 
-				public bool IsFull => quantity == maximumQuantity;
+				public int UsedSpace => items.Sum(kvp => kvp.Value.info.SlotSize * kvp.Value.quantity);
 
-				public int RemainingSpace => maximumQuantity - quantity;
+				public int RemainingSpace => capacitySize - UsedSpace;
 
-				public (int amount, Equipment prefab) TakeAll()
+				public int TotalSpace { get => capacitySize; }
+
+				/// <summary>
+				/// Removes all Items from this slot and returns them with capacity.
+				/// </summary>
+				public List<(Equipment item, int capacity)> TakeAll()
 				{
-						(int quantity, Equipment prefab) result = (quantity, shopItemInfo.Prefab);
-						shopItemInfo = null;
-						quantity = 0;
+						var result = items.Select(kvp => (kvp.Value.info.Prefab, kvp.Value.quantity)).ToList();
+						items.Clear();
 						return result;
 				}
 
 				public bool Contains(ShopParameters other)
 				{
-						return shopItemInfo is { } && shopItemInfo == other;
+						return items.Any(kvp => kvp.Value.info.ObjectType == other.ObjectType);
 				}
 
-				public Equipment TakePrefab(uint take)
+				public (Equipment prefab, int amount)? TakePrefab(EObjectType type, uint take)
 				{
-						if (shopItemInfo == null)
-								return null;
-
-						if (CheckQuantityToTake(take))
-						{
-								quantity -= (int)take;
-
-								// reset
-								if (quantity == 0)
-								{
-										shopItemInfo = null;
-								}
-
-								return shopItemInfo.Prefab;
-						}
-
-						return null;
+						return TakePrefab(items[type].info, take);
 				}
 
-				public void Put(ShopParameters shopItemInfo, uint quantity = 1)
+				public (Equipment prefab, int amount)? TakePrefab(ShopParameters type, uint take)
 				{
-						if (shopItemInfo == null)
+						(ShopParameters info, int quantity) value;
+						if (take > 0 && TryGetValue(type, out value))
 						{
-								throw new ArgumentNullException(nameof(shopItemInfo));
-						}
-
-						if (CheckPrefab(shopItemInfo))
-						{
-								this.shopItemInfo = shopItemInfo;
-
-								if (CheckQuantityToAdd(quantity))
+								if (value.quantity >= take)
 								{
-										this.quantity += (int)quantity;
+										ChangeQuantity(type, -(int)take);
+										return (value.info.Prefab, (int)take);
 								}
 								else
 								{
-										Debug.LogWarning($"Not enough space to put this quantity in this slot! {quantity}");
+										UpdateOrSet(type, 0);
+										return (value.info.Prefab, value.quantity);
 								}
 						}
-						else
+						return null;
+				}
+
+				private void UpdateOrSet(ShopParameters type, int newQuantity)
+				{
+						items[type.ObjectType] = (type, newQuantity);
+						if (newQuantity == 0)
 						{
-								Debug.LogError("You cannot add a different equipment. You must clear this slot first!");
+								items.Remove(type.ObjectType);
 						}
 				}
 
-				public bool CheckQuantityToTake(uint take)
+				public EObjectType[] GetObjectsTypes()
 				{
-						return this.quantity >= take;
+						return items.Keys.ToArray();
+				}
+
+				private void ChangeQuantity(ShopParameters type, int change)
+				{
+						if (TryGetValue(type, out var value))
+						{
+								UpdateOrSet(type, value.quantity + change);
+						}
+				}
+
+				private bool TryGetValue(ShopParameters type, out (ShopParameters info, int quantity) value)
+				{
+						return items.TryGetValue(type.ObjectType, out value);
+				}
+
+				public bool Put(ShopParameters info, uint quantity = 1)
+				{
+						if (info == null)
+						{
+								throw new ArgumentNullException(nameof(info));
+						}
+
+						if (quantity == 0)
+								return false;
+
+						if (CheckQuantityToAdd(quantity) && CheckFitSize((uint)info.SlotSize, quantity))
+						{
+								ChangeQuantity(info, (int)quantity);
+								return true;
+						}
+						else
+						{
+								Debug.LogWarning($"Not enough space to put this quantity in this slot! {quantity}");
+						}
+						return false;
+				}
+
+				public List<(Equipment item, int amount)> TakeAmount(uint count)
+				{
+						var result = new List<(Equipment item, int amount)>();
+						while (!IsEmpty && count > 0)
+						{
+								foreach ((ShopParameters info, int quantity) in items.Values)
+								{
+										if (quantity > 0 && quantity <= count)
+										{
+												int amount = Mathf.Min(quantity, (int)count);
+												ChangeQuantity(info, -amount);
+												count -= (uint)amount;
+												result.Add((info.Prefab, amount));
+												break;
+										}
+								}
+						}
+						return result;
+				}
+
+				public bool CheckFitSize(uint itemSize, uint amount)
+				{
+						return RemainingSpace >= itemSize * amount;
+				}
+
+				public bool CheckQuantityToTake(ShopParameters info, uint take)
+				{
+						return TryGetValue(info, out var value) && value.quantity >= take;
 				}
 
 				public bool CheckQuantityToAdd(uint quantity)
 				{
-						return this.quantity + quantity <= maximumQuantity;
+						return RemainingSpace <= quantity;
 				}
 
-				public int CountItem(ShopParameters item) => item.IsEqualTo(shopItemInfo) ? quantity : 0;
-
-				private bool CheckPrefab(ShopParameters shopItemInfo) => shopItemInfo is { } && shopItemInfo.IsEqualTo(this.shopItemInfo);
+				public int CountItem(EObjectType item)
+				{
+						return items.TryGetValue(item, out var value) ? value.quantity : 0;
+				}
 		}
 }
