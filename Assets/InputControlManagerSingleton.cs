@@ -36,19 +36,26 @@ namespace Assets
 
 				public bool EditorStopCamera => inputActions.Player.EditorStopRotateCamera.IsButtonReleased(ref editorStopCameraPhase);
 
+				/// <summary>
+				/// Controller: /_\
+				/// </summary>
 				public bool InteractButtonPressed => inputActions.Player.EquipmentToggle.IsButtonDown(ref interactButtonPressedPhase);
+				
+				/// <summary>
+				/// Controller: X
+				/// </summary>
+				public bool CrosshairTargetInteractionButtonPressed => inputActions.Player.Interaction.IsButtonDown(ref crosshairTargetInteractionButtonPressedPhase);
 
 				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.IsButtonDown(ref debugHuntToggleOnOffPhase);
 
 				public bool DropEquipmentButtonPressed => inputActions.Player.EquipmentDrop.IsButtonReleased(ref dropEquipmentButtonPressedPhase);
 
-				public bool CrosshairTargetInteractionButtonPressed => inputActions.Player.Interaction.IsButtonDown(ref crosshairTargetInteractionButtonPressedPhase);
 
 				public bool CrouchButtonPressed => inputActions.Player.Crouch.IsButtonHold(ref crouchButtonPressedPhase);
 
 				public bool RunButtonPressedOrHold => inputActions.Player.Run.IsButtonHold(ref runButtonPressedOrHoldPhase);
 
-				public bool PlaceEquipmentButtonPressed => inputActions.Player.PlaceItem.IsButtonDown(ref placeEquipmentButtonPressedPhase);
+				public bool PlaceEquipmentButtonPressing => inputActions.Player.PlaceItem.IsButtonDown(ref placeEquipmentButtonPressedPhase);
 
 				private void Awake()
 				{

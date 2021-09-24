@@ -54,7 +54,7 @@ namespace Assets.Script.Behaviour
 						if (IsHuntingActive)
 						{
 								// player can hold close with placing button
-								if (this.InputControls().PlaceEquipmentButtonPressed)
+								if (this.InputControls().PlaceEquipmentButtonPressing)
 								{
 										Close();
 								}

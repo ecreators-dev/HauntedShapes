@@ -24,21 +24,28 @@ namespace Assets.Script.Behaviour
 						return base.CheckPlayerCanPickUp(player) && IsPlaced is false;
 				}
 
-				public virtual void PlaceAtPositionAndNormal(HitInfo surfaceClick)
+				public virtual bool PlaceAtPositionAndNormal(HitInfo surfaceClick)
 				{
 						if (IsPlacing && !IsPlaced)
 						{
 								// fix: do not put to 0,0,0 when missing target
 								if (surfaceClick.IsHit)
 								{
+										// better in drop
+										const bool setParentNull = false;
+										if (setParentNull)
+										{
+												Transform.SetParent(null);
+										}
+
 										Transform.up = surfaceClick.Normal;
 										Transform.rotation = Quaternion.FromToRotation(NormalUp, surfaceClick.Normal);
-										Transform.position = surfaceClick.HitPoint + Transform.up * this.GetGameController().Crosshair.PlacementOffsetNormal;
-										Transform.SetParent(null);
+										Transform.position = surfaceClick.HitPoint + surfaceClick.Normal * this.GetGameController().Crosshair.PlacementOffsetNormal;
 
 										IsPlacing = false;
 										IsPlaced = true;
 										Debug.Log($"{base.GetTargetName()}: End placing @ {GetPrintablePosition(Transform.position)}");
+										return true;
 								}
 								else
 								{
@@ -46,6 +53,7 @@ namespace Assets.Script.Behaviour
 										User.AddMessage("Das funktioniert hier nicht");
 								}
 						}
+						return false;
 				}
 
 				protected static string GetPrintablePosition(Vector3 position)

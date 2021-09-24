@@ -37,10 +37,14 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				public override void PlaceAtPositionAndNormal(HitInfo surfaceClick)
+				public override bool PlaceAtPositionAndNormal(HitInfo surfaceClick)
 				{
-						base.PlaceAtPositionAndNormal(surfaceClick);
-						DisableGravity();
+						if (base.PlaceAtPositionAndNormal(surfaceClick))
+						{
+								DisableGravity();
+								return true;
+						}
+						return false;
 				}
 
 				public override EquipmentInfo GetEquipmentInfo()

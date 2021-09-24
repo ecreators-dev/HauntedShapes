@@ -76341,6 +76341,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 4018378361854923668, guid: 92bec0c2906a1cf4cbdfd35965e34576, type: 3}
+      propertyPath: hitDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018378361854923668, guid: 92bec0c2906a1cf4cbdfd35965e34576, type: 3}
+      propertyPath: hoverDistance
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 4018378361854923669, guid: 92bec0c2906a1cf4cbdfd35965e34576, type: 3}
       propertyPath: m_Alpha
       value: 0.06

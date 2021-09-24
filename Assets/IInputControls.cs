@@ -32,7 +32,7 @@ namespace Assets
 				/// </summary>
 				bool RunButtonPressedOrHold { get; }
 
-				bool PlaceEquipmentButtonPressed { get; }
+				bool PlaceEquipmentButtonPressing { get; }
 
 				void Disable();
 

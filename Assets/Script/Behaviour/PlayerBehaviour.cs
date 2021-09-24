@@ -45,7 +45,7 @@ namespace Assets.Script.Behaviour
 
 				public bool IsTeleported { get; private set; }
 
-				private bool IsButtonPlacingPressed => this.InputControls().PlaceEquipmentButtonPressed;
+				private bool IsButtonPlacingPressed => this.InputControls().PlaceEquipmentButtonPressing;
 
 				private bool IsButtonInteractionPressed => this.InputControls().CrosshairTargetInteractionButtonPressed;
 
@@ -323,19 +323,23 @@ namespace Assets.Script.Behaviour
 						{
 								if (tool.IsPlaced is false)
 								{
-										if (this.InputControls().PlaceEquipmentButtonPressed)
+										IInputControls inputControls = this.InputControls();
+										if (inputControls.PlaceEquipmentButtonPressing
+												&& !inputControls.CrosshairTargetInteractionButtonPressed)
 										{
 												InPlacing = true;
 												CrosshairHitVisual.Instance.ShowTargetPosition(tool);
 										}
+										// if nothing pressed or interaction during placing: then place it now:
 										else if (InPlacing)
 										{
-												Debug.Log($"Place Button released: Placed: {tool.GetTargetName()}");
 												InPlacing = false;
-												CrosshairHitVisual.Instance.HideTarget();
-												
-												EquipmentHolder.Drop();
-												tool.PlaceAtPositionAndNormal(CrosshairHitVisual.Instance.RaycastInfo.clickRange);
+												if (tool.PlaceAtPositionAndNormal(CrosshairHitVisual.Instance.RaycastInfo.clickRange))
+												{
+														Debug.Log($"Place Button released: Placed: {tool.GetTargetName()}");
+														CrosshairHitVisual.Instance.HideTarget();
+														EquipmentHolder.Drop();
+												}
 										}
 								}
 						}
