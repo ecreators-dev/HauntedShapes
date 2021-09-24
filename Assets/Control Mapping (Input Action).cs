@@ -40,7 +40,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""752302a7-2463-485e-8542-1729eaf097c8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap""
+                    ""interactions"": ""Press(behavior=1)""
                 },
                 {
                     ""name"": ""Editor Stop Rotate Camera"",
@@ -48,7 +48,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""2c7210b7-014f-478c-afd5-3b96f320c4f7"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""Interaction"",
@@ -56,7 +56,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""26318fdb-4333-4428-9192-00589aed46dc"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap""
+                    ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""Equipment Toggle"",
@@ -64,7 +64,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""fd3ae3b8-52ae-481a-9aa2-a681193030fd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap""
+                    ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""Equipment Drop"",
@@ -72,7 +72,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""bfd09ad3-e785-4050-9099-0e11fb5e8674"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap""
+                    ""interactions"": ""Press(behavior=1)""
                 },
                 {
                     ""name"": ""Hunt Toggle (Debug)"",
@@ -80,15 +80,15 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""55fba300-6b61-4a38-97fc-8ac581f64d9f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap""
+                    ""interactions"": ""Press(behavior=1)""
                 },
                 {
                     ""name"": ""Place Item"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""96c0c9a0-39df-43de-9585-191f7d26acaf"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap""
+                    ""interactions"": ""Hold""
                 },
                 {
                     ""name"": ""Crouch"",
@@ -96,7 +96,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""e4c16749-fb27-453d-bef8-4a525af621aa"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Hold""
                 },
                 {
                     ""name"": ""Run"",
@@ -104,7 +104,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""id"": ""182c65d0-73b1-47c1-9851-aff4ae1a8010"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.001)""
+                    ""interactions"": ""Hold""
                 }
             ],
             ""bindings"": [

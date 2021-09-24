@@ -19,6 +19,7 @@ namespace Assets.Script.Behaviour
 				[Min(0.005f)]
 				[SerializeField] private float closeSpeed = 1.1f;
 				[SerializeField] private Room room;
+				[SerializeField] private bool canBeOpenedDuringHunt;
 
 				private Animator animator;
 
@@ -48,14 +49,29 @@ namespace Assets.Script.Behaviour
 						return name;
 				}
 
-
-
-				public override bool CanInteract(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
-						return IsLocked is false;
+						if (IsHuntingActive)
+						{
+								// player can hold close with placing button
+								if (this.InputControls().PlaceEquipmentButtonPressed)
+								{
+										Close();
+								}
+								else if (canBeOpenedDuringHunt)
+								{
+										// player can open/close with interaction button
+										ToggleOpenClose();
+								}
+						}
+						else
+						{
+								// player can open/close with interaction button
+								ToggleOpenClose();
+						}
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				private void ToggleOpenClose()
 				{
 						if (IsOpened)
 						{
@@ -83,41 +99,23 @@ namespace Assets.Script.Behaviour
 
 				public override void OnAnimation_ToggleOn_Start()
 				{
-						if (true)
-						{
-								base.OnAnimation_ToggleOn_Start();
-						}
+						base.OnAnimation_ToggleOn_Start();
 				}
 
 				public override void OnAnimation_ToggleOn_End()
 				{
 						// automatically - see base implementation
-						if (false)
-						{
-								base.OnAnimation_ToggleOn_End();
-						}
 				}
 
 				public override void OnAnimation_ToggleOff_Start()
 				{
 						// automatically - see base implementation
-						if (false)
-						{
-								base.OnAnimation_ToggleOff_Start();
-						}
 				}
 
 				public override void OnAnimation_ToggleOff_End()
 				{
 						// manually OK
-						if (false)
-						{
-								base.OnAnimation_ToggleOff_End();
-						}
-						else
-						{
-								PlayToggleOffSoundExplicitFromScript();
-						}
+						PlayToggleOffSoundExplicitFromScript();
 				}
 		}
 }

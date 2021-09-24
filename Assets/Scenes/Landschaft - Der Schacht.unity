@@ -42139,11 +42139,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 6c59786d449ac03459ee8eed40622c90, type: 2}
-  m_audioClip: {fileID: 8300000, guid: e9a71c8e51c574440bf4aa3e1e45d7d3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: eb45e9d788564b14f90b38e73d38fc11, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -76595,6 +76595,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1610855582}
     - target: {fileID: 4018378361854923668, guid: 92bec0c2906a1cf4cbdfd35965e34576, type: 3}
+      propertyPath: layersHit.m_Bits
+      value: 791105
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018378361854923668, guid: 92bec0c2906a1cf4cbdfd35965e34576, type: 3}
       propertyPath: placementLayers.m_Bits
       value: 17
       objectReference: {fileID: 0}
@@ -76699,6 +76703,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 1467047445}
+    - target: {fileID: 8570112512964213720, guid: 1a4d7fc36c57cbb47a85e286b0be3da0, type: 3}
+      propertyPath: allowedLayers.m_Bits
+      value: 4672
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a4d7fc36c57cbb47a85e286b0be3da0, type: 3}
 --- !u!1001 &5068800767874447689

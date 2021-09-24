@@ -92,7 +92,7 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
 						if (sender.ActiveEquipment is IPowerbankSupport pb)
 						{

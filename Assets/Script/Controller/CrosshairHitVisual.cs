@@ -21,354 +21,175 @@ namespace Assets.Script.Behaviour
 		public class CrosshairHitVisual : MonoBehaviour, ICrosshairUI
 		{
 				[SerializeField] private CrosshairRoot root;
-				[SerializeField] private bool hovered;
-				[SerializeField] private float hitDistance = 4;
-				[SerializeField] private float hitDistanceFar = 5;
-
-				[SerializeField] private LayerMask interactibleLayer;
 				[Range(0.0001f, 0.2f)]
 				[SerializeField] private float size = 0.02f;
 				[Range(0.0001f, 0.2f)]
 				[SerializeField] private float sizeGamepad = 0.04f;
 				[SerializeField] private TMP_Text targetTextUI;
 				[SerializeField] private TMP_Text tooFarTextUI;
-				[SerializeField] private LayerMask hitLayers;
 				[SerializeField] private GameObject placementSprite;
-				[SerializeField] private LayerMask[] placementLayers;
 				[SerializeField] private Transform crosshairDot;
+				[SerializeField] private LayerMask layersHit;
+				[Min(0)]
+				[SerializeField] private float hitDistance = 6;
+				[Min(0)]
+				[SerializeField] private float hoverDistance = 400;
 
 				private RawImage image;
-				private Color matchColor;
-				private bool clickableRange;
-				private Equipment hitEquipment;
-				private PickupItem hitItem;
-				private Interactible hitAny;
-				private RaycastHit anyTarget;
-				private bool anyTargetHit;
-				private Vector3 hitBefore;
-				private RaycastHit placementHit;
 				private float initSize;
-
+				private Vector3 hitPointBefore;
 				public static ICrosshairUI Instance { get; private set; }
 
-				private bool IsInteractionPressed { get; set; }
+				public (HitInfo clickRange, HitInfo hoverRange) RaycastInfo { get; private set; }
+				public (ObjectHitInfo clickRange, ObjectHitInfo hoverRange) RaycastObjectInfo { get; private set; }
 
-				private bool GamepadConnected { get; set; }
+				public bool IsHovered { get; private set; }
 
-				private Equipment PlacementRequestor { get; set; }
-
-				private Transform Transform { get; set; }
-
-				public bool PlacementHitFound { get; private set; }
+				public bool IsGamepadConnected { get; private set; }
 
 				private void Awake()
 				{
+						Instance = this;
 						image = GetComponent<RawImage>();
-						Transform = transform;
 				}
 
 				private void Start()
 				{
 						this.initSize = size;
-						placementSprite.SetActive(false);
-						if (Instance == null)
-						{
-								Instance = this;
-						}
-						else
-						{
-								DestroyImmediate(this);
-								Debug.LogError($"Duplicated Instance of {nameof(CrosshairHitVisual)}");
-						}
+						HideTarget();
 				}
 
-				private void Update()
+				private void FixedUpdate()
 				{
-
-						IsInteractionPressed = this.InputControls().CrosshairTargetInteractionButtonPressed;
-						GamepadConnected = !this.GetGameController().IsGamepadDisconnected;
-						size = GamepadConnected ? sizeGamepad : initSize;
-
+						IsGamepadConnected = !this.GetGameController().IsGamepadDisconnected;
+						size = IsGamepadConnected ? sizeGamepad : initSize;
 						crosshairDot.localScale = Vector3.one * (size / 0.02f);
-						Camera cam = CameraMoveType.Instance.GetCamera();
-						Transform camera = cam.transform;
 
-						// HOVER: show near items with hand visible! (c)
-						hovered = false;
-						UpdateHoveredTarget(camera);
-						UpdatePlacementTarget();
+						(ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) objectInfo;
 
-						// CLICK:
-						tooFarTextUI.enabled = false;
-						if (IsInteractionPressed)
+						LayerMaskFilter layers = new LayerMaskFilter();
+						layers.Includers.Clear();
+						layers.Includers.Add(layersHit);
+
+						RangeFilter range = new RangeFilter
 						{
-								// show only when want to interact
-								tooFarTextUI.enabled = hovered && !clickableRange;
-						}
-						image.enabled = hovered;
+								ClickRange = hitDistance,
+								HoverRange = hoverDistance
+						};
 
-						//! Click Action is handled in Player Behaviour
+						RaycastInfo = CustomRaycastIgnoreTriggers(CameraMoveType.Instance.GetCamera(),
+								layers, range,
+								out objectInfo);
+
+						RaycastObjectInfo = objectInfo;
+
+						IsHovered = RaycastInfo.hoverRange.IsHit;
+
+						UpdateGui();
 				}
 
-				/// <summary>
-				/// See also <seealso cref="PlaceEquipment"/>
-				/// </summary>
-				public void ShowPlacementPointer(Equipment equipmentNotNull)
-				{
-						if (PlacementRequestor != null && PlacementRequestor != equipmentNotNull)
-						{
-								Debug.LogError($"You must call {nameof(PlaceEquipment)} from the original quipment first");
-								return;
-						}
-						if (equipmentNotNull == null)
-						{
-								Debug.LogError($"Only allowed for equipments not null!");
-								return;
-						}
-
-						PlacementRequestor = equipmentNotNull;
-						PlacementHitFound = false;
-				}
-
-				/// <summary>
-				/// See also <seealso cref="ShowPlacementPointer"/>
-				/// </summary>
-				public void PlaceEquipment(Equipment equipment, Vector3 up, float normalOffset)
-				{
-						if (PlacementRequestor == null || PlacementRequestor != equipment)
-						{
-								Debug.LogWarning("You must call this from the quipment, when placed or aborted");
-								return;
-						}
-
-						equipment.transform.SetParent(null);
-						Vector3 normal = placementHit.normal;
-						Vector3 position = placementHit.point;
-						equipment.transform.position = position + normal * normalOffset;
-						equipment.transform.rotation = Quaternion.FromToRotation(up, placementHit.normal);
-						HidePlacementPointer();
-				}
-
-				/// <summary>
-				/// See also <seealso cref="ShowPlacementPointer"/>
-				/// </summary>
-				public void PlaceEquipment(Equipment equipment, float normalOffset)
-				{
-						if (PlacementRequestor == null || PlacementRequestor != equipment)
-						{
-								Debug.LogWarning("You must call this from the quipment, when placed or aborted");
-								return;
-						}
-
-						equipment.transform.SetParent(null);
-						Vector3 normal = placementHit.normal;
-						Vector3 position = placementHit.point;
-						equipment.transform.position = position + normal * normalOffset;
-						HidePlacementPointer();
-				}
-
-				public Transform GetPlacementPosition()
-				{
-						return placementSprite.transform;
-				}
-
-				public Vector3 GetPlacementNormal()
-				{
-						return PlacementHitFound ? placementHit.normal : Vector3.up;
-				}
-
-				private void UpdatePlacementTarget()
-				{
-						// now placed: reset (only placeable equipments can be placed)
-						if (PlacementRequestor != null && PlacementRequestor is IPlacableEquipment p
-								&& p.IsPlaced)
-						{
-								HidePlacementPointer();
-						}
-
-						// show or hide
-						bool hoveredOnEnvironment = PlacementRequestor != null && PlacementHitFound;
-						if (hoveredOnEnvironment)
-						{
-								// put sprite to wall:
-								PlacementVisualUpdatePosition();
-						}
-						placementSprite.SetActive(hoveredOnEnvironment);
-				}
-
-				private void PlacementVisualUpdatePosition()
-				{
-						if (PlacementHitFound is false)
-								return;
-
-						Vector3 normal = placementHit.normal;
-						Vector3 position = placementHit.point;
-
-						Vector3 dir = (position - PlacementRequestor.transform.position).normalized;
-						if (dir.y < 0)
-						{
-								normal = new Vector3(normal.x, normal.y * -1, normal.z);
-						}
-
-						placementSprite.transform.forward = normal;
-						placementSprite.transform.position = position + placementSprite.transform.forward * 0.01f;
-				}
-
-				public (bool actualHit, RaycastHit hit) GetRaycastCollidersOnlyResult()
-				{
-						return (anyTargetHit, anyTarget);
-				}
-
-				public (HitInfo clickRange, HitInfo hoverRange) RaycastCollidersOnlyAllLayers(Camera camera, float clickDistance = 6, float hoverDistance = 8)
-				{
-						// every layer
-						return RaycastCollidersOnly(camera, new HashSet<LayerMask>(new[] { LayerMaskUtils.EVERY_LAYER }), null, clickDistance, hoverDistance);
-				}
-
-				public (HitInfo clickRange, HitInfo hoverRange) RaycastCollidersOnly(Camera sourceCamera, ISet<LayerMask> hitMasks, ISet<LayerMask> avoidMasks, float clickDistance = 6, float hoverDistance = 8)
+				public (HitInfo ClickRange, HitInfo HoverRange) CustomRaycastIgnoreTriggers(Camera sourceCamera,
+						LayerMaskFilter layers,
+						RangeFilter range,
+						out (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) objectInfo)
 				{
 						// layerMask = cam.cullingMask means:
 						// takes only visible targets in view, not player (for example)
 						Transform camera = sourceCamera.transform;
 						Ray ray = new Ray(camera.position, camera.forward);
 
-						int masks = LayerMaskUtils.CombineLayerMasks(hitMasks, avoidMasks);
+						int masks = LayerMaskUtils.CombineLayerMasks(layers.Includers, layers.Excluders);
 
 						bool anyTargetHit = Physics.SphereCast(ray, size,
-								out anyTarget, clickDistance, masks,
+								out RaycastHit anyTarget, range.ClickRange, masks,
 								// fixes hit no trigger!
 								QueryTriggerInteraction.Ignore);
 
 						bool anyTargetHover = Physics.SphereCast(ray, size,
-								out RaycastHit anyHover, hoverDistance, masks,
+								out RaycastHit anyHover, range.HoverRange, masks,
 								// fixes hit no trigger!
 								QueryTriggerInteraction.Ignore);
 
 						if (anyTargetHit)
 						{
-								hitBefore = anyTarget.point;
+								hitPointBefore = anyTarget.point;
 						}
 
+						(HitInfo ClickRange, HitInfo HoverRange) info = GetRaycastInfo(anyTargetHit, anyTarget, anyTargetHover, anyHover);
+						objectInfo = GetRaycastObjectInfo(info);
+						return info;
+				}
+
+				private static (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) GetRaycastObjectInfo((HitInfo ClickRange, HitInfo HoverRange) info)
+				{
 						return (
-								new HitInfo(anyTargetHit, anyTargetHit ? anyTarget.point : hitBefore, anyTarget.normal, 
-								anyTargetHit ? anyTarget.collider.gameObject : null),
-								new HitInfo(anyTargetHover, anyTargetHover ? anyHover.point : hitBefore, 
-								anyHover.normal,
-								anyTargetHover ? anyHover.collider.gameObject : null)
-								);
+														ClickRange: new ObjectHitInfo(info.ClickRange.Target?.GetComponent<Interactible>(), info.ClickRange.Target),
+														HoverRange: new ObjectHitInfo(info.HoverRange.Target?.GetComponent<Interactible>(), info.HoverRange.Target)
+														);
 				}
 
-				private void UpdateHoveredTarget(Transform camera)
+				private (HitInfo, HitInfo) GetRaycastInfo(bool anyTargetHit, RaycastHit anyTarget, bool anyTargetHover, RaycastHit anyHover)
 				{
-						hitEquipment = default;
-						hitItem = default;
-						hitAny = default;
-
-						// visiual size;
-						float size = this.size;
-						// when gamepad, hitsize should be bigger
-						if (!this.GetGameController().IsGamepadDisconnected)
-						{
-								size *= 2;
-						}
-
-						// condition! 1st: match any, 2nd: match only types
-						hovered =
-								Physics.SphereCast(camera.position, size, camera.forward, out RaycastHit clickInRange, hitDistance, interactibleLayer)
-								&& (IsEquimentHit(clickInRange, out hitEquipment)
-										| IsPickupItemHit(clickInRange, out hitItem)
-										| IsInteractibleHit(clickInRange, out hitAny));
-
-						// place anywhere:
-						foreach (var placementLayer in placementLayers)
-						{
-								PlacementHitFound =
-										Physics.Raycast(new Ray(camera.position, camera.forward),
-										out placementHit, hitDistance, placementLayer, QueryTriggerInteraction.Ignore);
-
-								if (PlacementHitFound) break;
-						}
-
-						clickableRange = hovered && clickInRange.distance <= hitDistance;
-						matchColor = root.GetColor(GetActionType(hitEquipment, hitAny));
-						targetTextUI.enabled = hovered;
-						tooFarTextUI.enabled = false;
-
-						if (hovered)
-						{
-								targetTextUI.text = $"{hitAny.GetTargetName()} in {clickInRange.distance:0}m";
-								targetTextUI.color = matchColor;
-								tooFarTextUI.enabled = clickInRange.distance <= hitDistance;
-						}
+						return (
+																				new HitInfo(anyTargetHit, anyTargetHit ? anyTarget.point : hitPointBefore, anyTarget.normal,
+																				anyTargetHit ? anyTarget.collider.gameObject : null),
+																				new HitInfo(anyTargetHover, anyTargetHover ? anyHover.point : hitPointBefore,
+																				anyHover.normal,
+																				anyTargetHover ? anyHover.collider.gameObject : null)
+																				);
 				}
 
-				private CrosshairRoot.ActionEnum GetActionType(Equipment equipment, Interactible any)
+				private void UpdateGui()
 				{
-						if (any is { })
+						targetTextUI.enabled = IsHovered;
+						tooFarTextUI.enabled = IsHovered && RaycastInfo.clickRange.IsHit is false;
+
+						if (IsHovered)
 						{
-								if (any.IsLocked)
+								targetTextUI.text = GetTargetName();
+								targetTextUI.color = root.GetColor(GetTargetType());
+						}
+
+						string GetTargetName()
+						{
+								return RaycastObjectInfo.hoverRange.GetInteractible()?.GetTargetName();
+						}
+
+						CrosshairRoot.ActionEnum GetTargetType()
+						{
+								var info = this.RaycastInfo;
+								var objectInfo = this.RaycastObjectInfo;
+								if (info.clickRange.IsHit)
 								{
-										return CrosshairRoot.ActionEnum.LOCKED;
-								}
-								else if (equipment is { })
-								{
-										if (equipment.IsBroken)
+										ObjectHitInfo clickable = objectInfo.clickRange;
+										if (clickable.GetInteractible()?.IsLocked ?? false)
+										{
+												return CrosshairRoot.ActionEnum.LOCKED;
+										}
+										if (clickable.GetEquipment()?.IsBroken ?? false)
 										{
 												return CrosshairRoot.ActionEnum.BROKEN;
 										}
 								}
+
 								return CrosshairRoot.ActionEnum.INTERACTIBLE;
 						}
-						return default;
 				}
 
-				private bool IsInteractibleHit(RaycastHit clickOutOfRange, out Interactible interactible)
+				// from update!
+				public void ShowTargetPosition(HitInfo surface, IPlacableEquipment placable)
 				{
-						return IsTargetType(clickOutOfRange, out interactible);
+						Vector3 position = surface.HitPoint;
+						placementSprite.transform.forward = surface.Normal;
+						placementSprite.transform.position = position + placementSprite.transform.forward * 0.01f;
+						placementSprite.transform.rotation = Quaternion.FromToRotation(placable.NormalUp, surface.Normal);
+						placementSprite.SetActive(true);
 				}
 
-				private bool IsPickupItemHit(RaycastHit clickOutOfRange, out PickupItem item)
+				// once!
+				public void HideTarget()
 				{
-						return IsTargetType(clickOutOfRange, out item);
-				}
-
-				private bool IsEquimentHit(RaycastHit clickOutOfRange, out Equipment tool)
-				{
-						return IsTargetType(clickOutOfRange, out tool);
-				}
-
-				private static bool IsTargetType<T>(RaycastHit clickInRange, out T target)
-						where T : Component
-				{
-						return clickInRange.collider.TryGetComponent(out target);
-				}
-
-				public bool TryGetItem(out bool inRange, out (Equipment equipment, PickupItem item, Interactible any) result)
-				{
-						result = (hitEquipment, hitItem, hitAny);
-						inRange = clickableRange;
-						return hovered;
-				}
-
-				public void HidePlacementPointer()
-				{
-						PlacementRequestor = null;
-						PlacementHitFound = false;
-				}
-
-				public bool TryGetResult(out bool inRange, out GameObject target, out Vector3 hitPoint, out Vector3 normal)
-				{
-						inRange = this.clickableRange;
-						target = null;
-						hitPoint = Vector3.zero;
-						normal = Vector3.zero;
-						if (hovered)
-						{
-								target = placementHit.collider.gameObject;
-								hitPoint = placementHit.point;
-								normal = placementHit.normal;
-						}
-						return hovered;
+						placementSprite.SetActive(false);
 				}
 		}
 }

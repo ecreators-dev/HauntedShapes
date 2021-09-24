@@ -49,10 +49,6 @@ namespace Assets.Script.Components
 								soundPlayer3d.loop = true;
 								PlayDelayedAsync(soundPlayer3d);
 						}
-						else
-						{
-								Debug.LogWarning($"{ownerName}: no {effectName}-sounds!");
-						}
 				}
 
 				private async void PlayDelayedAsync(AudioSource soundPlayer3d)

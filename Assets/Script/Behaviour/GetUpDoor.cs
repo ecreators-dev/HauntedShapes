@@ -117,10 +117,10 @@ namespace HauntedShapes.Doors
 						// the player can then interact to pick up or to open
 						UnlockForTesting();
 
-						return IsLocked is false && (getup is false || open is false);
+						return base.CanInteract(sender) && (getup is false || open is false);
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
 						if (getup is false)
 						{

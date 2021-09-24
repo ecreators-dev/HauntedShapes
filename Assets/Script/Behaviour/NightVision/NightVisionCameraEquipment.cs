@@ -38,15 +38,6 @@ namespace Assets.Script.Behaviour.NightVision
 						base.Update();
 
 						Renderer.material = IsPowered ? screenOn : screenOff;
-						//Transform.localScale = new Vector3(1, 1, 0.3f);
-						
-						if (IsPlaced)
-						{
-								if (IsCrosshairHovered)
-								{
-										// TODO - rotate
-								}
-						}
 				}
 
 				public override EquipmentInfo GetEquipmentInfo()
@@ -60,17 +51,12 @@ namespace Assets.Script.Behaviour.NightVision
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						return base.CanInteract(sender) && (User == null || User == sender);
+						return base.CanInteract(sender) && IsUserOrNotTaken(sender);
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
-						if (IsTakenByPlayer)
-						{
-								TogglePowered();
-						}
-						// click if placed
-						else if (IsPlaced)
+						if (IsTakenByPlayer || IsPlaced)
 						{
 								TogglePowered();
 						}

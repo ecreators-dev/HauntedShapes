@@ -28,6 +28,10 @@ namespace Assets.Script.Behaviour.GhostTypes
 						{
 								ToggleOn();
 						}
+						else
+						{
+								ToggleOff();
+						}
 				}
 
 				protected override void Update()
@@ -35,6 +39,8 @@ namespace Assets.Script.Behaviour.GhostTypes
 						base.Update();
 
 						animator.SetBool("Hunting", IsHuntingActive);
+
+						// light on/off
 						animator.SetBool("PowerOn", IsPowered);
 				}
 
@@ -46,21 +52,20 @@ namespace Assets.Script.Behaviour.GhostTypes
 						animator.SetBool("Reverse", reversedAnimation);
 				}
 
-				public void ToggleOff() => SetPowered(false);
+				private void ToggleOff() => SetPowered(false);
 
-				public void ToggleOn() => SetPowered(true);
+				private void ToggleOn() => SetPowered(true);
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						return base.CanInteract(sender) && (User == null || User == sender);
+						return base.CanInteract(sender) && CheckBelongsTo(sender);
 				}
 
-				public override void Interact(PlayerBehaviour senderIgnored)
+				protected override void Interact(PlayerBehaviour senderIgnored)
 				{
-						if (IsTakenByPlayer)
-						{
-								TogglePowered();
-						}
+						TogglePowered();
+
+						// light changed in Update() sby animation
 				}
 
 				public override EquipmentInfo GetEquipmentInfo()

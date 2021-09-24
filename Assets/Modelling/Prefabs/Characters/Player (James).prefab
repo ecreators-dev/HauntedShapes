@@ -1389,7 +1389,6 @@ GameObject:
   - component: {fileID: 4990787288825231745}
   - component: {fileID: 4990787288825231747}
   - component: {fileID: 766867404}
-  - component: {fileID: 8570112512964213720}
   - component: {fileID: 7219431934100902820}
   - component: {fileID: 192273647625465574}
   - component: {fileID: 945345729}
@@ -1484,7 +1483,9 @@ MonoBehaviour:
     - {fileID: 8300000, guid: d17e2e790ab2c184b8b29d5e0df32573, type: 3}
     - {fileID: 8300000, guid: a5e91de300c193d4e8bc6f750f22e902, type: 3}
     volume: 1
+    playedFromScript: 0
     loop: 0
+    delaySeconds: 0
 --- !u!82 &4990787288825231745
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1616,26 +1617,6 @@ MonoBehaviour:
   heatingSeconds: 5
   coolingSeconds: 20
   maxDistance: 15
---- !u!114 &8570112512964213720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4990787288825231748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb8733921ccc2094aaa0e12e7b0c2499, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hitDistance: 4
-  hoverDistance: 5
-  allowedLayers:
-    serializedVersion: 2
-    m_Bits: 266945
-  disallowedLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &7219431934100902820
 MonoBehaviour:
   m_ObjectHideFlags: 0

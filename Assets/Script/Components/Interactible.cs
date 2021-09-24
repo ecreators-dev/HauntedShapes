@@ -81,7 +81,7 @@ namespace Assets.Script.Components
 
 				protected bool CanRunInteraction(PlayerBehaviour sender) => CanInteract(sender) && IsInteractionTimeout;
 
-				public abstract void Interact(PlayerBehaviour sender);
+				protected abstract void Interact(PlayerBehaviour sender);
 
 				/// <summary>
 				/// Not empty Method! Calls <see cref="PerformHuntUpdate"/>

@@ -17,44 +17,36 @@ namespace Assets.Script.Components
 				/// <summary>
 				/// An interaction call from a player
 				/// </summary>
-				/// <param name="ignored"></param>
-				public override void Interact(PlayerBehaviour ignored)
+				/// <param name="player"></param>
+				protected override void Interact(PlayerBehaviour player)
 				{
-						// called from "protected"
-						if (ignored is { })
-						{
-								// do not allow any interaction, if it is not the player
-								if (CanInteract(ignored) is false)
-								{
-										return;
-								}
-						}
+						ToggleOpenClose();
+				}
 
+				private void ToggleOpenClose()
+				{
 						IsOpened = !IsOpened;
 						if (IsOpened)
 						{
-								OpenIntern();
+								Open();
 						}
 						else
 						{
-								CloseIntern();
+								Close();
 						}
 				}
 
-				/// <summary>
-				/// Sets <see cref="IsOpened"/> to false, no animation nor sound
-				/// </summary>
-				protected void Close() => IsOpened = false;
-
 				[ContextMenu("Interaction/Open")]
-				private void OpenIntern()
+				private void Open()
 				{
+						IsOpened = true;
 						PlayAnimation(openAnimation);
 				}
 
 				[ContextMenu("Interaction/Close")]
-				private void CloseIntern()
+				protected void Close()
 				{
+						IsOpened = false;
 						PlayAnimation(closeAnimation);
 				}
 
@@ -69,24 +61,11 @@ namespace Assets.Script.Components
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						// player only!
-						return sender is { };
+						// player only, if not locked!
+						return base.CanInteract(sender) && sender != null;
 				}
 
-				protected override void OnHuntStart()
-				{
-						// nothing - but exits (another script)
-				}
-
-				protected override void OnHuntStop()
-				{
-						// nothing
-				}
-
-				public override string GetTargetName()
-				{
-						return GetLockCloseStatusName(room?.RoomName ?? "??");
-				}
+				public override string GetTargetName() => GetLockCloseStatusName(room?.RoomName ?? "??");
 
 				private string GetLockCloseStatusName(string name)
 				{

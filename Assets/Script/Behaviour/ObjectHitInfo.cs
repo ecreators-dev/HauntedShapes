@@ -2,13 +2,16 @@
 
 using System;
 
+using UnityEngine;
+
 namespace Assets.Script.Behaviour
 {
 		public struct ObjectHitInfo
 		{
-				public ObjectHitInfo(Interactible target)
+				public ObjectHitInfo(Interactible target, GameObject owner)
 				{
 						TargetItem = target;
+						gameObject = owner;
 						var type = InteractionType.NONE;
 						if (TargetItem is Interactible)
 						{
@@ -33,6 +36,8 @@ namespace Assets.Script.Behaviour
 
 				public IInteractibleBase TargetItem { get; }
 
+				public GameObject gameObject { get; }
+
 				public IInteractible GetInteractible() => TargetItem as IInteractible;
 
 				public IPickupItem GetPickupItem() => TargetItem as PickupItem;
@@ -42,6 +47,8 @@ namespace Assets.Script.Behaviour
 				public EquipmentPlacable GetPlaceableItem() => TargetItem as EquipmentPlacable;
 
 				public bool HasTargetItem => Type != InteractionType.NONE;
+
+				public bool HasOwner => gameObject != null;
 
 				public bool IsType(InteractionType type) => Type.HasFlag(type);
 

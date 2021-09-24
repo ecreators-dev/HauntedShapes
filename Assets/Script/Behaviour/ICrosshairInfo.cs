@@ -8,7 +8,7 @@ namespace Assets.Script.Behaviour
 {
 		public interface ICrosshairInfo
 		{
-				(HitInfo InClickRange, HitInfo InHoverRange) Info { get; }
-				(ObjectHitInfo InClickRange, ObjectHitInfo InHoverRange) ObjectInfo { get; }
+				(HitInfo InClickRange, HitInfo InHoverRange) RaycastInfo { get; }
+				(ObjectHitInfo InClickRange, ObjectHitInfo InHoverRange) RaycastObjectInfo { get; }
 		}
 }

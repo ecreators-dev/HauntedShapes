@@ -2,7 +2,6 @@
 using Assets.Script.Components;
 
 using System;
-using System.Collections;
 
 using UnityEngine;
 
@@ -24,25 +23,15 @@ namespace Assets.Script.Behaviour
 
 				protected ICrosshairUI CrosshairHit { get; private set; }
 
-				protected bool IsCrosshairHovered
-				{
-						get
-						{
-								if (CrosshairHit == null)
-								{
-										return false;
-								}
-								(bool actualHit, RaycastHit hit) = CrosshairHit.GetRaycastCollidersOnlyResult();
-								return actualHit && hit.collider.GetComponent<PickupItem>() == this;
-						}
-				}
-				protected Vector3 UpNormal { get; set; } = Vector3.up;
+				public Vector3 NormalUp { get; set; } = Vector3.up;
+
 				protected Transform Transform { get; set; }
+				
 				protected Rigidbody RigidBody { get; set; }
 
 				protected virtual void Start()
 				{
-						UpNormal = GetUpNormalFromAxis(upAxis);
+						NormalUp = GetUpNormalFromAxis(upAxis);
 						Transform = transform;
 				}
 
@@ -50,14 +39,15 @@ namespace Assets.Script.Behaviour
 				/// <b>Need to be placed in a parent if taken before calling this method!</b>
 				/// <br/>Resets local position and rotation
 				/// </summary>
-				public virtual void EquippedByPlayerNotification(PlayerBehaviour newUser)
+				public virtual void TriggerPlayerPickup(PlayerBehaviour newUser)
 				{
-						CrosshairHit = CrosshairHitVisual.Instance;
 						if (newUser == null)
 						{
 								Debug.LogError($"Parameter \"player\" was null!");
 								return;
 						}
+
+						this.CrosshairHit ??= FindObjectOfType<CrosshairHitVisual>();
 
 						if (IsTakenByPlayer is true)
 						{
@@ -109,7 +99,7 @@ namespace Assets.Script.Behaviour
 								// unsetting parent belongs inside here! Because only after the check, the drop may be done
 								// updside!
 								float oldPan = Transform.localEulerAngles.y;
-								Transform.localRotation = Quaternion.FromToRotation(Vector3.up, UpNormal);
+								Transform.localRotation = Quaternion.FromToRotation(Vector3.up, NormalUp);
 								Transform.SetParent(null);
 								var euler = Transform.localEulerAngles;
 								Transform.localEulerAngles = new Vector3(euler.x, oldPan, euler.z);
@@ -182,7 +172,7 @@ namespace Assets.Script.Behaviour
 
 				public virtual bool CheckPlayerCanPickUp(PlayerBehaviour player)
 				{
-						return IsUnlocked && User == null;
+						return IsUnlocked && IsTakenByPlayer is false;
 				}
 		}
 }

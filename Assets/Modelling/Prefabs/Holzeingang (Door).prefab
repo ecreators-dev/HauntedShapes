@@ -64,7 +64,7 @@ MonoBehaviour:
     volume: 1
     playedFromScript: 1
     loop: 0
-    delaySeconds: 1
+    delaySeconds: 0
   ambientLoopOn:
     randomSounds: []
     volume: 1

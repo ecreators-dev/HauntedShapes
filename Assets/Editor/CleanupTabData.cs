@@ -4,18 +4,29 @@ using System.Text.RegularExpressions;
 
 using UnityEngine;
 
+using Object = UnityEngine.Object;
+
 namespace Assets.Script.GameMenu
 {
 		public class CleanupTabData
 		{
 				public CleanupTabData()
 				{
-						textures = new TabData();
-						materials = new TabData();
-						shaders = new TabData();
+						textures = new ProjectCleanUpTabData();
+						materials = new ProjectCleanUpTabData();
+						shaders = new ProjectCleanUpTabData();
+						scriptObjects = new SceneObjectTabData();
 				}
 
-				public class TabData
+				public class SceneObjectTabData
+				{
+						private Vector2 scrollPos;
+						public ref Vector2 ScrollPosition => ref scrollPos;
+
+						public List<Object> Objects { get; set; }
+				}
+
+				public class ProjectCleanUpTabData
 				{
 						private Vector2 scrollPos;
 
@@ -32,10 +43,12 @@ namespace Assets.Script.GameMenu
 						public bool FilterEnabled { get; set; }
 				}
 				
-				public TabData textures { get; }
+				public ProjectCleanUpTabData textures { get; }
 				
-				public TabData materials { get; }
+				public ProjectCleanUpTabData materials { get; }
 				
-				public TabData shaders { get; }
+				public ProjectCleanUpTabData shaders { get; }
+
+				public SceneObjectTabData scriptObjects { get; }
 		}
 }

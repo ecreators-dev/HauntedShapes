@@ -63,7 +63,7 @@ namespace Assets.Script.Behaviour
 								}
 								CurrentItem = item;
 								item.SetParent(holderParent);
-								item.EquippedByPlayerNotification(user);
+								item.TriggerPlayerPickup(user);
 						}
 				}
 

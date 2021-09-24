@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Script.Behaviour.FirstPerson;
+
+using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
@@ -15,15 +17,18 @@ namespace Assets.Script.Behaviour
 
 				public bool IsUnusedOnFloor => IsTakenByPlayer is false && IsPlacing is false && IsPlaced is false;
 
-				public IEquipment Self => this;
+				public ICrosshairUI CrosshairUI { get; private set; }
 
 				protected override void Update()
 				{
 						base.Update();
 
+						CrosshairUI ??= CrosshairHitVisual.Instance;
+
 						// while pressing hold
-						if (IsUnlocked && IsTakenByPlayer)
+						if (CrosshairUI != null)
 						{
+								// while holding:
 								if (this.InputControls().PlaceEquipmentButtonPressed)
 								{
 										UpdatePlacingOrStart();
@@ -40,29 +45,24 @@ namespace Assets.Script.Behaviour
 						// laying only on floor is:
 						// not placing and not placed
 
-						// once!
-						if (IsPlacing is false && IsTakenByPlayer)
-						{
-								IsPlacing = true;
-								IsPlaced = false;
-								CrosshairHit.ShowPlacementPointer(this);
-								Debug.Log($"{GetTargetName()}: Start placing");
-						}
+						//CrosshairHit.ShowPlacementPointer(this);
+						Debug.Log($"{GetTargetName()}: Start placing");
+
+						CrosshairHit.ShowTargetPosition(CrosshairUI.RaycastInfo.clickRange, this);
 				}
 
 				protected virtual void EndPlacing()
 				{
 						// fix: do not put to 0,0,0 when missing target
-						ICrosshairInfo info = User.CrosshairTargetInfo;
+						var info = CrosshairHitVisual.Instance.RaycastInfo;
 						if (IsPlacing && !IsPlaced)
 						{
-								if (info.Info.InClickRange.IsHit)
+								if (info.clickRange.IsHit)
 								{
 										// do placing
 										DropItemRotated(User, noForce: true);
 
-										float placementOffsetAtNormal = this.GetGameController().Crosshair.PlacementOffsetNormal;
-										CrosshairHit.PlaceEquipment(this, UpNormal, placementOffsetAtNormal);
+										CrosshairHit.HideTarget();
 
 										IsPlacing = false;
 										IsPlaced = true;
@@ -78,7 +78,9 @@ namespace Assets.Script.Behaviour
 
 				public override bool CheckPlayerCanPickUp(PlayerBehaviour player)
 				{
-						return base.CheckPlayerCanPickUp(player);
+						// only if unlocked not player and not fixed (or placed).
+						// if placed then first grab it with another button (not interaction button)
+						return base.CheckPlayerCanPickUp(player) && IsPlaced is false;
 				}
 		}
 }

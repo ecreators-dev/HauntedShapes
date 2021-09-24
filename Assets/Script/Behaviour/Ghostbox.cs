@@ -969,37 +969,31 @@ namespace Assets.Script.Behaviour
 						return Mathf.Round(number * shift) / shift;
 				}
 
-				protected override void OnEquip()
-				{
-				}
-
-				protected override void OnInventory()
-				{
-				}
-
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						return IsTakenByPlayer is false;
+						return base.CanInteract(sender) && IsTakenByPlayer;
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
+						TogglePowered();
 
+						if (IsPowered)
+						{
+								PlayRadio();
+						}
+						else
+						{
+								StopRadio();
+						}
 				}
 
-				protected override void OnHuntStart()
+				private void StopRadio()
 				{
-
 				}
 
-				protected override void OnHuntStop()
+				private void PlayRadio()
 				{
-						// nothing yet
-				}
-
-				protected override void OnOwnerOwnedEquipment()
-				{
-						// nothing yet
 				}
 
 				public override EquipmentInfo GetEquipmentInfo()

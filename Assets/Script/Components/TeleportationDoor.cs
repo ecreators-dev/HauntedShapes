@@ -73,7 +73,7 @@ namespace Assets.Script.Components
 						}
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
 						// ONE WAY open! Means:
 						// can get up, when closed
@@ -96,7 +96,11 @@ namespace Assets.Script.Components
 								{
 										// always active
 										SetTeleportActive(true);
-										base.Interact(null);
+										base.Interact(sender);
+								}
+								else
+								{
+										// cannot close!
 								}
 						}
 				}

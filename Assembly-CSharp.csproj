@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -52,9 +52,6 @@
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\Behaviour\Consumable.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
@@ -123,6 +120,7 @@
     <Compile Include="Assets\Script\Behaviour\HuntingAnimationProxy.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\FirstPersonAudio.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\Evidence.cs" />
+    <Compile Include="Assets\Script\Controller\RangeFilter.cs" />
     <Compile Include="Assets\Script\Components\Model\UnityEventCallByAttribute.cs" />
     <Compile Include="Assets\Script\Behaviour\IPowerbankSupport.cs" />
     <Compile Include="Assets\Script\Behaviour\PlayerBehaviour.cs" />
@@ -133,7 +131,6 @@
     <Compile Include="Assets\Script\Behaviour\ShopParameters.cs" />
     <Compile Include="Assets\Script\Controller\IHuntAction.cs" />
     <Compile Include="Assets\Script\Behaviour\Room.cs" />
-    <Compile Include="Assets\Script\Behaviour\CrosshairTargetInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\Ghostbox.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\FirstPersonView.cs" />
     <Compile Include="Assets\Script\Components\Interactible.cs" />
@@ -151,11 +148,13 @@
     <Compile Include="Assets\Script\Model\IMonoBehaviourExtensions.cs" />
     <Compile Include="Assets\Script\Behaviour\PasswayUpDown.cs" />
     <Compile Include="Assets\Script\Controller\CrosshairHitVisual.cs" />
+    <Compile Include="Assets\InputControlsExtensions.cs" />
     <Compile Include="Assets\Script\Components\Model\Tribute.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\CameraData.cs" />
     <Compile Include="Assets\Script\Behaviour\CalledByPlayerBehaviourAttribute.cs" />
     <Compile Include="Assets\Script\Behaviour\DropOnButton.cs" />
     <Compile Include="Assets\Script\Behaviour\FirstPerson\RotationData.cs" />
+    <Compile Include="Assets\Script\Components\IInteractibleBase.cs" />
     <Compile Include="Assets\Script\Controller\HuntActionControl.cs" />
     <Compile Include="Assets\Modelling\Asteroids Pack\Assets\Scripts\RandomRotator.cs" />
     <Compile Include="Assets\Mini First Person Controller\Scripts\Components\Zoom.cs" />
@@ -234,6 +233,7 @@
     <Compile Include="Assets\Script\NavMeshComponents\NavMeshLink.cs" />
     <Compile Include="Assets\Script\Behaviour\PickupItem.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\GhostEntity.cs" />
+    <Compile Include="Assets\Script\Controller\LayerMaskFilter.cs" />
     <Compile Include="Assets\Script\Model\CrosshairParameters.cs" />
     <Compile Include="Assets\Script\Behaviour\LightInteractor.cs" />
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />

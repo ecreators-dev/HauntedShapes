@@ -9,8 +9,6 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private Animator animator;
 				[SerializeField] private string brokenText = "Gerät ist kaputt";
 
-				private bool CrosshairHovered { get; set; }
-
 				protected override void Start()
 				{
 						base.Start();
@@ -24,35 +22,18 @@ namespace Assets.Script.Behaviour
 						base.Update();
 						animator.SetBool("Hunting", IsHuntingActive);
 						animator.SetBool("PowerOn", IsPowered);
-
-						CrosshairHovered = IsCrosshairHovered;
-
-						// cannot interact, when locked
-						if (IsLocked)
-								return;
 				}
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
-						return base.CanInteract(sender) && (User == null || sender == User);
+						return base.CanInteract(sender) && IsUserOrNotTaken(sender);
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
-						if (IsTakenByPlayer)
+						if (IsHuntingActive is false && (IsTakenByPlayer || IsPlaced))
 						{
 								TogglePowered();
-						}
-						else
-						{
-								if (IsPlaced is false)
-								{
-										CrosshairHit.ShowPlacementPointer(this);
-								}
-								else if (CrosshairHovered)
-								{
-										TogglePowered();
-								}
 						}
 				}
 

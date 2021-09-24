@@ -1,8 +1,3 @@
-using Assets.Script.Behaviour.FirstPerson;
-
-using System;
-using System.Collections.Generic;
-
 using UnityEngine;
 
 namespace Assets.Script.Behaviour
@@ -155,39 +150,32 @@ namespace Assets.Script.Behaviour
 
 				private void UpdateLookAtCrosshairTarget()
 				{
-						// any mask
-						Camera cam = CameraMoveType.Instance.GetCamera();
-						(HitInfo clickRange, HitInfo _) = CrosshairHit.RaycastCollidersOnlyAllLayers(cam);
-						bool actualHit = clickRange.IsHit;
-						Vector3 point = clickRange.HitPoint;
+						if (IsTakenByPlayer is false) return;
 
-						if (actualHit)
+						// any mask
+						(HitInfo _, HitInfo hoverRange) = CrosshairUI.RaycastInfo;
+
+						if (hoverRange.IsHit)
 						{
-								Vector3 targetDir = point - Transform.position;
+								Vector3 targetDir = hoverRange.HitPoint - Transform.position;
+								// it takes up to 5 seconds
 								Transform.rotation = Quaternion
 										.Slerp(Transform.rotation, Quaternion.LookRotation(targetDir, Transform.up),
-										 Time.deltaTime * 10);
+										 Time.deltaTime * 5);
 						}
 				}
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
 						// on ground or in hand
-						return IsLocked is false && IsUserOrNotTaken(sender);
+						return base.CanInteract(sender) && IsUserOrNotTaken(sender);
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
-						if (IsBroken is false && IsHuntingActive is false)
+						if (IsHuntingActive is false && IsTakenByPlayer)
 						{
-								if (IsTakenByPlayer)
-								{
-										TogglePowered();
-								}
-								else
-								{
-										sender.DropThenEquip(this);
-								}
+								TogglePowered();
 						}
 				}
 

@@ -47,6 +47,7 @@ namespace Assets.Script.GameMenu
 						public const string LABEL_MATERIALS = "Materials";
 						public const string LABEL_TEXTURES = "Texturen";
 						public const string LABEL_SHADERS = "Shaders";
+						public const string LABEL_SCRIPTS = "Missing Scripts";
 				}
 
 				private static TabControl tabControl { get; } = new TabControl(new List<Tab>
@@ -63,7 +64,36 @@ namespace Assets.Script.GameMenu
 						new Tab(CleanUpTabControlLabels.LABEL_TEXTURES, GetCleanUpData(), BuildCleanUpSubTabTextures),
 						new Tab(CleanUpTabControlLabels.LABEL_MATERIALS, GetCleanUpData(), BuildCleanUpSubTabMaterials),
 						new Tab(CleanUpTabControlLabels.LABEL_SHADERS, GetCleanUpData(), BuildCleanUpSubTabShaders),
+						new Tab(CleanUpTabControlLabels.LABEL_SCRIPTS, GetCleanUpData(), BuildCleanUpSubTabScripts),
 				});
+
+				private static void BuildCleanUpSubTabScripts(HauntedShapesGameEditorWindow window, Tab tabOwner, object data)
+				{
+						CleanupTabData args = data as CleanupTabData;
+						if (GUILayout.Button("Finde fehlende Scripts"))
+						{
+								args.scriptObjects.Objects = FindObjectsOfType<Object>()
+										.Where(obj => obj == null || obj is GameObject go && go.GetComponents<Component>().Any(cmp => cmp == null))
+										.ToList();
+						}
+
+						EditorGUILayout.LabelField($"Nicht verwendete Scripte: {args.scriptObjects.Objects?.Count ?? 0}");
+
+						GUI.enabled = args.scriptObjects.Objects?.Any() ?? false;
+						ShowScrollArea(ref args.scriptObjects.ScrollPosition, () =>
+						{
+								var pageEntries = args.scriptObjects.Objects ?? new List<Object>();
+								for (int i = 0; i < pageEntries.Count; i++)
+								{
+										// if (i > 0) HorizonalLine();
+										Object obj = pageEntries[i];
+										EditorGUILayout.ObjectField($"{i + 1}.", obj, typeof(Object), true);
+								}
+						});
+						GUI.enabled = true;
+
+						GUILayout.FlexibleSpace();
+				}
 
 				private static CleanupTabData GetCleanUpData()
 				{
@@ -75,7 +105,7 @@ namespace Assets.Script.GameMenu
 						CleanupTabData args = data as CleanupTabData;
 						MaterialsTabData e = tabControl.GetTabWithTitle(MainTabControlLabels.LABEL_MATERIALS).Data as MaterialsTabData;
 
-						CleanupTabData.TabData tabData = args.shaders;
+						CleanupTabData.ProjectCleanUpTabData tabData = args.shaders;
 						string headerPlural = "Shader";
 						ICollection<AssetPath> usedPaths = e.UsedShaders.Keys;
 						string AssetFilter = "t:Shader";
@@ -171,7 +201,7 @@ namespace Assets.Script.GameMenu
 						CleanupTabData args = data as CleanupTabData;
 						MaterialsTabData e = tabControl.GetTabWithTitle(MainTabControlLabels.LABEL_MATERIALS).Data as MaterialsTabData;
 
-						CleanupTabData.TabData tabData = args.materials;
+						CleanupTabData.ProjectCleanUpTabData tabData = args.materials;
 						string headerPlural = "Materials";
 						ICollection<AssetPath> usedPaths = e.UsedMaterials.Keys;
 						string AssetFilter = "t:Material";
@@ -187,7 +217,7 @@ namespace Assets.Script.GameMenu
 						CleanupTabData args = data as CleanupTabData;
 						MaterialsTabData e = tabControl.GetTabWithTitle(MainTabControlLabels.LABEL_MATERIALS).Data as MaterialsTabData;
 
-						CleanupTabData.TabData tabData = args.textures;
+						CleanupTabData.ProjectCleanUpTabData tabData = args.textures;
 						string headerPlural = "Texturen";
 						ICollection<AssetPath> usedPaths = e.UsedTextures.Keys;
 						string AssetFilter = "t:Texture";
@@ -269,7 +299,7 @@ namespace Assets.Script.GameMenu
 						return result;
 				}
 
-				private static void OnGui_CleanUpTab_Render(CleanupTabData.TabData tabData, string headerPlural, ICollection<AssetPath> usedPaths, string projectAssetFilterText)
+				private static void OnGui_CleanUpTab_Render(CleanupTabData.ProjectCleanUpTabData tabData, string headerPlural, ICollection<AssetPath> usedPaths, string projectAssetFilterText)
 				{
 						EditorGUILayout.LabelField($"Nicht verwendete {headerPlural}: {tabData.Unused?.Count ?? 0}");
 						tabData.Unused ??= new HashSet<AssetPath>();
@@ -477,7 +507,7 @@ namespace Assets.Script.GameMenu
 						}
 				}
 
-				private static void FetchUnused(CleanupTabData.TabData tabData, string assetFilter, ICollection<AssetPath> usedAssets)
+				private static void FetchUnused(CleanupTabData.ProjectCleanUpTabData tabData, string assetFilter, ICollection<AssetPath> usedAssets)
 				{
 						tabData.ForDelete.Clear();
 						tabData.Unused.Clear();
@@ -520,7 +550,7 @@ namespace Assets.Script.GameMenu
 						}
 				}
 
-				private static List<AssetPath> FilterPageEntriesSelector(List<List<AssetPath>> pagesWithEntries, CleanupTabData.TabData tabData)
+				private static List<AssetPath> FilterPageEntriesSelector(List<List<AssetPath>> pagesWithEntries, CleanupTabData.ProjectCleanUpTabData tabData)
 				{
 						EditorGUILayout.BeginHorizontal();
 						int pages = pagesWithEntries.Count;

@@ -204,7 +204,7 @@ namespace Assets.Script.Behaviour
 						base.OnPerformedDrop();
 				}
 
-				public override void Interact(PlayerBehaviour sender)
+				protected override void Interact(PlayerBehaviour sender)
 				{
 						if (IsTakenByPlayer)
 						{

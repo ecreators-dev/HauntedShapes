@@ -37,6 +37,6 @@ namespace Assets.Script.Behaviour
 
 				public override string GetTargetName() => parentInteractible.GetTargetName();
 
-				public override void Interact(PlayerBehaviour sender) => parentInteractible.Interact(sender);
+				protected override void Interact(PlayerBehaviour sender) => parentInteractible.RunInteraction(sender);
 		}
 }
