@@ -36,7 +36,12 @@ namespace Assets.Script.Behaviour
 				[SerializeField] private float hoverDistance = 400;
 
 				private RawImage image;
+
+				private RectTransform Transform { get; set; }
+
 				private float initSize;
+				private float initScaleW;
+				private float initScaleH;
 				private Vector3 hitPointBefore;
 				public static ICrosshairUI Instance { get; private set; }
 
@@ -51,11 +56,14 @@ namespace Assets.Script.Behaviour
 				{
 						Instance = this;
 						image = GetComponent<RawImage>();
+						Transform = transform as RectTransform;
 				}
 
 				private void Start()
 				{
-						this.initSize = size;
+						initSize = size;
+						initScaleW = Transform.sizeDelta.x;
+						initScaleH = Transform.sizeDelta.y;
 						HideTarget();
 				}
 
@@ -63,7 +71,9 @@ namespace Assets.Script.Behaviour
 				{
 						IsGamepadConnected = !this.GetGameController().IsGamepadDisconnected;
 						size = IsGamepadConnected ? sizeGamepad : initSize;
-						crosshairDot.localScale = Vector3.one * (size / 0.02f);
+						float scale = (size / 0.02f);
+						crosshairDot.localScale = Vector3.one * scale;
+						//Transform.sizeDelta = new Vector2(initScaleW, initScaleH) * scale;
 
 						(ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) objectInfo;
 
@@ -117,6 +127,7 @@ namespace Assets.Script.Behaviour
 
 						(HitInfo ClickRange, HitInfo HoverRange) info = GetRaycastInfo(anyTargetHit, anyTarget, anyTargetHover, anyHover);
 						objectInfo = GetRaycastObjectInfo(info);
+
 						return info;
 				}
 
@@ -141,8 +152,12 @@ namespace Assets.Script.Behaviour
 
 				private void UpdateGui()
 				{
+						// only visible in click range!
+						image.enabled = !tooFarTextUI.enabled && IsHovered;
+						// visible in hover range
 						targetTextUI.enabled = IsHovered;
-						tooFarTextUI.enabled = IsHovered && RaycastInfo.clickRange.IsHit is false;
+						// visible in hover range when targeting an object
+						tooFarTextUI.enabled = CanSeeTextTooFar();
 
 						if (IsHovered)
 						{
@@ -157,11 +172,9 @@ namespace Assets.Script.Behaviour
 
 						CrosshairRoot.ActionEnum GetTargetType()
 						{
-								var info = this.RaycastInfo;
-								var objectInfo = this.RaycastObjectInfo;
-								if (info.clickRange.IsHit)
+								if (RaycastInfo.clickRange.IsHit)
 								{
-										ObjectHitInfo clickable = objectInfo.clickRange;
+										ObjectHitInfo clickable = RaycastObjectInfo.clickRange;
 										if (clickable.GetInteractible()?.IsLocked ?? false)
 										{
 												return CrosshairRoot.ActionEnum.LOCKED;
@@ -176,20 +189,29 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				// from update!
-				public void ShowTargetPosition(HitInfo surface, IPlacableEquipment placable)
+				private bool CanSeeTextTooFar()
 				{
-						Vector3 position = surface.HitPoint;
-						placementSprite.transform.forward = surface.Normal;
-						placementSprite.transform.position = position + placementSprite.transform.forward * 0.01f;
-						placementSprite.transform.rotation = Quaternion.FromToRotation(placable.NormalUp, surface.Normal);
-						placementSprite.SetActive(true);
+						return IsHovered && RaycastInfo.clickRange.IsHit is false && RaycastObjectInfo.hoverRange.HasTargetItem;
+				}
+
+				// from update!
+				public void ShowTargetPosition(IPlacableEquipment placable)
+				{
+						HideTarget();
+						if (placable.IsPlaced is false)
+						{
+								Vector3 position = RaycastInfo.clickRange.HitPoint;
+								Vector3 spriteNormal = placementSprite.transform.forward;
+								placementSprite.transform.position = position + spriteNormal * 0.01f;
+								placementSprite.transform.rotation = Quaternion.FromToRotation(spriteNormal, RaycastInfo.clickRange.Normal);
+								placementSprite.gameObject.SetActive(true);
+						}
 				}
 
 				// once!
 				public void HideTarget()
 				{
-						placementSprite.SetActive(false);
+						placementSprite.gameObject.SetActive(false);
 				}
 		}
 }

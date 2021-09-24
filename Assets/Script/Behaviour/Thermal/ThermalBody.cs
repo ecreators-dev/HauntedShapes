@@ -41,6 +41,11 @@ namespace Assets.Script.Behaviour.Thermal
 
 				private float GetDistance(Transform caller)
 				{
+						if (caller == null || caller.gameObject == null)
+						{
+								return 0;
+						}
+
 						Transform point = heatMaximumSpot ?? Transform;
 						float distance = Vector3.Distance(caller.position, point.position);
 						return Mathf.Max(0, 1 - distance / maxDistance);

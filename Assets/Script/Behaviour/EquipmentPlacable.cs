@@ -17,56 +17,28 @@ namespace Assets.Script.Behaviour
 
 				public bool IsUnusedOnFloor => IsTakenByPlayer is false && IsPlacing is false && IsPlaced is false;
 
-				public ICrosshairUI CrosshairUI { get; private set; }
-
-				protected override void Update()
+				public override bool CheckPlayerCanPickUp(PlayerBehaviour player)
 				{
-						base.Update();
-
-						CrosshairUI ??= CrosshairHitVisual.Instance;
-
-						// while pressing hold
-						if (CrosshairUI != null)
-						{
-								// while holding:
-								if (this.InputControls().PlaceEquipmentButtonPressed)
-								{
-										UpdatePlacingOrStart();
-								}
-								else
-								{
-										EndPlacing();
-								}
-						}
+						// only if unlocked not player and not fixed (or placed).
+						// if placed then first grab it with another button (not interaction button)
+						return base.CheckPlayerCanPickUp(player) && IsPlaced is false;
 				}
 
-				protected virtual void UpdatePlacingOrStart()
+				public virtual void PlaceAtPositionAndNormal(HitInfo surfaceClick)
 				{
-						// laying only on floor is:
-						// not placing and not placed
-
-						//CrosshairHit.ShowPlacementPointer(this);
-						Debug.Log($"{GetTargetName()}: Start placing");
-
-						CrosshairHit.ShowTargetPosition(CrosshairUI.RaycastInfo.clickRange, this);
-				}
-
-				protected virtual void EndPlacing()
-				{
-						// fix: do not put to 0,0,0 when missing target
-						var info = CrosshairHitVisual.Instance.RaycastInfo;
 						if (IsPlacing && !IsPlaced)
 						{
-								if (info.clickRange.IsHit)
+								// fix: do not put to 0,0,0 when missing target
+								if (surfaceClick.IsHit)
 								{
-										// do placing
-										DropItemRotated(User, noForce: true);
-
-										CrosshairHit.HideTarget();
+										Transform.up = surfaceClick.Normal;
+										Transform.rotation = Quaternion.FromToRotation(NormalUp, surfaceClick.Normal);
+										Transform.position = surfaceClick.HitPoint + Transform.up * this.GetGameController().Crosshair.PlacementOffsetNormal;
+										Transform.SetParent(null);
 
 										IsPlacing = false;
 										IsPlaced = true;
-										Debug.Log($"{GetTargetName()}: End placing");
+										Debug.Log($"{base.GetTargetName()}: End placing @ {GetPrintablePosition(Transform.position)}");
 								}
 								else
 								{
@@ -76,11 +48,9 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				public override bool CheckPlayerCanPickUp(PlayerBehaviour player)
+				protected static string GetPrintablePosition(Vector3 position)
 				{
-						// only if unlocked not player and not fixed (or placed).
-						// if placed then first grab it with another button (not interaction button)
-						return base.CheckPlayerCanPickUp(player) && IsPlaced is false;
+						return $"xyz={position.x:0.0},{position.y:0.0},{position.z:0.0}";
 				}
 		}
 }

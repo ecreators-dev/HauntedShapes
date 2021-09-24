@@ -37,12 +37,11 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				protected override void EndPlacing()
+				public override void PlaceAtPositionAndNormal(HitInfo surfaceClick)
 				{
-						base.EndPlacing();
+						base.PlaceAtPositionAndNormal(surfaceClick);
 						DisableGravity();
 				}
-
 
 				public override EquipmentInfo GetEquipmentInfo()
 				{

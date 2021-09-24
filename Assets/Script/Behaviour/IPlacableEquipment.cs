@@ -5,5 +5,7 @@
 				bool IsPlaced { get; }
 
 				bool IsUnusedOnFloor { get; }
+
+				void PlaceAtPositionAndNormal(HitInfo clickRange);
 		}
 }

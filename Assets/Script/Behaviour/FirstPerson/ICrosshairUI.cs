@@ -9,7 +9,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				bool IsHovered { get; }
 				bool IsGamepadConnected { get; }
 
-				void ShowTargetPosition(HitInfo info, IPlacableEquipment equipment);
+				void ShowTargetPosition(IPlacableEquipment equipment);
 				
 				void HideTarget();
 

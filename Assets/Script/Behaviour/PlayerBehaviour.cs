@@ -48,10 +48,12 @@ namespace Assets.Script.Behaviour
 				private bool IsButtonPlacingPressed => this.InputControls().PlaceEquipmentButtonPressed;
 
 				private bool IsButtonInteractionPressed => this.InputControls().CrosshairTargetInteractionButtonPressed;
-				
+
 				private IItemHolder EquipmentHolder => equipmentHolder;
 
 				private IItemHolder CameraHolder => cameraHolder;
+
+				public bool InPlacing { get; private set; }
 
 				private void Awake()
 				{
@@ -272,7 +274,7 @@ namespace Assets.Script.Behaviour
 								if (target.CheckPlayerCanPickUp(this))
 								{
 										Debug.Log($"Equip @ placeable: '{target.GetTargetName()}'");
-										
+
 										// right hand: equip, calls equipped notification --- starts placing update
 										DropThenEquip(target);
 								}
@@ -315,6 +317,27 @@ namespace Assets.Script.Behaviour
 						{
 								OnCrosshairClick_HandleInteractible(interactible);
 								return;
+						}
+
+						if (equipmentHolder.CurrentItem is IPlacableEquipment tool)
+						{
+								if (tool.IsPlaced is false)
+								{
+										if (this.InputControls().PlaceEquipmentButtonPressed)
+										{
+												InPlacing = true;
+												CrosshairHitVisual.Instance.ShowTargetPosition(tool);
+										}
+										else if (InPlacing)
+										{
+												Debug.Log($"Place Button released: Placed: {tool.GetTargetName()}");
+												InPlacing = false;
+												CrosshairHitVisual.Instance.HideTarget();
+												
+												EquipmentHolder.Drop();
+												tool.PlaceAtPositionAndNormal(CrosshairHitVisual.Instance.RaycastInfo.clickRange);
+										}
+								}
 						}
 				}
 

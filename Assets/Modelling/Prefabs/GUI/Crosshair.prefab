@@ -222,8 +222,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2147483647
-  m_fontColor: {r: 1, g: 1, b: 1, a: 0.49803922}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -352,7 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.49056602, g: 0.48778924, b: 0.48778924, a: 0.47058824}
+  m_Color: {r: 0.49056602, g: 0.48778924, b: 0.48778924, a: 0.24313726}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -361,7 +361,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -437,7 +437,7 @@ GameObject:
   - component: {fileID: 4018378361854923668}
   - component: {fileID: 778800138}
   m_Layer: 5
-  m_Name: Hand (Visual Controller)
+  m_Name: 'Hand (Crosshair Ctrl + Placing) '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -522,21 +522,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   root: {fileID: 56723066}
-  hovered: 0
-  hitDistance: 3.5
-  hitDistanceFar: 4.5
-  interactibleLayer:
-    serializedVersion: 2
-    m_Bits: 4096
   size: 0.02
+  sizeGamepad: 0.05
   targetTextUI: {fileID: 4018378360332941738}
   tooFarTextUI: {fileID: 863931025}
-  hitLayers:
-    serializedVersion: 2
-    m_Bits: 4689
   placementSprite: {fileID: 3618368108724599824}
-  placementCheck: {fileID: 0}
   crosshairDot: {fileID: 4018378360666513109}
+  layersHit:
+    serializedVersion: 2
+    m_Bits: 791105
+  hitDistance: 5
+  hoverDistance: 40
 --- !u!114 &778800138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,6 +598,18 @@ PrefabInstance:
     - target: {fileID: 4460393101016709178, guid: f14e5cca55778294b9752cf4deb6ec78, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460393101016709178, guid: f14e5cca55778294b9752cf4deb6ec78, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460393101016709178, guid: f14e5cca55778294b9752cf4deb6ec78, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460393101016709178, guid: f14e5cca55778294b9752cf4deb6ec78, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4460393101016709178, guid: f14e5cca55778294b9752cf4deb6ec78, type: 3}
       propertyPath: m_LocalPosition.x
