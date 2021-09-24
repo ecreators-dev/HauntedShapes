@@ -409,7 +409,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""e566ac89-27a0-457a-991e-40204231235d"",
                     ""path"": ""<DualShockGamepad>/buttonSouth"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interaction"",

@@ -53,9 +53,9 @@ namespace Assets.Script.Behaviour
 						return IsPowered is false && ambientLoopOff != null && ambientLoopOff.IsLooping is false;
 				}
 
-				public override bool CanPickUp(PlayerBehaviour player)
+				public override bool CheckPlayerCanPickUp(PlayerBehaviour player)
 				{
-						return base.CanPickUp(player);
+						return base.CheckPlayerCanPickUp(player);
 				}
 
 				public override bool CanInteract(PlayerBehaviour sender)
@@ -76,11 +76,11 @@ namespace Assets.Script.Behaviour
 								{
 										if (active)
 										{
-												PlayToggleOnSound();
+												PlayToggleOnSoundInternal();
 										}
 										else
 										{
-												PlayToggleOffSound();
+												PlayToggleOffSoundInternal();
 										}
 								}
 						}

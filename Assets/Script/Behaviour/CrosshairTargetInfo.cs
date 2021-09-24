@@ -18,7 +18,7 @@ namespace Assets.Script.Behaviour
 				[Min(0)]
 				[SerializeField] private float hitDistance = 4;
 				[Min(0)]
-				[SerializeField] private float hoverDistance = 5;
+				[SerializeField] private float hoverDistance = 40;
 				[SerializeField] private LayerMask allowedLayers;
 				[SerializeField] private LayerMask disallowedLayers;
 
@@ -44,11 +44,23 @@ namespace Assets.Script.Behaviour
 						ICrosshairUI crosshair = CrosshairHitVisual.Instance;
 						if (crosshair == null) return;
 
-						Info = crosshair.RaycastCollidersOnly(cam, allowedLayersSet, disallowedLayersSet, hitDistance, hoverDistance);
-						ObjectInfo = (
-								new ObjectHitInfo(Info.InClickRange.Target?.GetComponent<Interactible>()),
-								new ObjectHitInfo(Info.InHoverRange.Target?.GetComponent<Interactible>())
+						var info = crosshair.RaycastCollidersOnly(cam, allowedLayersSet, disallowedLayersSet, hitDistance, hoverDistance);
+						var objectInfo = (
+								ClickRange: new ObjectHitInfo(Info.InClickRange.Target?.GetComponent<Interactible>()),
+								HoverRange: new ObjectHitInfo(Info.InHoverRange.Target?.GetComponent<Interactible>())
 								);
+
+						if (objectInfo.ClickRange.HasTargetItem != ObjectInfo.InClickRange.HasTargetItem)
+						{
+								Debug.Log($"Crosshair: changed! has target = {objectInfo.ClickRange.HasTargetItem}");
+						}
+						if (objectInfo.ClickRange.HasTargetItem && objectInfo.ClickRange.TargetItem != ObjectInfo.InClickRange.TargetItem)
+						{
+								Debug.Log($"Crosshair: changed! target = {objectInfo.ClickRange.TargetItem.GetTargetName()}");
+						}
+
+						Info = info;
+						ObjectInfo = objectInfo;
 				}
 
 				private ISet<LayerMask> GetLayerMasks(LayerMask layers)

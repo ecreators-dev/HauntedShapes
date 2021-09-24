@@ -15,8 +15,13 @@ namespace Assets.Script.Components
 				[SerializeField] private SoundEffect toggleOn = new SoundEffect();
 				[SerializeField] private SoundEffect toggleOff = new SoundEffect();
 				[SerializeField] private SoundEffect ambientLoopOn = new SoundEffect();
+				[SerializeField] private bool ambientLoopWithToggleOn = false;
+				[Range(0, 1)]
+				[Tooltip("Timeout between interactions in seconds")]
+				[SerializeField] private float interactionLockTimeout = 0.3f;
 
 				private bool oldHuntingStatus;
+				private float interactionTime;
 
 				public EObjectType ObjectType => identifier;
 
@@ -27,6 +32,10 @@ namespace Assets.Script.Components
 				public bool IsLocked => locked;
 
 				public bool IsUnlocked => !locked;
+
+				protected SoundEffect GetToggleOn() => toggleOn;
+				protected SoundEffect GetToggleOff() => toggleOff;
+				protected SoundEffect GetAmbientOn() => ambientLoopOn;
 
 				protected void Lock()
 				{
@@ -56,6 +65,21 @@ namespace Assets.Script.Components
 				{
 						return IsLocked is false;
 				}
+
+				public bool IsInteractionTimeout => Time.time - interactionTime > interactionLockTimeout;
+
+				public bool RunInteraction(PlayerBehaviour sender)
+				{
+						if (CanRunInteraction(sender))
+						{
+								interactionTime = Time.time;
+								Interact(sender);
+								return true;
+						}
+						return false;
+				}
+
+				protected bool CanRunInteraction(PlayerBehaviour sender) => CanInteract(sender) && IsInteractionTimeout;
 
 				public abstract void Interact(PlayerBehaviour sender);
 
@@ -104,11 +128,43 @@ namespace Assets.Script.Components
 
 				public abstract string GetTargetName();
 
-				protected void PlayToggleOnSound()
+				protected void PlayToggleOnSoundInternal()
+				{
+						if (toggleOn != null && toggleOn.playedFromScript is false)
+						{
+								PlayToggleOnSoundExplicitFromScript();
+						}
+				}
+
+				protected void PlayAmbientInternal()
+				{
+						if (toggleOn != null && ambientLoopOn.playedFromScript is false)
+						{
+								PlayAmbientExplicitFromScript();
+						}
+				}
+
+				protected void PlayToggleOnSoundExplicitFromScript()
 				{
 						if (soundPlayer3d is { })
 						{
 								toggleOn.PlayRandomOnce(GetTargetName(), "toggle on", soundPlayer3d);
+
+								if (ambientLoopWithToggleOn)
+								{
+										PlayAmbientExplicitFromScript();
+								}
+						}
+						else
+						{
+								Debug.LogWarning($"{GetTargetName()}: missing Audio Source (Component)!");
+						}
+				}
+
+				protected void PlayAmbientExplicitFromScript()
+				{
+						if (soundPlayer3d is { })
+						{
 								ambientLoopOn.PlayRandomLoop(GetTargetName(), "toggle on ambient", soundPlayer3dAmbient);
 						}
 						else
@@ -117,7 +173,15 @@ namespace Assets.Script.Components
 						}
 				}
 
-				protected void PlayToggleOffSound()
+				protected void PlayToggleOffSoundInternal()
+				{
+						if (toggleOff != null && toggleOff.playedFromScript is false)
+						{
+								PlayToggleOffSoundExplicitFromScript();
+						}
+				}
+
+				protected void PlayToggleOffSoundExplicitFromScript()
 				{
 						if (soundPlayer3d is { })
 						{
@@ -128,6 +192,38 @@ namespace Assets.Script.Components
 						{
 								Debug.LogWarning($"{GetTargetName()}: missing Audio Source (Component)!");
 						}
+				}
+
+				/// <summary>
+				/// Play Audio Toggle On
+				/// </summary>
+				public virtual void OnAnimation_ToggleOn_Start()
+				{
+						PlayToggleOnSoundExplicitFromScript();
+				}
+
+				/// <summary>
+				/// Plays no audio in default
+				/// </summary>
+				public virtual void OnAnimation_ToggleOn_End()
+				{
+						// nothing to play here yet
+				}
+
+				/// <summary>
+				/// Play Audio Toggle Off
+				/// </summary>
+				public virtual void OnAnimation_ToggleOff_Start()
+				{
+						PlayToggleOffSoundExplicitFromScript();
+				}
+
+				/// <summary>
+				/// Plays no audio in default
+				/// </summary>
+				public virtual void OnAnimation_ToggleOff_End()
+				{
+						// nothing to play here yet
 				}
 		}
 }

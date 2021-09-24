@@ -40,10 +40,7 @@ namespace Assets.Script.Behaviour
 						{
 								if (CurrentItem is IInteractible item)
 								{
-										if (item.CanInteract(playerOwner))
-										{
-												item.Interact(playerOwner);
-										}
+										item.RunInteraction(playerOwner);
 								}
 						}
 				}
@@ -66,7 +63,7 @@ namespace Assets.Script.Behaviour
 								}
 								CurrentItem = item;
 								item.SetParent(holderParent);
-								item.OnPlayer_NotifyItemTaken(user);
+								item.EquippedByPlayerNotification(user);
 						}
 				}
 

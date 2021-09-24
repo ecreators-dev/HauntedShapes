@@ -1,5 +1,7 @@
 using Assets.Script.Components;
 
+using System.Linq;
+
 using UnityEngine;
 
 namespace Assets.Script.Behaviour
@@ -27,7 +29,8 @@ namespace Assets.Script.Behaviour
 				private void Awake()
 				{
 						Transform = transform;
-						animator= GetComponent<Animator>();
+						animator = GetComponent<Animator>();
+						GetToggleOff().playedFromScript = true;
 				}
 
 				public override string GetTargetName() => GetLockCloseStatusName(room?.RoomName ?? "??");
@@ -44,6 +47,8 @@ namespace Assets.Script.Behaviour
 						}
 						return name;
 				}
+
+
 
 				public override bool CanInteract(PlayerBehaviour sender)
 				{
@@ -74,6 +79,45 @@ namespace Assets.Script.Behaviour
 						opened = false;
 						close?.Play(Transform, animator);
 						animator.SetFloat("Speed", closeSpeed);
+				}
+
+				public override void OnAnimation_ToggleOn_Start()
+				{
+						if (true)
+						{
+								base.OnAnimation_ToggleOn_Start();
+						}
+				}
+
+				public override void OnAnimation_ToggleOn_End()
+				{
+						// automatically - see base implementation
+						if (false)
+						{
+								base.OnAnimation_ToggleOn_End();
+						}
+				}
+
+				public override void OnAnimation_ToggleOff_Start()
+				{
+						// automatically - see base implementation
+						if (false)
+						{
+								base.OnAnimation_ToggleOff_Start();
+						}
+				}
+
+				public override void OnAnimation_ToggleOff_End()
+				{
+						// manually OK
+						if (false)
+						{
+								base.OnAnimation_ToggleOff_End();
+						}
+						else
+						{
+								PlayToggleOffSoundExplicitFromScript();
+						}
 				}
 		}
 }

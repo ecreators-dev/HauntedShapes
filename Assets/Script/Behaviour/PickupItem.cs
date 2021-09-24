@@ -50,7 +50,7 @@ namespace Assets.Script.Behaviour
 				/// <b>Need to be placed in a parent if taken before calling this method!</b>
 				/// <br/>Resets local position and rotation
 				/// </summary>
-				public virtual void OnPlayer_NotifyItemTaken(PlayerBehaviour newUser)
+				public virtual void EquippedByPlayerNotification(PlayerBehaviour newUser)
 				{
 						CrosshairHit = CrosshairHitVisual.Instance;
 						if (newUser == null)
@@ -180,7 +180,7 @@ namespace Assets.Script.Behaviour
 						Transform.SetParent(parent);
 				}
 
-				public virtual bool CanPickUp(PlayerBehaviour player)
+				public virtual bool CheckPlayerCanPickUp(PlayerBehaviour player)
 				{
 						return IsUnlocked && User == null;
 				}

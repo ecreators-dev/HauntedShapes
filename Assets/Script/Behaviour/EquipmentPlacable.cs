@@ -7,101 +7,78 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		public abstract class EquipmentPlacable : Equipment, IPlacableEquipment
 		{
-				private bool oldIsTaken;
-
+				// if it is only laying on floor, it is not placed!
 				public bool IsPlaced { get; private set; }
+
+				// if it is taken by player and holding placing button, then it is placing and not placed yet
 				protected bool IsPlacing { get; private set; }
-				protected bool ButtonPlacingPressed { get; private set; }
-				protected IInputControls InputControls { get; private set; }
+
+				public bool IsUnusedOnFloor => IsTakenByPlayer is false && IsPlacing is false && IsPlaced is false;
+
 				public IEquipment Self => this;
 
 				protected override void Update()
 				{
-						InputControls = this.InputControls();
-						ButtonPlacingPressed = InputControls.PlaceEquipmentButtonPressed;
-
 						base.Update();
 
-						if (IsLocked)
-								return;
-
-						if (IsTakenByPlayer && IsPlaced is false)
+						// while pressing hold
+						if (IsUnlocked && IsTakenByPlayer)
 						{
-								OnPlacing();
-						}
-
-						Update_HandleToResetPlacing();
-
-						oldIsTaken = IsTakenByPlayer;
-				}
-
-				private void Update_HandleToResetPlacing()
-				{
-						bool changedTaken = oldIsTaken != IsTakenByPlayer && IsTakenByPlayer is true;
-						if (changedTaken)
-						{
-								// now can place again: reset!
-								if (IsPlaced)
+								if (this.InputControls().PlaceEquipmentButtonPressed)
 								{
-										IsPlaced = false;
+										UpdatePlacingOrStart();
+								}
+								else
+								{
+										EndPlacing();
 								}
 						}
 				}
 
-				protected virtual void OnPlacing()
+				protected virtual void UpdatePlacingOrStart()
 				{
-						StartPlacing();
+						// laying only on floor is:
+						// not placing and not placed
 
-						// found place:
-						if (ButtonPlacingPressed)
-						{
-								PlaceItem();
-						}
-				}
-
-				private void StartPlacing()
-				{
 						// once!
-						if (IsPlacing is false)
+						if (IsPlacing is false && IsTakenByPlayer)
 						{
 								IsPlacing = true;
+								IsPlaced = false;
 								CrosshairHit.ShowPlacementPointer(this);
 								Debug.Log($"{GetTargetName()}: Start placing");
 						}
 				}
 
-				protected override void OnEquip()
+				protected virtual void EndPlacing()
 				{
-						base.OnEquip();
-
-						IsPlaced = false;
-				}
-
-				protected virtual void PlaceItem()
-				{
-						if (IsPlacing)
+						// fix: do not put to 0,0,0 when missing target
+						ICrosshairInfo info = User.CrosshairTargetInfo;
+						if (IsPlacing && !IsPlaced)
 						{
-								// do placing
-								DropItemRotated(User, noForce: true);
-								
-								float placementOffsetAtNormal = this.GetGameController().Crosshair.PlacementOffsetNormal;
-								CrosshairHit.PlaceEquipment(this, UpNormal, placementOffsetAtNormal);
+								if (info.Info.InClickRange.IsHit)
+								{
+										// do placing
+										DropItemRotated(User, noForce: true);
 
-								IsPlacing = false;
-								IsPlaced = true;
-								Debug.Log($"{GetTargetName()}: End placing");
-								OnPlaced();
+										float placementOffsetAtNormal = this.GetGameController().Crosshair.PlacementOffsetNormal;
+										CrosshairHit.PlaceEquipment(this, UpNormal, placementOffsetAtNormal);
+
+										IsPlacing = false;
+										IsPlaced = true;
+										Debug.Log($"{GetTargetName()}: End placing");
+								}
+								else
+								{
+										Debug.Log($"{GetTargetName()}: End placing: Cannot put here without target surface!");
+										User.AddMessage("Das funktioniert hier nicht");
+								}
 						}
 				}
 
-				protected virtual void OnPlaced()
+				public override bool CheckPlayerCanPickUp(PlayerBehaviour player)
 				{
-
-				}
-
-				public override bool CanPickUp(PlayerBehaviour player)
-				{
-						return base.CanPickUp(player);
+						return base.CheckPlayerCanPickUp(player);
 				}
 		}
 }

@@ -15,10 +15,10 @@ namespace Assets.Script.Behaviour
 				[CalledByPlayerBehaviour]
 				void DropItemRotated(PlayerBehaviour oldOwner, bool noForce = false);
 				
-				void OnPlayer_NotifyItemTaken(PlayerBehaviour newUser);
+				void EquippedByPlayerNotification(PlayerBehaviour newUser);
 				
 				void SetParent(Transform holderParent);
 
-				bool CanPickUp(PlayerBehaviour player);
+				bool CheckPlayerCanPickUp(PlayerBehaviour player);
 		}
 }

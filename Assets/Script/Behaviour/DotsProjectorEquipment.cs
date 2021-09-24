@@ -56,9 +56,9 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				protected override void PlaceItem()
+				protected override void EndPlacing()
 				{
-						base.PlaceItem();
+						base.EndPlacing();
 						DisableGravity();
 				}
 

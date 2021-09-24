@@ -5,7 +5,7 @@ namespace Assets.Script.Components
 		public interface IInteractible : IInteractibleBase
 		{
 				bool CanInteract(PlayerBehaviour sender);
-				void Interact(PlayerBehaviour sender);
+				bool RunInteraction(PlayerBehaviour sender);
 		}
 
 		public interface IInteractibleBase

@@ -2,6 +2,7 @@ using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Behaviour.GhostTypes;
 using Assets.Script.Components;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,7 +28,7 @@ namespace Assets.Script.Behaviour
 				[Space]
 				[SerializeField] private AudioSource playerAudioSource3d;
 				[SerializeField] private InventoryBehaviour inventory;
-				
+
 				[Header("Steps Fallback Audio")]
 				[SerializeField] private SoundEffect stepSoundsRandom;
 
@@ -38,16 +39,14 @@ namespace Assets.Script.Behaviour
 				/// TODO - Handle show messages for a certain amount of time in a coroutine
 				/// </summary>
 				private readonly Stack<string> messagesToShow = new Stack<string>();
-				
+
 				public PlayerInfo PlayerData => playerData;
 
 				private Transform Transform { get; set; }
 
-				private ICrosshairInfo CrosshairTargetInfo { get; set; }
+				public ICrosshairInfo CrosshairTargetInfo { get; set; }
 
 				public IEquipment ActiveEquipment => equipmentHolder is IItemHolder holder ? holder.CurrentItem as Equipment : null;
-
-				public bool InteractedInFrame { get; private set; }
 
 				public bool IsTeleported { get; private set; }
 
@@ -70,9 +69,23 @@ namespace Assets.Script.Behaviour
 
 				private void Update()
 				{
-						InteractedInFrame = false;
-
-						HandleCrosshairTarget();
+						(HitInfo ClickRange, HitInfo HoverRange) = CrosshairTargetInfo.Info;
+						if (ClickRange.IsHit)
+						{
+								ObjectHitInfo clickableTarget = CrosshairTargetInfo.ObjectInfo.InClickRange;
+								if (clickableTarget.HasTargetItem)
+								{
+										HandleCrosshairClickEventWithTarget(clickableTarget);
+								}
+						}
+						else if (HoverRange.IsHit)
+						{
+								// too far
+						}
+						else
+						{
+								// nothing
+						}
 				}
 
 				public void AddMessage(string message) => messagesToShow.Push(message);
@@ -194,78 +207,110 @@ namespace Assets.Script.Behaviour
 						Debug.Log($"Item pickup: {item.GetTargetName()}");
 				}
 
-				private void HandleCrosshairTarget()
+				private void OnCrosshairClick_HandleInteractible(IInteractible target)
 				{
-						// an (any) interactible must be in interactible layer mask
-						// to be clickable with name
-						if (CrosshairTargetInfo.Info.InClickRange.IsHit)
+						if (IsButtonInteractionPressed)
 						{
-								ObjectHitInfo clickRangeInfo = CrosshairTargetInfo.ObjectInfo.InClickRange;
-								if (clickRangeInfo.HasTargetItem && clickRangeInfo.TargetItem.IsUnlocked)
+								if (target.IsLocked)
 								{
-										var match = (
-												clickRangeInfo.GetEquipment(),
-												clickRangeInfo.GetPickupItem(),
-												clickRangeInfo.GetInteractible());
-
-										// an (any) interactible must be in interactible layer mask
-										// to be clickable with name
-										if (IsButtonInteractionPressed)
-										{
-												Debug.Log("interaction-button pressed for hovered target");
-												OnCrosshairHoverInteractible_InteractionButtonPressed(match);
-										}
-										else if (IsButtonPlacingPressed)
-										{
-												Debug.Log("place-button pressed for hovered target");
-												OnCrosshairHoverInteractible_PlaceButtonPressed(match);
-										}
+										Debug.Log($"Interaction-button @ on LOCKED: {target.GetTargetName()}");
+										return;
 								}
-						}
-						else if (CrosshairTargetInfo.Info.InHoverRange.IsHit)
-						{
 
-						}
-						else
-						{
-
+								// 2nd toggle: right hand
+								Debug.Log($"Interact @ target: {target.GetTargetName()}");
+								target.RunInteraction(this);
 						}
 				}
 
-				private void OnCrosshairHoverInteractible_PlaceButtonPressed((IEquipment equipment, IPickupItem item, IInteractibleBase any) match)
+				private void OnCrosshairClick_HandlePickup(IPickupItem target)
 				{
-						// grab from anywhere, but not from other player
-						if (match.equipment != null && match.equipment.IsTakenByPlayer is false && match.any.IsLocked is false)
+						if (IsButtonInteractionPressed)
 						{
-								DropThenEquip(match.equipment);
-								Debug.Log($"'{gameObject.name}' equipped a placed '{match.equipment.GetTargetName()}'");
+								if (target.IsLocked)
+								{
+										Debug.Log($"Interaction-button @ on LOCKED: {target.GetTargetName()}");
+										return;
+								}
+
+								if (target.IsTakenByPlayer is false && target.CheckPlayerCanPickUp(this))
+								{
+										// 1st pickup: left hand
+										Debug.Log($"Pickup @ target: {target.GetTargetName()}");
+										PickUp(target);
+								}
 						}
 				}
 
-				private void OnCrosshairHoverInteractible_InteractionButtonPressed((IEquipment equipment, IPickupItem item, IInteractible any) match)
+				private void OnCrosshairClick_HandleEquipment(IEquipment target)
 				{
-						// equipment is an pickupitem
-						// pickupitem is an interactible
+						OnCrosshairClick_HandleInteractible(target);
+				}
 
-						// interactible can be Interact
-						// pickupitem can be Interact and PickUp, but not set to inventory
-						// equipment can be Interact and PickUp and set to inventory
-
-						if (match.equipment is { })
+				private void OnCrosshairClick_HandlePlaceable(IPlacableEquipment target)
+				{
+						if (IsButtonPlacingPressed)
 						{
-								HandleEquipment(match.equipment);
-						}
-						else if (match.item is { })
-						{
-								if (match.item.IsTakenByPlayer is false)
+								if (target.IsLocked)
 								{
-										HandlePickupItem(match.item);
+										Debug.Log($"placing-button @ on LOCKED: {target.GetTargetName()}");
+										return;
+								}
+
+								Debug.Log($"placing-button @ placeable: {target.GetTargetName()}");
+
+								if (target.IsTakenByPlayer is false)
+								{
+										Debug.Log($"Equip @ placeable: '{target.GetTargetName()}'");
+										// right hand: equip
+										DropThenEquip(target);
+								}
+								else
+								{
+										Debug.Log($"Equip Placable @ already taken by player: '{target.GetTargetName()}'");
 								}
 						}
-						else if (match.any is { })
+				}
+
+				private void HandleCrosshairClickEventWithTarget(ObjectHitInfo clickableTarget)
+				{
+						IPlacableEquipment placeable = clickableTarget.GetPlaceableItem();
+						if (placeable != null)
 						{
-								HandleInteractible(match.any);
+								OnCrosshairClick_HandlePlaceable(placeable);
+								return;
 						}
+
+						IEquipment equipment = clickableTarget.GetEquipment();
+						if (equipment != null)
+						{
+								OnCrosshairClick_HandleEquipment(equipment);
+								return;
+						}
+
+						IPickupItem pickup = clickableTarget.GetPickupItem();
+						if (pickup != null)
+						{
+								OnCrosshairClick_HandlePickup(pickup);
+								return;
+						}
+
+						IInteractible interactible = clickableTarget.GetInteractible();
+						if (interactible != null)
+						{
+								OnCrosshairClick_HandleInteractible(interactible);
+								return;
+						}
+				}
+
+				private static IPickupItem GetPreferredPickable(IEquipment equipment, IPickupItem pickup)
+				{
+						return equipment ?? pickup;
+				}
+
+				private static IInteractible GetPreferredInteractible(IEquipment equipment, IInteractible any)
+				{
+						return equipment ?? any;
 				}
 
 				private void HandlePickupItem(IPickupItem item)
@@ -288,26 +333,9 @@ namespace Assets.Script.Behaviour
 								}
 								else
 								{
-										HandleInteractible(equipment);
+										equipment.RunInteraction(this);
 										Debug.Log($"'{gameObject.name}' toggled a placed '{equipment.GetTargetName()}'");
 								}
-						}
-				}
-
-				private void HandleInteractible(IInteractible any)
-				{
-						// inside only Interact! No check from outside behaviour!
-						if (any.CanInteract(this) && !InteractedInFrame)
-						{
-								// for example: a door is opened or closed
-								// a flashlight is toggled on or off
-								// an item is switched on or off or nothing
-								any.Interact(this);
-								InteractedInFrame = true;
-						}
-						else if (!InteractedInFrame)
-						{
-								Debug.Log("Unable to interact: not allowed");
 						}
 				}
 
@@ -359,8 +387,6 @@ namespace Assets.Script.Behaviour
 						{
 								EquipmentHolder.DropThenPut(this, item, false);
 						}
-
-						item.OnPlayer_NotifyItemTaken(this);
 				}
 
 				public void Die()

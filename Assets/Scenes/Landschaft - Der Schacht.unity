@@ -9544,22 +9544,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Holzeingang (Door)
       objectReference: {fileID: 0}
-    - target: {fileID: 797038580294278661, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 814141583398200066, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-      propertyPath: m_VersionIndex
-      value: 1042
-      objectReference: {fileID: 0}
     - target: {fileID: 3595927234889619477, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: fa34d00f99afd104aa06b957841e18cf, type: 2}
-    - target: {fileID: 3595927234889619477, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-      propertyPath: m_CullingMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4746741619604079955, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -9605,31 +9593,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6585144794796329983, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-      propertyPath: open
-      value: 
-      objectReference: {fileID: 11400000, guid: 5fac8adf221e7c04c80a48f97302420b, type: 2}
-    - target: {fileID: 6585144794796329983, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
       propertyPath: room
       value: 
       objectReference: {fileID: 2115480177}
-    - target: {fileID: 6585144794796329983, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-      propertyPath: close
-      value: 
-      objectReference: {fileID: 11400000, guid: 56b4e80d5de277545b5babeacf5bde6b, type: 2}
-    - target: {fileID: 6585144794796329983, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-      propertyPath: openSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6585144794796329983, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-      propertyPath: closeSpeed
-      value: 1.25
-      objectReference: {fileID: 0}
     - target: {fileID: 8573011738000606191, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 31743106}
-    m_RemovedComponents:
-    - {fileID: 814141583398200066, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
 --- !u!4 &430811312 stripped
 Transform:
@@ -35790,23 +35761,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &945345728 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4990787288825231748, guid: 1a4d7fc36c57cbb47a85e286b0be3da0, type: 3}
-  m_PrefabInstance: {fileID: 4990787288426415958}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &945345729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945345728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca9f7f9db2370db41a5a5f816429debe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &952362837
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47934,27 +47888,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &1489168443 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 797038580294278661, guid: 6daf3d89fc16cff41a87fa7eb83c409f, type: 3}
-  m_PrefabInstance: {fileID: 430811311}
-  m_PrefabAsset: {fileID: 0}
---- !u!208 &1489168444
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1489168443}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.075, y: 1.74, z: 1.205}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -1.51, z: -1.08}
-  m_TimeToStationary: 0.5
 --- !u!43 &1519999740
 Mesh:
   m_ObjectHideFlags: 0
@@ -76899,7 +76832,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1522485222815262393, guid: 742401fc9ffcbad47b0a24f767848ad7, type: 3}
       propertyPath: m_VersionIndex
-      value: 339
+      value: 348
       objectReference: {fileID: 0}
     - target: {fileID: 2890572037877274687, guid: 742401fc9ffcbad47b0a24f767848ad7, type: 3}
       propertyPath: m_RootOrder

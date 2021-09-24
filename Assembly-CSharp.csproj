@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,6 +53,9 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Script\Behaviour\Consumable.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="Assets\Script\Controller\AudioFaderSingleton.cs" />
     <Compile Include="Assets\Script\Model\IEquipment.cs" />
     <Compile Include="Assets\Script\Model\IVoiceMaker.cs" />
+    <Compile Include="Assets\Script\Behaviour\DarknessInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\UnityEventEditorReferenceAttribute.cs" />
     <Compile Include="Assets\Script\Behaviour\Animals\RatMovement.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingStateBean.cs" />
@@ -209,12 +213,14 @@
     <Compile Include="Assets\Script\Behaviour\DebugShowDirection.cs" />
     <Compile Include="Assets\Modelling\HeatObj\IRCamera.cs" />
     <Compile Include="Assets\Script\Controller\MouseCursorController.cs" />
+    <Compile Include="Assets\Script\Behaviour\ItemHolderInfoGui.cs" />
     <Compile Include="Assets\Script\Behaviour\PanoramaScreenshot\Panorama360.cs" />
     <Compile Include="Assets\Script\Behaviour\ItemHolder.cs" />
     <Compile Include="Assets\Script\Behaviour\ConsumableChild.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentPlacable.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\MoodType.cs" />
     <Compile Include="Assets\Script\Behaviour\PforteCondition.cs" />
+    <Compile Include="Assets\Script\Behaviour\IDarknessInfo.cs" />
     <Compile Include="Assets\Script\Controller\SaveLoad\SaveLoadController.cs" />
     <Compile Include="Assets\Script\Behaviour\PforteTriggerBehaviour.cs" />
     <Compile Include="Assets\Script\Model\IMouseCursor.cs" />
@@ -233,9 +239,6 @@
     <Compile Include="Assets\Modelling\HeatObj\ClassicCamera.cs" />
     <Compile Include="Assets\Script\Model\IVoiceRecognizer.cs" />
     <Compile Include="Assets\Script\Controller\SceneViewCameraAlignmentEditMode.cs" />
-    <Compile Include="Assets\Script\Behaviour\ItemHolderInfoGui.cs" />
-    <Compile Include="Assets\Script\Behaviour\DarknessInfo.cs" />
-    <Compile Include="Assets\Script\Behaviour\IDarknessInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\WaveformProvider\readme_en.txt" />
@@ -285,7 +288,7 @@
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.extension.lu.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM\Microsoft.CognitiveServices.Speech.core.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
-    <None Include="Assets\Music\Clips\Animals\Read.txt" />
+    <None Include="Assets\Sounds\Animals\Read.txt" />
     <None Include="Assets\Modelling\Verschiedenes\mixamo.com.txt" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\x64\Microsoft.CognitiveServices.Speech.core.dll" />
     <None Include="Assets\SpeechSDK\Plugins\WSA\ARM64\Microsoft.CognitiveServices.Speech.extension.silk_codec.dll" />
