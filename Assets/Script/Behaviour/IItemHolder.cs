@@ -8,7 +8,7 @@ namespace Assets.Script.Behaviour
 				
 				HolderTypeEnum HolderType { get; }
 
-				void Drop();
+				void Drop(bool dropForPlacing);
 				
 				void PutIntoInventory();
 

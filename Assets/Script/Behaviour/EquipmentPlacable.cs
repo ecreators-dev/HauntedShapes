@@ -1,6 +1,4 @@
-﻿using Assets.Script.Behaviour.FirstPerson;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
@@ -9,6 +7,9 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		public abstract class EquipmentPlacable : Equipment, IPlacableEquipment
 		{
+				[Tooltip("If unset (null), this.gameObject will be used")]
+				[SerializeField] private GameObject placingPrefab;
+
 				// if it is only laying on floor, it is not placed!
 				public bool IsPlaced { get; private set; }
 
@@ -17,30 +18,23 @@ namespace Assets.Script.Behaviour
 
 				public bool IsUnusedOnFloor => IsTakenByPlayer is false && IsPlacing is false && IsPlaced is false;
 
-				public override bool CheckPlayerCanPickUp(PlayerBehaviour player)
+				protected override void OnPickedUp()
 				{
-						// only if unlocked not player and not fixed (or placed).
-						// if placed then first grab it with another button (not interaction button)
-						return base.CheckPlayerCanPickUp(player) && IsPlaced is false;
+						base.OnPickedUp();
+
+						IsPlacing = false;
+						IsPlaced = false;
 				}
 
-				public virtual bool PlaceAtPositionAndNormal(HitInfo surfaceClick)
+				public virtual bool PlaceAtPositionAndNormal(HitSurfaceInfo surfaceInfo)
 				{
-						if (IsPlacing && !IsPlaced)
+						if (!IsPlaced)
 						{
 								// fix: do not put to 0,0,0 when missing target
-								if (surfaceClick.IsHit)
+								if (surfaceInfo.IsHit)
 								{
-										// better in drop
-										const bool setParentNull = false;
-										if (setParentNull)
-										{
-												Transform.SetParent(null);
-										}
-
-										Transform.up = surfaceClick.Normal;
-										Transform.rotation = Quaternion.FromToRotation(NormalUp, surfaceClick.Normal);
-										Transform.position = surfaceClick.HitPoint + surfaceClick.Normal * this.GetGameController().Crosshair.PlacementOffsetNormal;
+										Transform.position = surfaceInfo.HitPoint + surfaceInfo.Normal * this.GetGameController().Crosshair.PlacementOffsetNormal;
+										Transform.rotation = Quaternion.FromToRotation(NormalUp, surfaceInfo.Normal);
 
 										IsPlacing = false;
 										IsPlaced = true;
@@ -59,6 +53,19 @@ namespace Assets.Script.Behaviour
 				protected static string GetPrintablePosition(Vector3 position)
 				{
 						return $"xyz={position.x:0.0},{position.y:0.0},{position.z:0.0}";
+				}
+
+				public GameObject GetPlacingPrefab()
+				{
+						return this.placingPrefab ?? gameObject;
+				}
+
+				public void StartPreviewPlacement(IPlacableEquipment original)
+				{
+						RigidBody = GetComponent<Rigidbody>();
+						DisableGravity();
+						RigidBody.detectCollisions = false;
+						SetShopInfo(original.ShopInfo, (Equipment)original);
 				}
 		}
 }

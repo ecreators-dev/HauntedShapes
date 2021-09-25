@@ -4,15 +4,18 @@ namespace Assets.Script.Behaviour.FirstPerson
 {
 		public interface ICrosshairUI
 		{
-				(HitInfo clickRange, HitInfo hoverRange) RaycastInfo { get; }
-				(ObjectHitInfo clickRange, ObjectHitInfo hoverRange) RaycastObjectInfo { get; }
+				(HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, bool IsHitAny) RaycastInfo { get; }
+				
+				(ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) RaycastObjectInfo { get; }
+				
 				bool IsHovered { get; }
+				
 				bool IsGamepadConnected { get; }
 
 				void ShowTargetPosition(IPlacableEquipment equipment);
 				
-				void HideTarget();
+				void HideTargetOnce();
 
-				(HitInfo ClickRange, HitInfo HoverRange) CustomRaycastIgnoreTriggers(Camera sourceCamera, LayerMaskFilter layers, RangeFilter range, out (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) objectInfo);
+				(HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, bool IsHitAny) CustomRaycastIgnoreTriggers(Camera sourceCamera, LayerMaskFilter layers, RangeFilter range, out (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) objectInfo);
 		}
 }

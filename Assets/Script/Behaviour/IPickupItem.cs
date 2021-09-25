@@ -15,7 +15,7 @@ namespace Assets.Script.Behaviour
 				bool CheckBelongsTo(PlayerBehaviour player);
 				
 				[CalledByPlayerBehaviour]
-				void DropItemRotated(PlayerBehaviour oldOwner, bool noForce = false);
+				void DropItemRotated(PlayerBehaviour oldOwner, bool noForce = false, bool dropForPlacing = false);
 				
 				void TriggerPlayerPickup(PlayerBehaviour newUser);
 				

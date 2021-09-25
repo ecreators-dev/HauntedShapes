@@ -45,10 +45,6 @@ namespace Assets.Script.Behaviour
 
 				public bool IsTeleported { get; private set; }
 
-				private bool IsButtonPlacingPressed => this.InputControls().PlaceEquipmentButtonPressing;
-
-				private bool IsButtonInteractionPressed => this.InputControls().CrosshairTargetInteractionButtonPressed;
-
 				private IItemHolder EquipmentHolder => equipmentHolder;
 
 				private IItemHolder CameraHolder => cameraHolder;
@@ -69,10 +65,10 @@ namespace Assets.Script.Behaviour
 
 				private void Update()
 				{
-						(HitInfo ClickRange, HitInfo HoverRange) = CrosshairHitVisual.Instance.RaycastInfo;
+						(HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, _) = CrosshairHitVisual.Instance.RaycastInfo;
 						if (ClickRange.IsHit)
 						{
-								ObjectHitInfo clickableTarget = CrosshairHitVisual.Instance.RaycastObjectInfo.clickRange;
+								ObjectHitInfo clickableTarget = CrosshairHitVisual.Instance.RaycastObjectInfo.ClickRange;
 								if (clickableTarget.HasOwner)
 								{
 										HandleCrosshairTarget(clickableTarget);
@@ -209,7 +205,7 @@ namespace Assets.Script.Behaviour
 
 				private bool OnCrosshairClick_HandleInteractible(IInteractible target)
 				{
-						if (IsButtonInteractionPressed)
+						if (this.InputControls().InteractWithCrosshairTargetButton)
 						{
 								// 2nd toggle: right hand
 								Debug.Log($"Interact @ target: {target.GetTargetName()}");
@@ -220,7 +216,7 @@ namespace Assets.Script.Behaviour
 
 				private void OnCrosshairClick_HandlePickup(IPickupItem target)
 				{
-						if (IsButtonInteractionPressed)
+						if (this.InputControls().InteractWithCrosshairTargetButton)
 						{
 								if (target.IsLocked)
 								{
@@ -239,11 +235,12 @@ namespace Assets.Script.Behaviour
 
 				private void OnCrosshairClick_HandleEquipment(IEquipment target, bool forceAction = false)
 				{
-						if (forceAction || IsButtonInteractionPressed)
+						if (forceAction || this.InputControls().InteractWithCrosshairTargetButton)
 						{
 								if (target.IsTakenByPlayer is false)
 								{
-										if (target.CheckPlayerCanPickUp(this))
+										bool validPlaceable = !(target is IPlacableEquipment tool) || tool.IsPlaced is false;
+										if (target.CheckPlayerCanPickUp(this) && validPlaceable)
 										{
 												DropThenEquip(target);
 										}
@@ -261,29 +258,19 @@ namespace Assets.Script.Behaviour
 
 				private void OnCrosshairClick_HandlePlaceable(IPlacableEquipment target)
 				{
-						if (IsButtonPlacingPressed)
+						if (this.InputControls().PlacingButton)
 						{
-								if (target.IsLocked)
-								{
-										Debug.Log($"placing-button @ on LOCKED: {target.GetTargetName()}");
-										return;
-								}
-
-								Debug.Log($"placing-button @ placeable: {target.GetTargetName()}");
-
+								// pickup item, that is placed
 								if (target.CheckPlayerCanPickUp(this))
 								{
+										InPlacing = false;
 										Debug.Log($"Equip @ placeable: '{target.GetTargetName()}'");
 
 										// right hand: equip, calls equipped notification --- starts placing update
 										DropThenEquip(target);
 								}
-								else
-								{
-										Debug.Log($"Equip Placable @ already taken by player: '{target.GetTargetName()}'");
-								}
 						}
-						else if (IsButtonInteractionPressed)
+						else if (this.InputControls().InteractWithCrosshairTargetButton)
 						{
 								OnCrosshairClick_HandleEquipment(target, true);
 						}
@@ -319,29 +306,65 @@ namespace Assets.Script.Behaviour
 								return;
 						}
 
+						// an placing item in hand
 						if (equipmentHolder.CurrentItem is IPlacableEquipment tool)
 						{
+								// that item is not yet placed
 								if (tool.IsPlaced is false)
 								{
-										IInputControls inputControls = this.InputControls();
-										if (inputControls.PlaceEquipmentButtonPressing
-												&& !inputControls.CrosshairTargetInteractionButtonPressed)
+										if (this.InputControls().PlacingButton)
 										{
-												InPlacing = true;
-												CrosshairHitVisual.Instance.ShowTargetPosition(tool);
-										}
-										// if nothing pressed or interaction during placing: then place it now:
-										else if (InPlacing)
-										{
-												InPlacing = false;
-												if (tool.PlaceAtPositionAndNormal(CrosshairHitVisual.Instance.RaycastInfo.clickRange))
+												// player toggles on: (a)
+												// player toggles off: (b)
+												InPlacing = !InPlacing;
+
+												// if (a): nothing here - next condition after
+												// if (b): player wants to place at that position, only if button was pressed in this frame as well
+												if (!InPlacing)
 												{
-														Debug.Log($"Place Button released: Placed: {tool.GetTargetName()}");
-														CrosshairHitVisual.Instance.HideTarget();
-														EquipmentHolder.Drop();
+														// place original at target position with normal
+														PlaceItem(tool);
 												}
 										}
+
+										// if (a)
+										if (InPlacing)
+										{
+												// show Target Position, if anything is hit (click or hover)
+												if (CrosshairHitVisual.Instance.RaycastInfo.IsHitAny)
+												{
+														CrosshairHitVisual.Instance.ShowTargetPosition(tool);
+												}
+												// hide Target Position, if nothing is hit (nor click or hover)
+												else
+												{
+														CrosshairHitVisual.Instance.HideTargetOnce();
+												}
+										}
+										// if (b) - handled in above condition
 								}
+						}
+				}
+
+				private void PlaceItem(IPlacableEquipment placable)
+				{
+						if (placable == null) return;
+
+						if (EquipmentHolder.CurrentItem == placable)
+						{
+								// enables gravity!
+								EquipmentHolder.Drop(true);
+
+								// disables gravity if it is the dots projector!
+								placable.PlaceAtPositionAndNormal(CrosshairHitVisual.Instance.RaycastInfo.ClickRange);
+
+								// important: hide Target Position now (once)
+								// delete preview with this:
+								CrosshairHitVisual.Instance.HideTargetOnce();
+						}
+						else
+						{
+								Debug.LogWarning($"Cannot place item. It is no part in item holder: {placable.GetTargetName()}");
 						}
 				}
 

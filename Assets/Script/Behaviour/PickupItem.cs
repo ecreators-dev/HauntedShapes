@@ -26,7 +26,7 @@ namespace Assets.Script.Behaviour
 				public Vector3 NormalUp { get; set; } = Vector3.up;
 
 				protected Transform Transform { get; set; }
-				
+
 				protected Rigidbody RigidBody { get; set; }
 
 				protected virtual void Start()
@@ -67,6 +67,7 @@ namespace Assets.Script.Behaviour
 						Transform.localRotation = Quaternion.identity;
 
 						Debug.Log($"Picked up: {GetTargetName()}");
+
 						OnPickedUp();
 				}
 
@@ -86,7 +87,7 @@ namespace Assets.Script.Behaviour
 				/// After the player dropped this item
 				/// </summary>
 				[CalledByPlayerBehaviour]
-				public void DropItemRotated(PlayerBehaviour oldOwner, bool noForce = false)
+				public void DropItemRotated(PlayerBehaviour oldOwner, bool noForce = false, bool dropForPlacing = false)
 				{
 						// must not be null!
 						oldOwner = oldOwner ?? throw new ArgumentNullException(nameof(oldOwner));
@@ -99,10 +100,17 @@ namespace Assets.Script.Behaviour
 								// unsetting parent belongs inside here! Because only after the check, the drop may be done
 								// updside!
 								float oldPan = Transform.localEulerAngles.y;
-								Transform.localRotation = Quaternion.FromToRotation(Vector3.up, NormalUp);
+								if (!dropForPlacing)
+								{
+										Transform.localRotation = Quaternion.FromToRotation(NormalUp, Vector3.up);
+								}
 								Transform.SetParent(null);
-								var euler = Transform.localEulerAngles;
-								Transform.localEulerAngles = new Vector3(euler.x, oldPan, euler.z);
+
+								if (!dropForPlacing)
+								{
+										var euler = Transform.localEulerAngles;
+										Transform.localEulerAngles = new Vector3(euler.x, oldPan, euler.z);
+								}
 
 								if (RigidBody is { })
 								{

@@ -29,14 +29,14 @@ namespace Assets.Script.Behaviour
 				private void Update()
 				{
 						IInputControls inputControls = this.InputControls();
-						if (inputControls.DropEquipmentButtonPressed)
+						if (inputControls.DropEquipmentButton)
 						{
 								if (CurrentItem is IEquipment)
 								{
-										Drop();
+										Drop(false);
 								}
 						}
-						else if (inputControls.InteractButtonPressed)
+						else if (inputControls.InteractWithEquipmentButton)
 						{
 								if (CurrentItem is IInteractible item)
 								{
@@ -75,14 +75,14 @@ namespace Assets.Script.Behaviour
 						if (!(CurrentItem is IEquipment equipment))
 						{
 								Debug.LogWarning($"{CurrentItem.GetTargetName()}: No equipment type. Cannot put into inventory.");
-								Drop();
+								Drop(false);
 								return;
 						}
 
 						if (!CanPutIntoInventory)
 						{
 								Debug.Log($"Inventory is full! Drop instead: {equipment.GetTargetName()}");
-								Drop();
+								Drop(false);
 								return;
 						}
 
@@ -92,9 +92,9 @@ namespace Assets.Script.Behaviour
 						CurrentItem = null;
 				}
 
-				public void Drop()
+				public void Drop(bool dropForPlacing)
 				{
-						CurrentItem.DropItemRotated(CurrentItem.User);
+						CurrentItem?.DropItemRotated(CurrentItem.User, dropForPlacing, dropForPlacing);
 						CurrentItem = null;
 				}
 		}

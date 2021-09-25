@@ -45,8 +45,8 @@ namespace Assets.Script.Behaviour
 				private Vector3 hitPointBefore;
 				public static ICrosshairUI Instance { get; private set; }
 
-				public (HitInfo clickRange, HitInfo hoverRange) RaycastInfo { get; private set; }
-				public (ObjectHitInfo clickRange, ObjectHitInfo hoverRange) RaycastObjectInfo { get; private set; }
+				public (HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, bool IsHitAny) RaycastInfo { get; private set; }
+				public (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) RaycastObjectInfo { get; private set; }
 
 				public bool IsHovered { get; private set; }
 
@@ -64,7 +64,7 @@ namespace Assets.Script.Behaviour
 						initSize = size;
 						initScaleW = Transform.sizeDelta.x;
 						initScaleH = Transform.sizeDelta.y;
-						HideTarget();
+						HideTargetOnce();
 				}
 
 				private void FixedUpdate()
@@ -93,12 +93,12 @@ namespace Assets.Script.Behaviour
 
 						RaycastObjectInfo = objectInfo;
 
-						IsHovered = RaycastInfo.hoverRange.IsHit;
+						IsHovered = RaycastInfo.HoverRange.IsHit;
 
 						UpdateGui();
 				}
 
-				public (HitInfo ClickRange, HitInfo HoverRange) CustomRaycastIgnoreTriggers(Camera sourceCamera,
+				public (HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, bool IsHitAny) CustomRaycastIgnoreTriggers(Camera sourceCamera,
 						LayerMaskFilter layers,
 						RangeFilter range,
 						out (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) objectInfo)
@@ -125,13 +125,13 @@ namespace Assets.Script.Behaviour
 								hitPointBefore = anyTarget.point;
 						}
 
-						(HitInfo ClickRange, HitInfo HoverRange) info = GetRaycastInfo(anyTargetHit, anyTarget, anyTargetHover, anyHover);
+						(HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, bool IsHitAny) info = GetRaycastInfo(anyTargetHit, anyTarget, anyTargetHover, anyHover);
 						objectInfo = GetRaycastObjectInfo(info);
 
 						return info;
 				}
 
-				private static (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) GetRaycastObjectInfo((HitInfo ClickRange, HitInfo HoverRange) info)
+				private static (ObjectHitInfo ClickRange, ObjectHitInfo HoverRange) GetRaycastObjectInfo((HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, bool IsHitAny) info)
 				{
 						return (
 														ClickRange: new ObjectHitInfo(info.ClickRange.Target?.GetComponent<Interactible>(), info.ClickRange.Target),
@@ -139,15 +139,17 @@ namespace Assets.Script.Behaviour
 														);
 				}
 
-				private (HitInfo, HitInfo) GetRaycastInfo(bool anyTargetHit, RaycastHit anyTarget, bool anyTargetHover, RaycastHit anyHover)
+				private (HitSurfaceInfo ClickRange, HitSurfaceInfo HoverRange, bool IsHitAny) GetRaycastInfo(bool anyTargetHit, RaycastHit anyTarget, bool anyTargetHover, RaycastHit anyHover)
 				{
-						return (
-																				new HitInfo(anyTargetHit, anyTargetHit ? anyTarget.point : hitPointBefore, anyTarget.normal,
-																				anyTargetHit ? anyTarget.collider.gameObject : null),
-																				new HitInfo(anyTargetHover, anyTargetHover ? anyHover.point : hitPointBefore,
-																				anyHover.normal,
-																				anyTargetHover ? anyHover.collider.gameObject : null)
-																				);
+						return (ClickRange:
+										new HitSurfaceInfo(anyTargetHit, anyTargetHit ? anyTarget.point : hitPointBefore, anyTarget.normal,
+										anyTargetHit ? anyTarget.collider.gameObject : null),
+										HoverRange:
+										new HitSurfaceInfo(anyTargetHover, anyTargetHover ? anyHover.point : hitPointBefore,
+										anyHover.normal,
+										anyTargetHover ? anyHover.collider.gameObject : null),
+										IsHitAny: anyTargetHit || anyTargetHover
+										);
 				}
 
 				private void UpdateGui()
@@ -167,14 +169,14 @@ namespace Assets.Script.Behaviour
 
 						string GetTargetName()
 						{
-								return RaycastObjectInfo.hoverRange.GetInteractible()?.GetTargetName();
+								return RaycastObjectInfo.HoverRange.GetInteractible()?.GetTargetName();
 						}
 
 						CrosshairRoot.ActionEnum GetTargetType()
 						{
-								if (RaycastInfo.clickRange.IsHit)
+								if (RaycastInfo.ClickRange.IsHit)
 								{
-										ObjectHitInfo clickable = RaycastObjectInfo.clickRange;
+										ObjectHitInfo clickable = RaycastObjectInfo.ClickRange;
 										if (clickable.GetInteractible()?.IsLocked ?? false)
 										{
 												return CrosshairRoot.ActionEnum.LOCKED;
@@ -191,27 +193,88 @@ namespace Assets.Script.Behaviour
 
 				private bool CanSeeTextTooFar()
 				{
-						return IsHovered && RaycastInfo.clickRange.IsHit is false && RaycastObjectInfo.hoverRange.HasTargetItem;
+						return IsHovered && RaycastInfo.ClickRange.IsHit is false && RaycastObjectInfo.HoverRange.HasTargetItem;
 				}
 
 				// from update!
 				public void ShowTargetPosition(IPlacableEquipment placable)
 				{
-						HideTarget();
-						if (placable.IsPlaced is false)
+						if (RaycastInfo.IsHitAny)
 						{
-								Vector3 position = RaycastInfo.clickRange.HitPoint;
-								Vector3 spriteNormal = placementSprite.transform.forward;
-								placementSprite.transform.position = position + spriteNormal * 0.01f;
-								placementSprite.transform.rotation = Quaternion.FromToRotation(spriteNormal, RaycastInfo.clickRange.Normal);
+								Transform visual = placementSprite.transform;
+								Vector3 position = RaycastInfo.ClickRange.HitPoint;
+								Vector3 spriteNormal = visual.forward;
+								visual.position = position + spriteNormal * this.GetGameController().Crosshair.PlacementOffsetNormal;
+								visual.rotation = Quaternion.FromToRotation(spriteNormal, RaycastInfo.ClickRange.Normal);
 								placementSprite.gameObject.SetActive(true);
+
+								// if not null: make a copy of it an show it at target position
+								if (placable != null)
+								{
+										var copy = ShowAtTarget(placable);
+										copy.position = RaycastInfo.ClickRange.HitPoint;
+										copy.rotation = Quaternion.FromToRotation(placable.NormalUp, RaycastInfo.ClickRange.Normal);
+								}
+						}
+						else
+						{
+								HideTargetOnce();
 						}
 				}
 
-				// once!
-				public void HideTarget()
+				private int copyInstanceFrom;
+				private Transform copy;
+
+				private Transform ShowAtTarget(IPlacableEquipment placable)
+				{
+						MonoBehaviour behaviour = placable as MonoBehaviour;
+						if (behaviour == null)
+								return null;
+
+						if (copyInstanceFrom == behaviour.GetInstanceID())
+						{
+								return copy;
+						}
+
+						if (copy != null)
+						{
+								DestroyCopy();
+						}
+
+						copyInstanceFrom = behaviour.GetInstanceID();
+						var clone = Instantiate(GetBlueprint(placable, behaviour), null);
+						copy = clone.transform;
+						var copyCmp = copy.GetComponent<IPlacableEquipment>();
+						copyCmp.StartPreviewPlacement(placable);
+
+						/* only with parent != null!
+						// show in size of original
+						float scaleReverse = 1 / placementSprite.transform.lossyScale.x;
+						copy.localScale = behaviour.transform.lossyScale * scaleReverse;
+						*/
+
+						return copy;
+
+						static GameObject GetBlueprint(IPlacableEquipment placable, MonoBehaviour behaviour)
+						{
+								GameObject source = placable.GetPlacingPrefab();
+								return source == null ? behaviour.gameObject : source;
+						}
+				}
+
+				public void HideTargetOnce()
 				{
 						placementSprite.gameObject.SetActive(false);
+						if (copy != null)
+						{
+								DestroyCopy();
+						}
+				}
+
+				private void DestroyCopy()
+				{
+						copyInstanceFrom = 0;
+						Destroy(copy.gameObject);
 				}
 		}
 }

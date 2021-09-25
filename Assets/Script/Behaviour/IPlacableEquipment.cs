@@ -1,4 +1,6 @@
-﻿namespace Assets.Script.Behaviour
+﻿using UnityEngine;
+
+namespace Assets.Script.Behaviour
 {
 		public interface IPlacableEquipment : IEquipment
 		{
@@ -6,6 +8,8 @@
 
 				bool IsUnusedOnFloor { get; }
 
-				bool PlaceAtPositionAndNormal(HitInfo clickRange);
+				bool PlaceAtPositionAndNormal(HitSurfaceInfo clickRange);
+				GameObject GetPlacingPrefab();
+				void StartPreviewPlacement(IPlacableEquipment placable);
 		}
 }

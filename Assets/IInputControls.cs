@@ -12,27 +12,27 @@ namespace Assets
 				float MouseDeltaY { get; }
 
 				bool ExitGameButton { get; }
-				bool EditorStopCamera { get; }
+				bool StopCameraRotationButton { get; }
 
-				bool InteractButtonPressed { get; }
+				bool InteractWithEquipmentButton { get; }
 
-				bool DropEquipmentButtonPressed { get; }
+				bool DropEquipmentButton { get; }
 
-				bool DebugHuntToggleOnOff { get; }
+				bool DebugHuntingButton { get; }
 
 				bool IsEnabled { get; }
 
-				bool CrosshairTargetInteractionButtonPressed { get; }
+				bool InteractWithCrosshairTargetButton { get; }
 
-				bool CrouchButtonPressed { get; }
+				bool CrouchButton { get; }
 
 				/// <summary>
 				/// Special settings to input controller for run
 				/// 
 				/// </summary>
-				bool RunButtonPressedOrHold { get; }
+				bool RunButton { get; }
 
-				bool PlaceEquipmentButtonPressing { get; }
+				bool PlacingButton { get; }
 
 				void Disable();
 

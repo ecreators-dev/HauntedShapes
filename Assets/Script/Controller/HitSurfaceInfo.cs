@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Assets.Script.Behaviour
 {
 		[Serializable]
-		public struct HitInfo
+		public struct HitSurfaceInfo
 		{
-				public HitInfo(bool isHit, Vector3 hitPoint, Vector3 normal, GameObject target)
+				public HitSurfaceInfo(bool isHit, Vector3 hitPoint, Vector3 normal, GameObject target)
 				{
 						IsHit = isHit;
 						HitPoint = hitPoint;

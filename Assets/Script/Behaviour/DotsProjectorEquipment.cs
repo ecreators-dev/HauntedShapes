@@ -37,7 +37,7 @@ namespace Assets.Script.Behaviour
 						}
 				}
 
-				public override bool PlaceAtPositionAndNormal(HitInfo surfaceClick)
+				public override bool PlaceAtPositionAndNormal(HitSurfaceInfo surfaceClick)
 				{
 						if (base.PlaceAtPositionAndNormal(surfaceClick))
 						{

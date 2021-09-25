@@ -9,15 +9,6 @@ namespace Assets
 				public static IInputControls Instance { get; private set; }
 				private ControlMappingInputAction inputActions;
 
-				private InputActionPhase runButtonPressedOrHoldPhase;
-				private InputActionPhase placeEquipmentButtonPressedPhase;
-				private InputActionPhase crouchButtonPressedPhase;
-				private InputActionPhase crosshairTargetInteractionButtonPressedPhase;
-				private InputActionPhase dropEquipmentButtonPressedPhase;
-				private InputActionPhase debugHuntToggleOnOffPhase;
-				private InputActionPhase interactButtonPressedPhase;
-				private InputActionPhase editorStopCameraPhase;
-				private InputActionPhase exitGameButtonPhase;
 				public bool IsEnabled { get; private set; }
 
 				public Vector2 InputAxis => inputActions.Player.Movement.ReadValue<Vector2>();
@@ -32,30 +23,30 @@ namespace Assets
 
 				public float MouseDeltaY => MouseDelta.y;
 
-				public bool ExitGameButton => inputActions.Player.ExitGame.IsButtonReleased(ref exitGameButtonPhase);
+				public bool ExitGameButton => inputActions.Player.ExitGame.IsButtonReleased();
 
-				public bool EditorStopCamera => inputActions.Player.EditorStopRotateCamera.IsButtonReleased(ref editorStopCameraPhase);
+				public bool StopCameraRotationButton => inputActions.Player.EditorStopRotateCamera.IsButtonReleased();
 
 				/// <summary>
-				/// Controller: /_\
+				/// Controller: Triangle
 				/// </summary>
-				public bool InteractButtonPressed => inputActions.Player.EquipmentToggle.IsButtonDown(ref interactButtonPressedPhase);
+				public bool InteractWithEquipmentButton => inputActions.Player.EquipmentToggle.IsButtonDown();
 				
 				/// <summary>
-				/// Controller: X
+				/// Controller: Cross
 				/// </summary>
-				public bool CrosshairTargetInteractionButtonPressed => inputActions.Player.Interaction.IsButtonDown(ref crosshairTargetInteractionButtonPressedPhase);
+				public bool InteractWithCrosshairTargetButton => inputActions.Player.Interaction.IsButtonDown();
 
-				public bool DebugHuntToggleOnOff => inputActions.Player.HuntToggleDebug.IsButtonDown(ref debugHuntToggleOnOffPhase);
+				public bool DebugHuntingButton => inputActions.Player.HuntToggleDebug.IsButtonDown();
 
-				public bool DropEquipmentButtonPressed => inputActions.Player.EquipmentDrop.IsButtonReleased(ref dropEquipmentButtonPressedPhase);
+				public bool DropEquipmentButton => inputActions.Player.EquipmentDrop.IsButtonReleased();
 
 
-				public bool CrouchButtonPressed => inputActions.Player.Crouch.IsButtonHold(ref crouchButtonPressedPhase);
+				public bool CrouchButton => inputActions.Player.Crouch.IsButtonHold();
 
-				public bool RunButtonPressedOrHold => inputActions.Player.Run.IsButtonHold(ref runButtonPressedOrHoldPhase);
+				public bool RunButton => inputActions.Player.Run.IsButtonHold();
 
-				public bool PlaceEquipmentButtonPressing => inputActions.Player.PlaceItem.IsButtonDown(ref placeEquipmentButtonPressedPhase);
+				public bool PlacingButton => inputActions.Player.PlaceItem.IsButtonDown();
 
 				private void Awake()
 				{

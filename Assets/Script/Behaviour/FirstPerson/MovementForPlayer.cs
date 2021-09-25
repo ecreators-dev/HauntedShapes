@@ -61,14 +61,14 @@ namespace Assets.Script.Behaviour.FirstPerson
 						targetSpeed = moveSpeed;
 
 						IInputControls inputControls = this.InputControls();
-						running = inputControls.RunButtonPressedOrHold;
+						running = inputControls.RunButton;
 						if (running)
 						{
 								Debug.Log($"Running pressed {Time.realtimeSinceStartup}");
 								targetSpeed = runSpeed;
 						}
 
-						crouching = inputControls.CrouchButtonPressed;
+						crouching = inputControls.CrouchButton;
 						if (crouching)
 						{
 								Debug.Log($"Crouching hold {Time.realtimeSinceStartup}");

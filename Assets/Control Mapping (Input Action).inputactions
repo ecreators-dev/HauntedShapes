@@ -27,7 +27,7 @@
                     "id": "752302a7-2463-485e-8542-1729eaf097c8",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=1)"
+                    "interactions": ""
                 },
                 {
                     "name": "Editor Stop Rotate Camera",
@@ -35,7 +35,7 @@
                     "id": "2c7210b7-014f-478c-afd5-3b96f320c4f7",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": ""
                 },
                 {
                     "name": "Interaction",
@@ -43,7 +43,7 @@
                     "id": "26318fdb-4333-4428-9192-00589aed46dc",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": ""
                 },
                 {
                     "name": "Equipment Toggle",
@@ -51,7 +51,7 @@
                     "id": "fd3ae3b8-52ae-481a-9aa2-a681193030fd",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": ""
                 },
                 {
                     "name": "Equipment Drop",
@@ -59,7 +59,7 @@
                     "id": "bfd09ad3-e785-4050-9099-0e11fb5e8674",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=1)"
+                    "interactions": ""
                 },
                 {
                     "name": "Hunt Toggle (Debug)",
@@ -67,15 +67,15 @@
                     "id": "55fba300-6b61-4a38-97fc-8ac581f64d9f",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=1)"
+                    "interactions": ""
                 },
                 {
                     "name": "Place Item",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "96c0c9a0-39df-43de-9585-191f7d26acaf",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold"
+                    "interactions": ""
                 },
                 {
                     "name": "Crouch",

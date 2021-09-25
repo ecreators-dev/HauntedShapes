@@ -149,7 +149,7 @@ namespace Assets.Script.Controller
 
 				private void HandleCameraEditorStopOnButton()
 				{
-						if (this.InputControls().EditorStopCamera && IsPlayMode())
+						if (this.InputControls().StopCameraRotationButton && IsPlayMode())
 						{
 								SetStopCameraEdit(!IsCameraRotateStop);
 						}

@@ -149,7 +149,7 @@ namespace Assets.Script.Behaviour.Animals
 								inJob = true;
 								float waitingTimeoutSeconds = NextRandomWaitingTimeout();
 								int nextPosition = NextRandomLocationIndex();
-								Debug.Log($"{gameObject.name} finds next position to go: {waitingTimeoutSeconds} s then position at index: {walkPositions[nextPosition].gameObject.name}");
+								Debug.Log($"{gameObject.name} finds next position to go: {waitingTimeoutSeconds:0.0} s then position at index: {walkPositions[nextPosition].gameObject.name}");
 								StartCoroutine(WaitAndWalk(waitingTimeoutSeconds, nextPosition));
 						}
 				}

@@ -11,7 +11,7 @@ namespace Assets.Script.Controller
 
 				private void Update()
 				{
-						if (this.InputControls().DebugHuntToggleOnOff)
+						if (this.InputControls().DebugHuntingButton)
 						{
 								HuntingStateBean hunt = HuntingStateBean.Instance;
 								if (hunt.InHunt is false)

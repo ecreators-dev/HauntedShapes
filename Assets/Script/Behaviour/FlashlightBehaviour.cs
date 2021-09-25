@@ -153,7 +153,7 @@ namespace Assets.Script.Behaviour
 						if (IsTakenByPlayer is false) return;
 
 						// any mask
-						(HitInfo _, HitInfo hoverRange) = CrosshairHit.RaycastInfo;
+						(_, HitSurfaceInfo hoverRange, _) = CrosshairHit.RaycastInfo;
 
 						if (hoverRange.IsHit)
 						{

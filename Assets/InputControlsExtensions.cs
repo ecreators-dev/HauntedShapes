@@ -5,13 +5,9 @@ namespace Assets
 {
 		public static class InputControlsExtensions
 		{
-				private const InputActionPhase DEFAULT_STATE = InputActionPhase.Canceled;
-				private const InputActionPhase ACTIVE_STATE_CHANGE = InputActionPhase.Performed;
-				private const InputActionPhase DEFAULT_STATE_WAITING = InputActionPhase.Waiting;
-
 				private static float lastTimeHold;
 
-				public static bool IsButtonHold(this InputAction buttonAction, ref InputActionPhase value)
+				public static bool IsButtonHold(this InputAction buttonAction)
 				{
 						bool hold = buttonAction.triggered;
 						// once per second log - not too much logging here
@@ -23,7 +19,7 @@ namespace Assets
 						return hold;
 				}
 
-				public static bool IsButtonReleased(this InputAction buttonAction, ref InputActionPhase value)
+				public static bool IsButtonReleased(this InputAction buttonAction)
 				{
 						bool triggered = buttonAction.triggered;
 						if (triggered)
@@ -33,7 +29,7 @@ namespace Assets
 						return triggered;
 				}
 
-				public static bool IsButtonDown(this InputAction buttonAction, ref InputActionPhase value)
+				public static bool IsButtonDown(this InputAction buttonAction)
 				{
 						bool triggered = buttonAction.triggered;
 						if (triggered)

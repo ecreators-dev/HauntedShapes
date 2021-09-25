@@ -199,10 +199,24 @@ namespace Assets.Script.Behaviour
 
 				public override string GetTargetName()
 				{
+						if (ShopInfo == null)
+						{
+								if (gameObject == null)
+								{
+										return null;
+								}
+								Debug.LogError($"Missing shop info for {gameObject.name}.{GetType().Name}");
+								return gameObject.name;
+						}
 						return ShopInfo.DisplayName;
 				}
 
-				public void Destroy() => Destroy(gameObject);
+				public void Destroy()
+				{
+						if (gameObject is null) return;
+						Destroy(gameObject);
+				}
+
 				public abstract EquipmentInfo GetEquipmentInfo();
 		}
 }

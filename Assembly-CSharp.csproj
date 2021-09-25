@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,6 +53,9 @@
     <UnityVersion>2021.1.16f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\Script\Behaviour\Consumable.cs" />
     <Compile Include="Assets\Script\Behaviour\WorldUnrotator.cs" />
     <Compile Include="Assets\Script\Controller\GameControllerSingleton.cs" />
@@ -84,7 +87,6 @@
     <Compile Include="Assets\Script\NavMeshComponents\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\Script\Behaviour\HuntingOffline.cs" />
     <Compile Include="Assets\Script\Behaviour\StepAnimationEventReference.cs" />
-    <Compile Include="Assets\Script\Controller\HitInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\HolderTypeEnum.cs" />
     <Compile Include="Assets\Script\Model\IFlashlight.cs" />
     <Compile Include="Assets\Script\Controller\AudioFaderSingleton.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Assets\Script\Behaviour\ItemHolder.cs" />
     <Compile Include="Assets\Script\Behaviour\ConsumableChild.cs" />
     <Compile Include="Assets\Script\Behaviour\EquipmentPlacable.cs" />
+    <Compile Include="Assets\Script\Controller\HitSurfaceInfo.cs" />
     <Compile Include="Assets\Script\Behaviour\GhostTypes\MoodType.cs" />
     <Compile Include="Assets\Script\Behaviour\PforteCondition.cs" />
     <Compile Include="Assets\Script\Behaviour\IDarknessInfo.cs" />
