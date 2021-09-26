@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ceedd3b17cd4b48a38b3a1f5567f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 1
+  identifier: 2
   locked: 0
   soundPlayer3d: {fileID: 6861054241175444463}
   soundPlayer3dAmbient: {fileID: 63843346}
@@ -314,6 +314,20 @@ MonoBehaviour:
   doorCollider: {fileID: 8536456976392089908}
   doorLight: {fileID: 1792094149232126741}
   doorTeleporter: {fileID: 2049058856}
+  pullChainsAudio:
+    randomSounds: []
+    volume: 1
+    playedFromScript: 1
+    loop: 1
+    delaySeconds: 0
+  pullChainsAudioSource: {fileID: 4099405102797809367}
+  ambienceHellAudio:
+    randomSounds: []
+    volume: 1
+    playedFromScript: 1
+    loop: 1
+    delaySeconds: 0
+  ambienceHellAudioSource: {fileID: 198102034}
 --- !u!1 &5348480453452193740
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +353,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5348480453452193740}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.6, y: 2.15, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3492841184390635929}
@@ -630,12 +644,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 1123047613124797247}
     m_Modifications:
     - target: {fileID: 1080664359, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080664359, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080664359, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
+      propertyPath: m_LocalPosition.y
       value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1080664359, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.013
+      value: -0.16
       objectReference: {fileID: 0}
     - target: {fileID: 1080664359, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -659,7 +681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1080664360, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_LightUnit
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1080664360, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_NormalBias
@@ -715,7 +737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1080664361, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_Type
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1080664361, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_Range
@@ -834,12 +856,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2717925971862647003, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2717925971862647003, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7330dd4f36c34264e81dbcd1d9c62e32, type: 2}
     - target: {fileID: 4683730404521686411, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4758454312721886818, guid: 7f41908c66d2d7446ad1c847c99e102b, type: 3}
       propertyPath: m_Mesh

@@ -1,5 +1,7 @@
 ﻿using Assets.Script.Behaviour;
 
+using System;
+
 using UnityEngine;
 
 namespace Assets.Script.Components
@@ -35,6 +37,13 @@ namespace Assets.Script.Components
 
 				protected SoundEffect GetToggleOn() => toggleOn;
 				protected SoundEffect GetToggleOff() => toggleOff;
+
+				public virtual void OnCollisionEnterChild(Collision collision)
+				{ }
+
+				public virtual void OnCollisionExitChild(Collision collision)
+				{ }
+
 				protected SoundEffect GetAmbientOn() => ambientLoopOn;
 
 				protected void Lock()
@@ -128,11 +137,11 @@ namespace Assets.Script.Components
 
 				public abstract string GetTargetName();
 
-				protected void PlayToggleOnSoundInternal()
+				protected void PlayToggleOnSoundInternal(bool fireAndForget = false)
 				{
 						if (toggleOn != null && toggleOn.playedFromScript is false)
 						{
-								PlayToggleOnSoundExplicitFromScript();
+								PlayToggleOnSoundExplicitFromScript(fireAndForget);
 						}
 				}
 
@@ -144,11 +153,12 @@ namespace Assets.Script.Components
 						}
 				}
 
-				protected void PlayToggleOnSoundExplicitFromScript()
+				protected void PlayToggleOnSoundExplicitFromScript(bool fireAndForget = false)
 				{
 						if (soundPlayer3d is { })
 						{
-								toggleOn.PlayRandomOnce(GetTargetName(), "toggle on", soundPlayer3d);
+								Vector3? fireAndForgetPosition = fireAndForget ? transform.position : default;
+								toggleOn.PlayRandomOnce(GetTargetName(), "toggle on", soundPlayer3d, fireAndForgetPosition);
 
 								if (ambientLoopWithToggleOn)
 								{
@@ -173,19 +183,20 @@ namespace Assets.Script.Components
 						}
 				}
 
-				protected void PlayToggleOffSoundInternal()
+				protected void PlayToggleOffSoundInternal(bool fireAndForget = false)
 				{
 						if (toggleOff != null && toggleOff.playedFromScript is false)
 						{
-								PlayToggleOffSoundExplicitFromScript();
+								PlayToggleOffSoundExplicitFromScript(fireAndForget);
 						}
 				}
 
-				protected void PlayToggleOffSoundExplicitFromScript()
+				protected void PlayToggleOffSoundExplicitFromScript(bool fireAndForget = false)
 				{
 						if (soundPlayer3d is { })
 						{
-								toggleOff.PlayRandomOnce(GetTargetName(), "toggle off", soundPlayer3d);
+								Vector3? fireAndForgetPosition = fireAndForget ? transform.position : default;
+								toggleOff.PlayRandomOnce(GetTargetName(), "toggle off", soundPlayer3d, fireAndForgetPosition);
 								ambientLoopOn.StopLoop();
 						}
 						else

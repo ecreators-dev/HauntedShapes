@@ -45,7 +45,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.9433962, g: 0.7131965, b: 0.29725876, a: 1}
   m_Intensity: 5
-  m_Range: 6
+  m_Range: 12
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -1174,7 +1174,7 @@ Transform:
   m_GameObject: {fileID: 8494032240470888178}
   m_LocalRotation: {x: 0, y: 0, z: -0.18715839, w: 0.9823298}
   m_LocalPosition: {x: -0.9678, y: 0.54987, z: 1.6494}
-  m_LocalScale: {x: 0.10931399, y: 0.10931399, z: 0.109313995}
+  m_LocalScale: {x: 0.109313995, y: 0.109313995, z: 0.10931399}
   m_Children:
   - {fileID: 4444737049492928569}
   m_Father: {fileID: 0}
@@ -1192,15 +1192,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c295d0e119685434299140803bd6bd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 4
+  identifier: 5
   locked: 0
   soundPlayer3d: {fileID: 297916480}
-  toggleOnSounds:
-  - {fileID: 8300000, guid: 26962e0276679374ca615e6d25dfec7c, type: 3}
-  - {fileID: 8300000, guid: 4ed178b51437afa4590a33c4aa11da5c, type: 3}
-  soundVolumeOn: 1
+  soundPlayer3dAmbient: {fileID: 0}
+  toggleOn:
+    randomSounds:
+    - {fileID: 8300000, guid: 26962e0276679374ca615e6d25dfec7c, type: 3}
+    - {fileID: 8300000, guid: 4ed178b51437afa4590a33c4aa11da5c, type: 3}
+    volume: 1
+    playedFromScript: 0
+    loop: 0
+    delaySeconds: 0
+  toggleOff:
+    randomSounds: []
+    volume: 1
+    playedFromScript: 0
+    loop: 0
+    delaySeconds: 0
+  ambientLoopOn:
+    randomSounds: []
+    volume: 1
+    playedFromScript: 0
+    loop: 0
+    delaySeconds: 0
+  ambientLoopWithToggleOn: 0
+  interactionLockTimeout: 0.3
   upAxis: 2
   toggleTimerSeconds: 0.01
+  ambientLoopOff:
+    randomSounds: []
+    volume: 1
+    playedFromScript: 0
+    loop: 0
+    delaySeconds: 0
   StartEnlit: 0
   lightMatRenderer: {fileID: 4444737049428116130}
   filling: 1
@@ -1267,8 +1292,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 26962e0276679374ca615e6d25dfec7c, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

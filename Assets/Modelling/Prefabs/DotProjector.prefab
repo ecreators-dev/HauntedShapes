@@ -1218,7 +1218,7 @@ MeshRenderer:
   m_RenderingLayerMask: 2147483645
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d1e47c280f11b4c49b4ecbd6e62cf6f6, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1300,7 +1300,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 605560dcab383a94b9f17cd99a8b2452, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1428,7 +1428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f053a2b7a11ab409c1a4a66c733ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 4
+  identifier: 6
   locked: 0
   soundPlayer3d: {fileID: 481439078}
   soundPlayer3dAmbient: {fileID: 0}
@@ -1462,7 +1462,7 @@ MonoBehaviour:
     playedFromScript: 0
     loop: 0
     delaySeconds: 0
-  placingPrefab: {fileID: 0}
+  placingPrefab: {fileID: 8349849991034908809, guid: 9c18456b31b0e4c448938f60624eb967, type: 3}
   rigidBody: {fileID: 4860025742392329372}
   shopInfo: {fileID: 11400000, guid: 47c6ebefa4c6ecc4487858aa9f8e9aa4, type: 2}
   animator: {fileID: 874647289}

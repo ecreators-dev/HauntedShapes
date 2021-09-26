@@ -3,6 +3,7 @@
 		public enum EObjectType
 		{
 				UNDEFINED,
+				BALLOON,
 				DOOR,
 				CANDLE,
 				FLASHLIGHT,

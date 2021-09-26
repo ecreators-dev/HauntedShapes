@@ -38,5 +38,15 @@ namespace Assets.Script.Behaviour
 				public override string GetTargetName() => parentInteractible.GetTargetName();
 
 				protected override void Interact(PlayerBehaviour sender) => parentInteractible.RunInteraction(sender);
+
+				private void OnCollisionEnter(Collision collision)
+				{
+						parentInteractible.OnCollisionEnterChild(collision);		
+				}
+
+				private void OnCollisionExit(Collision collision)
+				{
+						parentInteractible.OnCollisionExitChild(collision);		
+				}
 		}
 }

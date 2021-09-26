@@ -1,8 +1,6 @@
-using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Behaviour.GhostTypes;
 using Assets.Script.Components;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +12,7 @@ using Debug = UnityEngine.Debug;
 
 namespace Assets.Script.Behaviour
 {
+		[RequireComponent(typeof(CharacterController))]
 		[DisallowMultipleComponent]
 		public class PlayerBehaviour : MonoBehaviour, IStepSoundProvider
 		{
@@ -32,6 +31,9 @@ namespace Assets.Script.Behaviour
 				private float money = 0;
 				private AudioClip stepSoundClip;
 				private bool mouseDown;
+				private bool inTeleport;
+				private CharacterController controller;
+
 				/// <summary>
 				/// TODO - Handle show messages for a certain amount of time in a coroutine
 				/// </summary>
@@ -43,7 +45,13 @@ namespace Assets.Script.Behaviour
 
 				public IEquipment ActiveEquipment => equipmentHolder is IItemHolder holder ? holder.CurrentItem as Equipment : null;
 
+				private Transform exitTeleport { get; set; }
+
 				public bool IsTeleported { get; private set; }
+
+				public Rigidbody Rigidbody { get; private set; }
+
+				public MeshCollider Collider { get; private set; }
 
 				private IItemHolder EquipmentHolder => equipmentHolder;
 
@@ -54,6 +62,9 @@ namespace Assets.Script.Behaviour
 				private void Awake()
 				{
 						Transform = transform;
+						Rigidbody = GetComponent<Rigidbody>();
+						Collider = GetComponent<MeshCollider>();
+						controller = GetComponent<CharacterController>();
 				}
 
 				private void Start()
@@ -82,11 +93,74 @@ namespace Assets.Script.Behaviour
 						{
 								// nothing
 						}
+
+						UpdateForPushObjects();
+				}
+
+				private float forceMultiplyer = 1000f;
+				private float velocity;
+				private Vector3 Velocity;
+				private Vector3 lastframepos;
+
+				private void UpdateForPushObjects()
+				{
+						//calculates velocity
+						Velocity.x = transform.position.x - lastframepos.x;
+						Velocity.y = transform.position.x - lastframepos.y;
+						Velocity.y = transform.position.y - lastframepos.y;
+						//calculates velocity "Speed"
+						float vx;
+						float vy;
+						float vz;
+						if (Velocity.x < 0) { vx = Velocity.x * -1; } else { vx = Velocity.x; };
+						if (Velocity.y < 0) { vy = Velocity.y * -1; } else { vy = Velocity.y; };
+						if (Velocity.z < 0) { vz = Velocity.z * -1; } else { vz = Velocity.z; };
+						velocity = vx + vy + vz;
+						//Sets the lastframe pos
+						lastframepos = transform.position;
+				}
+
+				//checks character controller collision
+				private void OnControllerColliderHit(ControllerColliderHit collision)
+				{
+						PushObjects(collision);
+				}
+
+				private void PushObjects(ControllerColliderHit collision)
+				{
+						//checks if there is rigidbody
+						if (collision.rigidbody == null || collision.rigidbody.mass > Rigidbody.mass)
+								return;
+
+						Vector3 pushDir = Velocity;
+
+						//Adds force to the object
+						collision.rigidbody.AddForceAtPosition(
+								pushDir * velocity * forceMultiplyer * Time.deltaTime,
+								collision.point,
+								ForceMode.Impulse);
+				}
+
+				private void LateUpdate()
+				{
+						if (inTeleport)
+						{
+								inTeleport = false;
+								Transform target = Transform;
+								target.position = exitTeleport.position;
+								target.rotation = exitTeleport.rotation;
+								Debug.Log($"Teleportation: '{gameObject.name}' to '{exitTeleport.gameObject.name}'");
+						}
 				}
 
 				public void AddMessage(string message) => messagesToShow.Push(message);
 
-				public void SetTeleported() => IsTeleported = true;
+				public void SetTeleported(Transform exit)
+				{
+						inTeleport = true;
+						exitTeleport = exit;
+						IsTeleported = true;
+				}
 
 				public void SetReturnedFromTeleport() => IsTeleported = false;
 
@@ -456,15 +530,25 @@ namespace Assets.Script.Behaviour
 						return $"'{clip.name}'";
 				}
 
+				private float distanceSinceLastStep;
+				[Range(0, 3f)]
+				[SerializeField] private float stepDistanceForSound = 0.3f;
+
 				public void OnWalkingAnimation_OnStep()
 				{
-						if (stepSoundClip == null)
+						distanceSinceLastStep += GetComponent<Rigidbody>().velocity.magnitude;
+						if (distanceSinceLastStep >= stepDistanceForSound)
 						{
-								stepSoundsRandom.PlayRandomOnce(gameObject.name, "Step Fallback", playerAudioSource3d);
-						}
-						else
-						{
-								//playerAudioSource3d.PlayOneShot(stepSoundClip);
+								distanceSinceLastStep = 0;
+
+								if (stepSoundClip == null)
+								{
+										stepSoundsRandom.PlayRandomOnce(gameObject.name, "Step Fallback", playerAudioSource3d);
+								}
+								else
+								{
+										//playerAudioSource3d.PlayOneShot(stepSoundClip);
+								}
 						}
 				}
 		}

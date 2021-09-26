@@ -93,6 +93,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 						movement += Vector3.down * 9.81f;
 
 						character.Move(movement * Time.fixedDeltaTime);
+						character.detectCollisions = true;
 				}
 		}
 }

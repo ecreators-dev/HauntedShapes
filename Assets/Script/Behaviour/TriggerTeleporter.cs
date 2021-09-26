@@ -61,17 +61,8 @@ namespace Assets.Door
 						if (other.TryGetComponent(out PlayerBehaviour player))
 						{
 								TeleportedPlayers.Add(player);
-								player.SetTeleported();
-								TeleportTo(player, exitTransform);
+								player.SetTeleported(exitTransform);
 						}
-				}
-
-				private void TeleportTo(Component teleporterObject, Transform exit)
-				{
-						Transform target = teleporterObject.transform;
-						target.position = exit.position;
-						target.rotation = exit.rotation;
-						Debug.Log($"Teleportation: '{teleporterObject.gameObject.name}' to '{exit.gameObject.name}'");
 				}
 
 				private RaycastHit? GetFloorHitDownside(Transform from)
