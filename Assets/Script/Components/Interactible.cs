@@ -202,6 +202,14 @@ namespace Assets.Script.Components
 						PlayToggleOnSoundExplicitFromScript();
 				}
 
+				protected void StopPlaybackToggleOnOrOff()
+				{
+						if (soundPlayer3d != null)
+						{
+								soundPlayer3d.Stop();
+						}
+				}
+
 				/// <summary>
 				/// Plays no audio in default
 				/// </summary>

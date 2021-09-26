@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -271,6 +272,113 @@ namespace Assets.Script.GameMenu
 						HorizonalLine();
 
 						OnGUI_OrbHitlines(tab, e);
+						HorizonalLine();
+
+						OnGUI_ContributeSelectionStaticLightmapObjects(tab, e);
+				}
+
+				private static void OnGUI_ContributeSelectionStaticLightmapObjects(Tab tab, GeneralTabData e)
+				{
+						EditorGUILayout.LabelField("Global Illumination Objects");
+
+						if (GUILayout.Button("Alle Finden"))
+						{
+								var allStatic = (from obj in FindObjectsOfType<MeshRenderer>(true)
+																 where obj.gameObject.isStatic
+																 orderby (int)obj.shadowCastingMode descending
+																 select obj).ToList();
+
+								e.staticObjectsInScene = allStatic;
+
+								var allStaticLights = (from obj in FindObjectsOfType<Light>(true)
+																			 orderby (int)obj.lightShadowCasterMode
+																			 select obj).ToList();
+
+								e.lights = allStaticLights;
+						}
+
+						if (e.lights != null)
+						{
+								ShowScrollArea(ref e.lightsScrollPosition, () =>
+								{
+										int i = 1;
+										foreach (Light item in e.lights)
+										{
+												EditorGUILayout.BeginHorizontal();
+												EditorGUILayout.ObjectField($"#{i++}", item.gameObject, typeof(GameObject), true);
+
+												bool setting = IsContributeUI(item);
+												bool nowSetting = EditorGUILayout.Toggle("Contribute", setting);
+												if (setting != nowSetting)
+												{
+														if (nowSetting)
+														{
+																SetContributeUI(item);
+														}
+														else
+														{
+																UnsetContributeUI(item);
+														}
+												}
+												EditorGUILayout.EndHorizontal();
+										}
+								});
+						}
+						else
+						{
+								EditorGUILayout.HelpBox("Erst \"Finden\" klicken", MessageType.Info);
+						}
+
+						if (e.staticObjectsInScene != null)
+						{
+								var without = e.staticObjectsInScene
+												.Where(e => !IsContributeUI(e))
+												.ToList();
+
+								var all = e.staticObjectsInScene
+												.Where(e => IsContributeUI(e))
+												.ToList();
+
+								if (GUILayout.Button($"Contribute GI all: remaining {without.Count}"))
+								{
+										without.ForEach(e => SetContributeUI(e));
+								}
+
+								if (GUILayout.Button($"Contribute GI none: remaining {all.Count}"))
+								{
+										all.ForEach(e => UnsetContributeUI(e));
+								}
+
+								ShowScrollArea(ref e.staticObjectsScrollPosition, () =>
+								{
+										int i = 1;
+										foreach (MeshRenderer item in e.staticObjectsInScene)
+										{
+												EditorGUILayout.BeginHorizontal();
+												EditorGUILayout.ObjectField($"#{i++}", item, typeof(Light), true);
+
+												bool setting = IsContributeUI(item);
+												bool nowSetting = EditorGUILayout.Toggle("Mixed Mode", setting);
+												if (setting != nowSetting)
+												{
+														if (nowSetting)
+														{
+																SetContributeUI(item);
+														}
+														else
+														{
+																UnsetContributeUI(item);
+														}
+												}
+												EditorGUILayout.EndHorizontal();
+										}
+
+								});
+						}
+						else
+						{
+								EditorGUILayout.HelpBox("Erst \"Finden\" klicken", MessageType.Info);
+						}
 				}
 
 				void OnGUI()
@@ -279,6 +387,63 @@ namespace Assets.Script.GameMenu
 
 						tabControl.OnGUI(this);
 						GUILayout.FlexibleSpace();
+				}
+
+				static bool IsContributeUI(MeshRenderer item)
+				{
+						if (!GameObjectUtility.AreStaticEditorFlagsSet(item.gameObject, StaticEditorFlags.ContributeGI))
+								return false;
+						if (!item.receiveShadows)
+								return false;
+						if (item.shadowCastingMode == ShadowCastingMode.Off)
+								return false;
+						if (item.rayTracingMode == UnityEngine.Experimental.Rendering.RayTracingMode.Off)
+								return false;
+						if (!item.staticShadowCaster)
+								return false;
+						return true;
+				}
+
+				static void SetContributeUI(MeshRenderer item)
+				{
+						var flags = GameObjectUtility.GetStaticEditorFlags(item.gameObject);
+						flags |= StaticEditorFlags.ContributeGI;
+						GameObjectUtility.SetStaticEditorFlags(item.gameObject, flags);
+
+						item.receiveShadows = true;
+						if (item.shadowCastingMode == ShadowCastingMode.Off)
+						{
+								item.shadowCastingMode = ShadowCastingMode.On;
+						}
+
+						item.receiveGI = ReceiveGI.Lightmaps;
+						item.rayTracingMode = UnityEngine.Experimental.Rendering.RayTracingMode.DynamicTransform;
+						item.staticShadowCaster = true;
+				}
+
+				static void UnsetContributeUI(MeshRenderer item)
+				{
+						var flags = GameObjectUtility.GetStaticEditorFlags(item.gameObject);
+						flags &= ~StaticEditorFlags.ContributeGI;
+						GameObjectUtility.SetStaticEditorFlags(item.gameObject, flags);
+				}
+
+				static bool IsContributeUI(Light item)
+				{
+						if (item.lightmapBakeType != LightmapBakeType.Mixed)
+								return false;
+
+						return true;
+				}
+
+				static void SetContributeUI(Light item)
+				{
+						item.lightmapBakeType = LightmapBakeType.Mixed;
+				}
+
+				static void UnsetContributeUI(Light item)
+				{
+						item.lightmapBakeType = LightmapBakeType.Realtime;
 				}
 
 				public static List<List<T>> Chuck<T>(IEnumerable<T> source, uint chunkSize)

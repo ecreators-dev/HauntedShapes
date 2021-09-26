@@ -71,16 +71,9 @@ namespace Assets.Door
 						Transform target = teleporterObject.transform;
 						target.position = exit.position;
 						target.rotation = exit.rotation;
-						if (teleporterObject.TryGetComponent(out Rigidbody body))
-						{
-								body.useGravity = false;
-								Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(_ =>
-								{
-										body.useGravity = true;
-								});
-						}
 						Debug.Log($"Teleportation: '{teleporterObject.gameObject.name}' to '{exit.gameObject.name}'");
 				}
+
 				private RaycastHit? GetFloorHitDownside(Transform from)
 				{
 						if (Physics.Raycast(from.position, -Vector3.up, out RaycastHit hit))

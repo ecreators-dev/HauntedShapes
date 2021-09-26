@@ -26,9 +26,6 @@ namespace Assets.Script.Components
 						if (IsLooping)
 						{
 								LoopingAudio.Stop();
-								LoopingAudio.clip = null;
-								LoopingAudio.loop = false;
-								LoopingAudio.volume = 1;
 								LoopingAudio = null;
 						}
 				}
@@ -36,19 +33,32 @@ namespace Assets.Script.Components
 
 				public void PlayRandomLoop(string ownerName, string effectName, AudioSource soundPlayer3d)
 				{
+						if (soundPlayer3d == null)
+								return;
+
 						if (randomSounds is { } && randomSounds.Length > 0)
 						{
 								if (IsLooping) return;
 
-								IsLooping = true;
-								LoopingAudio = soundPlayer3d;
-
 								AudioClip clip = randomSounds[UnityEngine.Random.Range(0, randomSounds.Length)];
-								soundPlayer3d.clip = clip;
-								soundPlayer3d.volume = volume;
-								soundPlayer3d.loop = true;
-								PlayDelayedAsync(soundPlayer3d);
+								PlayClipLoop(soundPlayer3d, clip);
 						}
+						else if (soundPlayer3d.clip is { })
+						{
+								if (IsLooping) return;
+
+								PlayClipLoop(soundPlayer3d, soundPlayer3d.clip);
+						}
+				}
+
+				private void PlayClipLoop(AudioSource soundPlayer3d, AudioClip clip)
+				{
+						IsLooping = true;
+						LoopingAudio = soundPlayer3d;
+						soundPlayer3d.clip = clip;
+						soundPlayer3d.volume = volume;
+						soundPlayer3d.loop = true;
+						PlayDelayedAsync(soundPlayer3d);
 				}
 
 				private async void PlayDelayedAsync(AudioSource soundPlayer3d)

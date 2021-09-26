@@ -18,6 +18,10 @@ namespace HauntedShapes.Doors
 				[SerializeField] private Collider doorCollider;
 				[SerializeField] private Light doorLight;
 				[SerializeField] private TriggerTeleporter doorTeleporter;
+				[SerializeField] private SoundEffect pullChainsAudio;
+				[SerializeField] private AudioSource pullChainsAudioSource;
+				[SerializeField] private SoundEffect ambienceHellAudio;
+				[SerializeField] private AudioSource ambienceHellAudioSource;
 
 				private Animator animator;
 				private bool getup;
@@ -30,11 +34,6 @@ namespace HauntedShapes.Doors
 				private void Awake()
 				{
 						animator = GetComponent<Animator>();
-				}
-
-				private void Start()
-				{
-						SetDoorCooliderEnabled(true);
 				}
 
 				protected override void Update()
@@ -75,17 +74,6 @@ namespace HauntedShapes.Doors
 						animator.ResetTrigger(getupName);
 						animator.ResetTrigger(openName);
 						animator.Play("idle", 0, 0f);
-
-						SetDoorCooliderEnabled(true);
-				}
-
-				private void SetDoorCooliderEnabled(bool enabled)
-				{
-						// at start:
-						// enabled = true, if door is laying on the floor
-
-						doorCollider.enabled = enabled;
-						passCollider.enabled = !enabled;
 				}
 
 				[ContextMenu("Animation/Get up")]
@@ -96,7 +84,6 @@ namespace HauntedShapes.Doors
 
 						getup = true;
 						animator.SetTrigger(getupName);
-						SetDoorCooliderEnabled(false);
 				}
 
 				[ContextMenu("Animation/Open")]
@@ -107,7 +94,6 @@ namespace HauntedShapes.Doors
 
 						open = true;
 						animator.SetTrigger(openName);
-						SetDoorCooliderEnabled(false);
 				}
 
 				public override bool CanInteract(PlayerBehaviour sender)
@@ -139,6 +125,43 @@ namespace HauntedShapes.Doors
 								return $"{gameObject.name} (Lv {10})";
 						}
 						return $"{gameObject.name}";
+				}
+
+				/// <summary>
+				/// Get Up Start
+				/// </summary>
+				public override void OnAnimation_ToggleOn_Start()
+				{
+						base.OnAnimation_ToggleOn_Start();
+						pullChainsAudio.PlayRandomLoop(GetTargetName(), "pull chains", pullChainsAudioSource);
+				}
+
+				/// <summary>
+				/// Get Up End
+				/// </summary>
+				public override void OnAnimation_ToggleOn_End()
+				{
+						//base.OnAnimation_ToggleOn_End();
+						StopPlaybackToggleOnOrOff();
+						pullChainsAudio.StopLoop();
+				}
+
+				/// <summary>
+				/// Open Start
+				/// </summary>
+				public override void OnAnimation_ToggleOff_Start()
+				{
+						base.OnAnimation_ToggleOff_Start();
+						ambienceHellAudio.PlayRandomLoop(GetTargetName(), "ambience hell open", ambienceHellAudioSource);
+						// keep running
+				}
+
+				/// <summary>
+				/// Open End
+				/// </summary>
+				public override void OnAnimation_ToggleOff_End()
+				{
+						PlayAmbientExplicitFromScript();
 				}
 		}
 }
