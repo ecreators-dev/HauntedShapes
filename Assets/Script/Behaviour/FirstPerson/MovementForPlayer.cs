@@ -25,6 +25,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				public Transform Transform { get; private set; }
 
 				private Rigidbody Rigidbody { get; set; }
+				public bool IsRunning { get; private set; }
 
 				private void Awake()
 				{
@@ -67,6 +68,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 								Debug.Log($"Running pressed {Time.realtimeSinceStartup}");
 								targetSpeed = runSpeed;
 						}
+						IsRunning = running;
 
 						crouching = inputControls.CrouchButton;
 						if (crouching)

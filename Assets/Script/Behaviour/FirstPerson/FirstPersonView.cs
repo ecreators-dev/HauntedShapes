@@ -18,6 +18,7 @@ namespace Assets.Script.Behaviour.FirstPerson
 				{
 						View = GetComponent<CameraFirstPerson>();
 						Move = GetComponent<MovementForPlayer>();
+						moveType.FixCameraMissing();
 				}
 
 				private void Update()

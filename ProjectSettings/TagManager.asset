@@ -24,10 +24,10 @@ TagManager:
   - HeatObject
   - Static Lights
   - Lightprobes Layer
-  - Interactable Door
+  - Interactible & Collision
   - James Body
   - James Root
-  - Interactible Object
+  - Interactible & No Collision
   - GroundCheck
   - Player
   - No Raycast (Info only)
@@ -35,7 +35,7 @@ TagManager:
   - IR Post Processing Volume
   - Walkable (NavMesh)
   - Feuerzeug Decal (Bedruckt)
-  - 
+  - Interact & Collide Child
   - 
   - 
   - 

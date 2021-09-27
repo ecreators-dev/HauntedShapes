@@ -2,36 +2,51 @@
 
 using System;
 
+using UnityEngine;
+
 namespace Assets.Script.Behaviour
 {
-		public abstract class HuntEventObject : Interactible
+		public abstract class HuntEventObject : MonoBehaviour
 		{
-				protected HuntingStateBean HuntInfo { get; private set; }
-
-				protected bool IsHuntActive => HuntInfo?.InHunt ?? false;
 				private bool IsHunt { get; set; }
+
+				protected bool IsHuntingActive { get; private set; }
+
+				protected bool IsHuntingActiveChanged { get; private set; }
 
 				protected virtual void Update()
 				{
-						HuntInfo ??= HuntingStateBean.Instance;
+						PerformHuntUpdate();
+				}
 
-						if (IsHunt != IsHuntActive)
+				/// <summary>
+				/// Is called INSIDE Update.<br/>
+				/// Updates <see cref="IsHuntingActive"/> and <see cref="IsHuntingActiveChanged"/><br/>
+				/// to call <see cref="OnHuntStarts"/> or <see cref="OnHuntEnds"/>
+				/// </summary>
+				protected void PerformHuntUpdate()
+				{
+						IsHuntingActive = Beans.InHunt;
+						IsHuntingActiveChanged = IsHuntingActive != IsHunt;
+
+						if (IsHuntingActiveChanged)
 						{
-								if (IsHuntActive)
+								if (IsHunt)
 								{
-										OnHuntActivate();
+										OnHuntEnds();
 								}
 								else
 								{
-										OnHuntEnding();
+										OnHuntStarts();
 								}
 						}
-						IsHunt = IsHuntActive;
+
+						IsHunt = IsHuntingActive;
 				}
 
-				protected abstract void OnHuntEnding();
+				protected virtual void OnHuntStarts() { }
 
-				protected abstract void OnHuntActivate();
+				protected virtual void OnHuntEnds() { }
 
 		}
 }

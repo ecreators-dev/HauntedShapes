@@ -12,41 +12,54 @@ namespace Assets.Script.Behaviour
 		/// </summary>
 		public class InteractibleChild : Interactible
 		{
-				private Interactible parentInteractible;
+				[SerializeField] private Interactible parentInteractible;
+
+				protected Interactible ParentWithAssertion => GetComponentInParent<Interactible>(transform);
 
 				private void Awake()
 				{
 						if (transform.parent == null)
 						{
-								Debug.LogError($"Must have a parent and a component with {nameof(Interactible)}");
+								Debug.LogError($"Must have a parent and a component with instance of {nameof(Interactible)}");
 						}
 				}
 
-				private void Start()
-				{
-						parentInteractible = transform.GetComponentsInParent<Interactible>().FirstOrDefault(e => e is Component cmp && cmp.GetInstanceID() != this.GetInstanceID());
-						if (parentInteractible is null)
-						{
-								Debug.LogError($"Must have a parent and a component with {nameof(Interactible)}");
-						}
-				}
+				public override bool CanInteract(PlayerBehaviour sender) => ParentWithAssertion?.CanInteract(sender) ?? false;
 
-				protected Interactible InteractibleParent => parentInteractible;
+				public override string GetTargetName() => ParentWithAssertion?.GetTargetName();
 
-				public override bool CanInteract(PlayerBehaviour sender) => parentInteractible.CanInteract(sender);
+				protected override void Interact(PlayerBehaviour sender) => ParentWithAssertion?.RunInteraction(sender);
 
-				public override string GetTargetName() => parentInteractible.GetTargetName();
-
-				protected override void Interact(PlayerBehaviour sender) => parentInteractible.RunInteraction(sender);
-
+				/// <summary>
+				/// Sends Collision to parent Interactible
+				/// </summary>
 				private void OnCollisionEnter(Collision collision)
 				{
-						parentInteractible.OnCollisionEnterChild(collision);		
+						ParentWithAssertion?.OnCollisionEnterChild(collision);
 				}
 
+				/// <summary>
+				/// Sends Collision to parent Interactible
+				/// </summary>
 				private void OnCollisionExit(Collision collision)
 				{
-						parentInteractible.OnCollisionExitChild(collision);		
+						ParentWithAssertion?.OnCollisionExitChild(collision);
+				}
+
+				private static T GetComponentInParent<T>(Transform reference)
+				{
+						if (reference.parent == null)
+						{
+								Debug.LogError($"Does not hava a parent! {reference.gameObject.name}");
+								return default;
+						}
+
+						if (!reference.parent.TryGetComponentAllParent(out T result))
+						{
+								Debug.LogError($"Unable to find: {typeof(T).Name}({nameof(T)} in {reference.parent.gameObject.name})");
+								return default;
+						}
+						return result;
 				}
 		}
 }

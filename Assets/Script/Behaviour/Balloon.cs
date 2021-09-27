@@ -1,3 +1,5 @@
+using Assets.Script.Components;
+
 using System;
 using System.Collections;
 
@@ -6,58 +8,110 @@ using UnityEngine;
 namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(Rigidbody))]
-		public class Balloon : HuntEventObject, IBalloon
+		[RequireComponent(typeof(SphereCollider))]
+		public class Balloon :
+				Interactible
+				, IBalloon
 		{
 				[SerializeField] private float floatStrength = 0.8f;
-				[SerializeField] private Transform body;
+				[SerializeField] private BalloonBody body;
 				[SerializeField] private AudioSource audioSource3d;
 				[SerializeField] private AudioClip bounceSound3d;
+
+				public Filling Drain(float newFloatingValue)
+				{
+						if (CanFloatUp())
+						{
+								floatStrength = newFloatingValue;
+						}
+
+						return Mathf.Max(0, newFloatingValue / initFloatingStrength);
+
+						bool CanFloatUp() => initFloatingStrength > 0;
+				}
+
 				[Range(0, 1)]
 				[SerializeField] private float bounceVolume = 1;
 
 				private Vector3 initScale;
+				private float initFloatingStrength;
 
 				private Rigidbody Rigidbody { get; set; }
 
-				public float FloatStrength => FloatStrength;
+				private Rigidbody BodyRigidbody { get; set; }
+
+				public float FloatStrength => floatStrength;
+
+				public float InitFloatStrength => initFloatingStrength;
 
 				private void Awake()
 				{
 						Rigidbody = GetComponent<Rigidbody>();
-						Rigidbody.useGravity = false;
+						BodyRigidbody = body.GetComponent<Rigidbody>();
+
+						// fix movement
+						BodyRigidbody.mass = Rigidbody.mass * 2f;
+
+						SetUseGravity(false);
+				}
+
+				private void Start()
+				{
+						initFloatingStrength = FloatStrength;
+				}
+
+				private void SetUseGravity(bool status)
+				{
+						Rigidbody.useGravity = status;
+						BodyRigidbody.useGravity = status;
+				}
+
+				private void FixedUpdateAddForce()
+				{
+						// fx: rotate upwards again
+						Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.identity, Time.fixedDeltaTime * this.floatStrength));
+
+						//BodyRigidbody.MovePosition(transform.position + Vector3.up * floatStrength * Time.fixedDeltaTime);
+
+						// fx: float down or up depending on floatStrength
+						BodyRigidbody.AddForce(Vector3.up * floatStrength);
+						BodyRigidbody.AddForceAtPosition(Vector3.up * floatStrength, transform.position);
 				}
 
 				private void FixedUpdate()
 				{
-						HuntingStateBean.Instance.HuntingStateChangedEvent -= OnHuntingStateChanged;
-						HuntingStateBean.Instance.HuntingStateChangedEvent += OnHuntingStateChanged;
-
 						//body.transform.localPosition = initBodyLocalPosition;
-						if (IsHuntActive)
+						if (IsHuntingActiveChanged)
 						{
-								Rigidbody.useGravity = true;
-								body.GetComponent<Rigidbody>().useGravity = true;
+								if (IsHuntingActive)
+								{
+										SetUseGravity(true);
+								}
+								else
+								{
+										SetUseGravity(false);
+								}
 						}
-						else
-						{
-								Rigidbody.useGravity = false;
-								body.GetComponent<Rigidbody>().useGravity = false;
 
-								Rigidbody.AddForce(Vector3.up * floatStrength);
-								//Rigidbody.AddForceAtPosition(Vector3.up.normalized * floatStrength, body.position);
+						if (IsHuntingActive is false)
+						{
+								FixedUpdateAddForce();
 						}
 				}
 
 				private void OnHuntingStateChanged(bool huntActive)
 				{
-						if (huntActive is false)
+						if (huntActive is false && !gameObject.activeSelf)
 						{
-								OnHuntEnding();
+								Reserect();
+								HuntingStateBean.Instance.HuntingStateChangedEvent -= OnHuntingStateChanged;
 						}
 				}
 
 				public void Pop()
 				{
+						HuntingStateBean.Instance.HuntingStateChangedEvent += OnHuntingStateChanged;
+
 						StartCoroutine(PopBlowUp());
 				}
 
@@ -75,7 +129,8 @@ namespace Assets.Script.Behaviour
 								yield return endFrame;
 						}
 						gameObject.SetActive(false);
-						OnHuntActivate();
+						OnHuntStarts();
+						yield break;
 				}
 
 				private void PlayPopEmission()
@@ -85,27 +140,24 @@ namespace Assets.Script.Behaviour
 
 				public void Reserect()
 				{
+						body.Reserected();
+						floatStrength = initFloatingStrength;
 						body.transform.localScale = initScale;
 						gameObject.SetActive(true);
 
 						//body.localPosition = initBodyLocalPosition;
-						Rigidbody.useGravity = false;
+						SetUseGravity(false);
 						base.PlayToggleOffSoundInternal();
 				}
 
-				protected override void OnHuntActivate()
+				protected override void OnHuntStarts()
 				{
-						Rigidbody.useGravity = true;
+						SetUseGravity(true);
 				}
 
-				protected override void OnHuntEnding()
+				protected override void OnHuntEnds()
 				{
-						Reserect();
-				}
-
-				public override bool CanInteract(PlayerBehaviour sender)
-				{
-						return base.CanInteract(sender);
+						SetUseGravity(false);
 				}
 
 				protected override void Interact(PlayerBehaviour sender)
@@ -116,21 +168,27 @@ namespace Assets.Script.Behaviour
 				public override string GetTargetName()
 				{
 						// nothing to display
-						return null;
+						return "?";
 				}
 
-				// self:
-				private void OnCollisionEnter(Collision collision)
-				{
-						audioSource3d.PlayOneShot(bounceSound3d, bounceVolume);
-				}
-
-				// child:
+				// collision of child:
 				public override void OnCollisionEnterChild(Collision collision)
 				{
 						base.OnCollisionEnterChild(collision);
 
-						audioSource3d.PlayOneShot(bounceSound3d, bounceVolume);
+						if (collision.collider != body.GetComponent<Collider>())
+						{
+								audioSource3d.PlayOneShot(bounceSound3d, bounceVolume);
+						}
+				}
+
+				// self collision:
+				private void OnCollisionEnter(Collision collision)
+				{
+						if (collision.collider != body.GetComponent<Collider>())
+						{
+								audioSource3d.PlayOneShot(bounceSound3d, bounceVolume);
+						}
 				}
 		}
 }

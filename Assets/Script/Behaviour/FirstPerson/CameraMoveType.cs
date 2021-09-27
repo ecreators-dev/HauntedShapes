@@ -1,6 +1,9 @@
 ﻿using System;
 
+using UnityEditor;
+
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 namespace Assets.Script.Behaviour.FirstPerson
 {
@@ -25,6 +28,45 @@ namespace Assets.Script.Behaviour.FirstPerson
 				public TypeEnum Type => type;
 
 				public void SetType(TypeEnum type) => this.type = type;
+
+				internal void FixCameraMissing()
+				{
+						camNotBumping ??= Find(camNotBumping.gameObject.name);
+						camBumping ??= Find(camBumping.gameObject.name);
+						camBumping.gameObject.SetActive(false);
+				}
+
+				private Camera Find(string name)
+				{
+						Debug.LogError($"Camera missing: {name}");
+						Camera result = null;
+
+#if UNITY_EDITOR
+						string[] paths = new string[0];
+						paths = AssetDatabase.FindAssets(name);
+						foreach (var item in paths)
+						{
+
+								result = AssetDatabase.LoadAssetAtPath<Camera>(item);
+								if (result != null)
+								{
+										Debug.LogError($"Camera found in assets: {name} at {item}");
+										break;
+								}
+						}
+#endif
+
+						if (result == null)
+						{
+								Debug.LogError($"Camera not found in assets: {name}. Make my own.");
+								GameObject cam = new GameObject(name);
+								cam.tag = "MainCamera";
+								result = cam.AddComponent<Camera>();
+								var _ = cam.GetComponent<AudioListener>() ?? cam.AddComponent<AudioListener>();
+								cam.AddComponent<HDAdditionalCameraData>();
+						}
+						return result;
+				}
 
 				public Camera GetCamera()
 				{

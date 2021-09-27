@@ -1,3 +1,4 @@
+using Assets.Script.Behaviour.FirstPerson;
 using Assets.Script.Behaviour.GhostTypes;
 using Assets.Script.Components;
 
@@ -445,6 +446,9 @@ namespace Assets.Script.Behaviour
 #if UNITY_EDITOR
 				private void OnGUI()
 				{
+						// don't display controls anymore :/
+						if (Application.isPlaying) return;
+
 						EditorGUILayout.HelpBox("T = Interagieren", MessageType.Info);
 						EditorGUILayout.HelpBox("H = Hunt", MessageType.Info);
 						EditorGUILayout.HelpBox("Backspace = Drehen Aus", MessageType.Info);
@@ -456,20 +460,19 @@ namespace Assets.Script.Behaviour
 
 				private void OnDrawGizmos()
 				{
-						if (Application.isPlaying)
-						{
-								if (mouseDown)
-								{
-										Ray forward = new Ray(Camera.current.transform.position, Camera.current.transform.forward);
-										if (Physics.Raycast(forward, out var hit, 20))
-										{
-												Vector3 hitPos = hit.point;
-												Handles.color = Color.yellow;
-												Handles.DrawLine(forward.origin, hitPos);
+						if (!Application.isPlaying) return;
 
-												Handles.color = Color.white;
-												Handles.Label(hitPos, $"{Vector3.Distance(forward.origin, hitPos)} m");
-										}
+						if (mouseDown)
+						{
+								Ray forward = new Ray(Camera.current.transform.position, Camera.current.transform.forward);
+								if (Physics.Raycast(forward, out var hit, 20))
+								{
+										Vector3 hitPos = hit.point;
+										Handles.color = Color.yellow;
+										Handles.DrawLine(forward.origin, hitPos);
+
+										Handles.color = Color.white;
+										Handles.Label(hitPos, $"{Vector3.Distance(forward.origin, hitPos)} m");
 								}
 						}
 				}
@@ -530,16 +533,22 @@ namespace Assets.Script.Behaviour
 						return $"'{clip.name}'";
 				}
 
-				private float distanceSinceLastStep;
+				private float lastStepTime;
+
 				[Range(0, 3f)]
-				[SerializeField] private float stepDistanceForSound = 0.3f;
+				[SerializeField] private float stepDelay = 0.3f;
 
 				public void OnWalkingAnimation_OnStep()
 				{
-						distanceSinceLastStep += GetComponent<Rigidbody>().velocity.magnitude;
-						if (distanceSinceLastStep >= stepDistanceForSound)
+						float stepDelay = this.stepDelay;
+						if (GetComponent<MovementForPlayer>().IsRunning)
 						{
-								distanceSinceLastStep = 0;
+								stepDelay /= 2;
+						}
+
+						if ((Time.time - lastStepTime) >= stepDelay)
+						{
+								lastStepTime = Time.time;
 
 								if (stepSoundClip == null)
 								{
