@@ -49,6 +49,11 @@ namespace Assets.Script.Behaviour.Animals
 				private float agentInitSpeed;
 				private readonly NavMeshAgentTurnInsantStrategy agentStrategy = new NavMeshAgentTurnInsantStrategy();
 
+				private void Awake()
+				{
+						Rigidbody = GetComponent<Rigidbody>();
+				}
+
 				private void Start()
 				{
 						agentStrategy.Start(agent);
@@ -92,6 +97,7 @@ namespace Assets.Script.Behaviour.Animals
 				}
 
 				private AnimationStatus Status { get; set; } = AnimationStatus.IDLE;
+				private Rigidbody Rigidbody { get; set; }
 
 				public void AnimateWalk()
 				{
@@ -135,6 +141,15 @@ namespace Assets.Script.Behaviour.Animals
 								// update destination
 								agent.SetDestination(followRat.transform.position);
 						}
+
+						if (agent.velocity.magnitude > 0)
+						{
+								AnimateWalk();
+						}
+						else
+						{
+								AnimateIdle();
+						}
 				}
 
 				private void LateUpdate()
@@ -173,7 +188,6 @@ namespace Assets.Script.Behaviour.Animals
 
 				private IEnumerator WaitAndWalk(float waitingTimeoutSeconds, int nextPosition)
 				{
-						AnimateIdle();
 						yield return new WaitForSeconds(waitingTimeoutSeconds);
 						Vector3 position = walkPositions[nextPosition].position;
 						if (WillFollowOtherRat())
@@ -202,7 +216,6 @@ namespace Assets.Script.Behaviour.Animals
 								followRat = null;
 								agent.SetDestination(position);
 						}
-						AnimateWalk();
 						inJob = false;
 						yield break;
 				}
