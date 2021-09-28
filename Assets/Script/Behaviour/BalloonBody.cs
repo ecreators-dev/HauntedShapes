@@ -1,12 +1,9 @@
-﻿
-using System;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(Rigidbody))]
-		[RequireComponent(typeof(MeshCollider))]
+		[RequireComponent(typeof(Collider))]
 		public class BalloonBody : InteractibleChild
 		{
 				[Min(0)]

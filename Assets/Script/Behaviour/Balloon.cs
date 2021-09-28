@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Assets.Script.Behaviour
 {
 		[RequireComponent(typeof(Rigidbody))]
-		[RequireComponent(typeof(SphereCollider))]
+		[RequireComponent(typeof(Collider))]
 		public class Balloon :
 				Interactible
 				, IBalloon
@@ -70,12 +70,10 @@ namespace Assets.Script.Behaviour
 				{
 						// fx: rotate upwards again
 						Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.identity, Time.fixedDeltaTime * this.floatStrength));
-
-						//BodyRigidbody.MovePosition(transform.position + Vector3.up * floatStrength * Time.fixedDeltaTime);
-
+						
 						// fx: float down or up depending on floatStrength
 						BodyRigidbody.AddForce(Vector3.up * floatStrength);
-						BodyRigidbody.AddForceAtPosition(Vector3.up * floatStrength, transform.position);
+						BodyRigidbody.AddForceAtPosition(Vector3.up * floatStrength * 0.2f, transform.position);
 				}
 
 				private void FixedUpdate()
