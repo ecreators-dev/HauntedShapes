@@ -50,6 +50,11 @@ namespace Assets.Script.Behaviour
 						return result;
 				}
 
+				public static bool HasLayerMask(this LayerMask mask, LayerMask other)
+				{
+						return (mask & other) == other;
+				}
+
 				public static void RemoveLayerMask(this ref LayerMask result, LayerMask item)
 				{
 						// https://forum.unity.com/threads/how-to-remove-a-single-layer-from-cullingmask.410820/

@@ -47,7 +47,7 @@ MonoBehaviour:
     materialQuality: 0
   m_RenderingPathDefaultRealtimeReflectionFrameSettings:
     bitDatas:
-      data1: 139945030483789
+      data1: 140185550880589
       data2: 13763000469028864024
     lodBias: 1
     lodBiasMode: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
     maximumLODLevelMode: 0
     maximumLODLevelQualityLevel: 0
     sssQualityMode: 0
-    sssQualityLevel: 0
+    sssQualityLevel: 2
     sssCustomSampleBudget: 20
     materialQuality: 0
   m_RenderPipelineSettings:
@@ -119,7 +119,7 @@ MonoBehaviour:
       cookieFormat: 48
       cookieAtlasLastValidMip: 1
       cookieTexArraySize: 1
-      planarReflectionAtlasSize: 1024
+      planarReflectionAtlasSize: 4096
       reflectionProbeCacheSize: 16
       reflectionCubemapSize: 512
       reflectionCacheCompressed: 1
@@ -170,9 +170,9 @@ MonoBehaviour:
       screenSpaceShadowBufferFormat: 48
     decalSettings:
       drawDistance: 50
-      atlasWidth: 8192
-      atlasHeight: 8192
-      perChannelMask: 1
+      atlasWidth: 4096
+      atlasHeight: 4096
+      perChannelMask: 0
     postProcessSettings:
       m_LutSize: 32
       lutFormat: 48
@@ -291,7 +291,7 @@ MonoBehaviour:
       Fog_DepthRatio:
       - 1
       - 0.666
-      - 0.5
+      - 0.8
   allowShaderVariantStripping: 1
   enableSRPBatcher: 1
   shaderVariantLogLevel: 2

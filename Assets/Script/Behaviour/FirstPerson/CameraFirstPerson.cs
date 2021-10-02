@@ -31,10 +31,23 @@ namespace Assets.Script.Behaviour.FirstPerson
 						// Rotate camera up-down and controller left-right from velocity.
 						Camera cam = CameraMoveType.Instance.GetCamera();
 						cam.fieldOfView = fieldOfView;
-						
+
+						if (this.InputControls().StopCameraRotationButton)
+						{
+								ToggleStopRotation();
+						}
+
 						Transform camera = cam.transform;
 						camera.localRotation = Quaternion.AngleAxis(-euler.y, Vector3.right);
 						character.Transform.rotation = Quaternion.AngleAxis(euler.x, Vector3.up);
+				}
+
+				private void ToggleStopRotation()
+				{
+						Model.IGameController gameController = this.GetGameController();
+						gameController.SetStopCameraEdit(!gameController.IsCameraRotateStop);
+
+						Debug.Log($"Camera rotation stop: {gameController.IsCameraRotateStop}");
 				}
 
 				private float GetSensitivityByInputType()

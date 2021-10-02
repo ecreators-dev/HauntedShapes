@@ -9,11 +9,11 @@ namespace Assets
 
 				public static bool IsButtonHold(this InputAction buttonAction)
 				{
-						bool hold = buttonAction.triggered;
+						bool hold = buttonAction.ReadValue<float>() != 0f;
 						// once per second log - not too much logging here
 						if (hold && (lastTimeHold == 0 || (Time.time - lastTimeHold) >= 1f))
 						{
-								Debug.Log($"{buttonAction.name}: button held");
+								//Debug.Log($"{buttonAction.name}: button held");
 								lastTimeHold = Time.time;
 						}
 						return hold;

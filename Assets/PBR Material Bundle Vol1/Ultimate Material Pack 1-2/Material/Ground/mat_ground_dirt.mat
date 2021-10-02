@@ -184,7 +184,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AORemapMax: 0.077770114
+    - _AORemapMax: 0.36402965
     - _AORemapMin: 0
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
@@ -282,7 +282,7 @@ Material:
     - _RefractionModel: 0
     - _RoundAdjuster: 0
     - _Smoothness: 0.5
-    - _SmoothnessRemapMax: 0.34029302
+    - _SmoothnessRemapMax: 0.40055817
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularAAScreenSpaceVariance: 0.1
@@ -319,7 +319,7 @@ Material:
     - _UVDetail: 0
     - _UVEmissive: 0
     - _UVSec: 0
-    - _UseEmissiveIntensity: 0
+    - _UseEmissiveIntensity: 1
     - _UseShadowThreshold: 0
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace Assets.Script.Behaviour
 {
@@ -15,6 +17,7 @@ namespace Assets.Script.Behaviour
 				private Balloon endPart;
 				private Vector3 initScale;
 				private float drainTime;
+				private float drainMultiplier = 0;
 
 				private bool CanDrain => drainTimeSeconds > 0;
 
@@ -42,7 +45,8 @@ namespace Assets.Script.Behaviour
 
 				private void HandleDrainUpdate()
 				{
-						float percentFilled = endPart.Drain(Mathf.Lerp(endPart.FloatStrength, -Mathf.Abs(endPart.InitFloatStrength), Time.deltaTime / drainTimeSeconds));
+						float drainDuration = drainTimeSeconds / (1 + drainMultiplier);
+						float percentFilled = endPart.Drain(Mathf.Lerp(endPart.FloatStrength, -Mathf.Abs(endPart.InitFloatStrength), Time.deltaTime / drainDuration));
 
 						// once side flatten (height and depth)
 						Vector3 nowScale = new Vector3
@@ -95,6 +99,12 @@ namespace Assets.Script.Behaviour
 				{
 						transform.localScale = initScale;
 						drainTime = 0;
+						drainMultiplier = 0;
+				}
+
+				public void DrainFaster()
+				{
+						drainMultiplier += 1;
 				}
 		}
 }

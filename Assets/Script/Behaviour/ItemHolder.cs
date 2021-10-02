@@ -3,6 +3,7 @@ using Assets.Script.Components;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Assets.Script.Behaviour
 {
@@ -40,7 +41,27 @@ namespace Assets.Script.Behaviour
 						{
 								if (CurrentItem is IInteractible item)
 								{
-										item.RunInteraction(playerOwner);
+										// to toggle head equipment you must also press north button
+										if (HolderType == HolderTypeEnum.HEAD)
+										{
+												if (this.InputControls().InteractWithEquipmentUpButton)
+												{
+														Debug.Log("Toggle Head Equipment");
+														item.RunInteraction(playerOwner);
+												}
+										}
+										else if (HolderType == HolderTypeEnum.RIGHT_HAND)
+										{
+												if (!this.InputControls().InteractWithEquipmentUpButton)
+												{
+														Debug.Log("Toggle Right Hand Equipment");
+														item.RunInteraction(playerOwner);
+												}
+										}
+										else
+										{
+												// left Hand is not allowed to interact!
+										}
 								}
 						}
 				}

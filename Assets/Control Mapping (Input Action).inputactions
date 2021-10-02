@@ -46,12 +46,20 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Equipment Toggle",
+                    "name": "Equipment Right Hand Toggle",
                     "type": "Button",
                     "id": "fd3ae3b8-52ae-481a-9aa2-a681193030fd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Equipment Head Toggle",
+                    "type": "PassThrough",
+                    "id": "6bb3c9c5-45a5-436d-a9b2-36cfe428bb31",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold"
                 },
                 {
                     "name": "Equipment Drop",
@@ -233,8 +241,8 @@
                     "path": "<Keyboard>/t",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Classic",
-                    "action": "Equipment Toggle",
+                    "groups": "",
+                    "action": "Equipment Right Hand Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -245,7 +253,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Equipment Toggle",
+                    "action": "Equipment Right Hand Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -433,6 +441,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Place Item",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c366674-ea39-47d8-852c-f94603bc3e39",
+                    "path": "<Keyboard>/1",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Equipment Head Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6937f1dd-f3b2-4298-943f-bad6cb2f47fa",
+                    "path": "<DualShockGamepad>/dpad/up",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Equipment Head Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

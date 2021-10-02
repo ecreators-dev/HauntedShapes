@@ -1194,6 +1194,7 @@ GameObject:
   - component: {fileID: 7219431934100902820}
   - component: {fileID: 192273647625465574}
   - component: {fileID: 945345729}
+  - component: {fileID: 759292502}
   m_Layer: 14
   m_Name: Player (James)
   m_TagString: Player
@@ -1433,8 +1434,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 192273647625465574}
-  sensitivityGamepad: 24
-  sensitivityMouse: 4.8
+  sensitivityGamepad: 12
+  sensitivityMouse: 2
   smoothing: 1.5
   limitDown: -90
   limitUp: 90
@@ -1467,6 +1468,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9f7f9db2370db41a5a5f816429debe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!182 &759292502
+WindZone:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4990787288825231748}
+  m_Enabled: 1
+  m_Mode: 1
+  m_Radius: 3.46
+  m_WindMain: 1
+  m_WindTurbulence: 1
+  m_WindPulseMagnitude: 0.5
+  m_WindPulseFrequency: 0.01
 --- !u!1 &4990787289039253691
 GameObject:
   m_ObjectHideFlags: 0
@@ -3203,6 +3218,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4812219235163670878}
     m_Modifications:
+    - target: {fileID: 5894232117348997176, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+      propertyPath: clearColorMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894232117348997176, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+      propertyPath: backgroundColorHDR.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894232117348997176, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+      propertyPath: backgroundColorHDR.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894232117348997176, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+      propertyPath: backgroundColorHDR.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894232117348997176, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+      propertyPath: backgroundColorHDR.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894232117348997176, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+      propertyPath: customRenderingSettings
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894232117348997176, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+      propertyPath: m_RenderingPathCustomFrameSettings.sssQualityLevel
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6228074491132852485, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
       propertyPath: m_Name
       value: Camera (not animated) new
@@ -3258,14 +3301,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7631953597165472650, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
   m_PrefabInstance: {fileID: 3817797746234504841}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &7816343984396689442 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6377855333542516395, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
-  m_PrefabInstance: {fileID: 3817797746234504841}
-  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1137134864857355577 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 4268393131169342384, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
+  m_PrefabInstance: {fileID: 3817797746234504841}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7816343984396689442 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6377855333542516395, guid: 95f51ae672825fd409a90c5371759c81, type: 3}
   m_PrefabInstance: {fileID: 3817797746234504841}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8945410016826220422

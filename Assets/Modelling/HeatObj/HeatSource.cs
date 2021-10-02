@@ -1,3 +1,5 @@
+using Assets.Script.Behaviour;
+
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -5,7 +7,7 @@ using UnityEngine;
 namespace Assets.Modelling.HeatObj
 {
 		[RequireComponent(typeof(Light))]
-		public class HeatSource : MonoBehaviour
+		public class HeatSource : MonoBehaviour, IHeat
 		{
 				public static bool INFRARED_VIEW_ACTIVE = false;
 				public static readonly List<(Light light, int mask)> LIGHTS = new List<(Light light, int mask)>();
@@ -25,6 +27,8 @@ namespace Assets.Modelling.HeatObj
 				/// You need to add environment temperature
 				/// </summary>
 				public float NormalizedTemperature => PoweredProgress * heatMaximum;
+
+				public float HeatDegressCelsius => NormalizedTemperature;
 
 				private void Awake()
 				{

@@ -15,7 +15,7 @@ namespace Assets.Script.Behaviour
 		{
 				[SerializeField] private float floatStrength = 0.8f;
 				[SerializeField] private BalloonBody body;
-				[SerializeField] private AudioSource audioSource3d;
+				[SerializeField] private AudioSource bounceAudioSource3d;
 				[SerializeField] private AudioClip bounceSound3d;
 
 				public Filling Drain(float newFloatingValue)
@@ -35,6 +35,8 @@ namespace Assets.Script.Behaviour
 
 				private Vector3 initScale;
 				private float initFloatingStrength;
+				private Collider Collider;
+				private float initBounce;
 
 				private Rigidbody Rigidbody { get; set; }
 
@@ -58,6 +60,8 @@ namespace Assets.Script.Behaviour
 				private void Start()
 				{
 						initFloatingStrength = FloatStrength;
+						Collider = BodyRigidbody.GetComponent<Collider>();
+						initBounce = this.Collider.material.bounciness;
 				}
 
 				private void SetUseGravity(bool status)
@@ -70,7 +74,7 @@ namespace Assets.Script.Behaviour
 				{
 						// fx: rotate upwards again
 						Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.identity, Time.fixedDeltaTime * this.floatStrength));
-						
+
 						// fx: float down or up depending on floatStrength
 						BodyRigidbody.AddForce(Vector3.up * floatStrength);
 						BodyRigidbody.AddForceAtPosition(Vector3.up * floatStrength * 0.2f, transform.position);
@@ -95,6 +99,17 @@ namespace Assets.Script.Behaviour
 						{
 								FixedUpdateAddForce();
 						}
+
+						Rigidbody.angularVelocity = Vector3.Lerp(Rigidbody.angularVelocity, Vector3.zero, Time.fixedDeltaTime);
+						BodyRigidbody.angularVelocity = Vector3.Lerp(BodyRigidbody.angularVelocity, Vector3.zero, Time.fixedDeltaTime);
+						if (FloatStrength < 0)
+						{
+								Collider.material.bounciness = 0;
+						}
+						else
+						{
+								Collider.material.bounciness = initBounce;
+						}
 				}
 
 				private void OnHuntingStateChanged(bool huntActive)
@@ -115,16 +130,19 @@ namespace Assets.Script.Behaviour
 
 				private IEnumerator PopBlowUp()
 				{
-						PlayPopEmission();
-						WaitForEndOfFrame endFrame = new WaitForEndOfFrame();
-						float seconds = base.GetToggleOn().length / 3f;
 						base.PlayToggleOnSoundExplicitFromScript(true);
 						this.initScale = body.transform.localScale;
-						while (seconds > 0)
+						if (FloatStrength > 0)
 						{
-								seconds -= Time.deltaTime;
-								body.transform.localScale = Vector3.Lerp(body.transform.localScale, initScale * 1.25f, Time.deltaTime);
-								yield return endFrame;
+								PlayPopEmission();
+								WaitForEndOfFrame endFrame = new WaitForEndOfFrame();
+								float seconds = base.GetToggleOn().length / 3f;
+								while (seconds > 0)
+								{
+										seconds -= Time.deltaTime;
+										body.transform.localScale = Vector3.Lerp(body.transform.localScale, initScale * 1.25f, Time.deltaTime);
+										yield return endFrame;
+								}
 						}
 						gameObject.SetActive(false);
 						OnHuntStarts();
@@ -174,19 +192,40 @@ namespace Assets.Script.Behaviour
 				{
 						base.OnCollisionEnterChild(collision);
 
-						if (collision.collider != body.GetComponent<Collider>())
-						{
-								audioSource3d.PlayOneShot(bounceSound3d, bounceVolume);
-						}
+						HandleCollision(collision);
 				}
+
 
 				// self collision:
 				private void OnCollisionEnter(Collision collision)
 				{
-						if (collision.collider != body.GetComponent<Collider>())
+						HandleCollision(collision);
+				}
+
+				private void HandleCollision(Collision collision)
+				{
+						if (collision.collider == body.GetComponent<Collider>())
+								return;
+
+						if (collision.gameObject.GetComponentInParent<IHeat>() is IHeat heater
+								|| collision.gameObject.TryGetComponent(out heater))
 						{
-								audioSource3d.PlayOneShot(bounceSound3d, bounceVolume);
+								if (heater.HeatDegressCelsius >= 100)
+								{
+										if (FloatStrength >= 0)
+										{
+												Pop();
+												return;
+										}
+										else
+										{
+												body.DrainFaster();
+										}
+								}
 						}
+
+						float force = collision.impulse.magnitude;
+						bounceAudioSource3d.PlayOneShot(bounceSound3d, Mathf.Max(0.2f, Mathf.Clamp01(bounceVolume * force)));
 				}
 		}
 }

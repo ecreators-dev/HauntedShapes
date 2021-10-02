@@ -59,12 +59,20 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Equipment Toggle"",
+                    ""name"": ""Equipment Right Hand Toggle"",
                     ""type"": ""Button"",
                     ""id"": ""fd3ae3b8-52ae-481a-9aa2-a681193030fd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Equipment Head Toggle"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""6bb3c9c5-45a5-436d-a9b2-36cfe428bb31"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold""
                 },
                 {
                     ""name"": ""Equipment Drop"",
@@ -246,8 +254,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Classic"",
-                    ""action"": ""Equipment Toggle"",
+                    ""groups"": """",
+                    ""action"": ""Equipment Right Hand Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -258,7 +266,7 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Equipment Toggle"",
+                    ""action"": ""Equipment Right Hand Toggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -448,6 +456,28 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                     ""action"": ""Place Item"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c366674-ea39-47d8-852c-f94603bc3e39"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Equipment Head Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6937f1dd-f3b2-4298-943f-bad6cb2f47fa"",
+                    ""path"": ""<DualShockGamepad>/dpad/up"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Equipment Head Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -494,7 +524,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         m_Player_ExitGame = m_Player.FindAction("Exit Game", throwIfNotFound: true);
         m_Player_EditorStopRotateCamera = m_Player.FindAction("Editor Stop Rotate Camera", throwIfNotFound: true);
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
-        m_Player_EquipmentToggle = m_Player.FindAction("Equipment Toggle", throwIfNotFound: true);
+        m_Player_EquipmentRightHandToggle = m_Player.FindAction("Equipment Right Hand Toggle", throwIfNotFound: true);
+        m_Player_EquipmentHeadToggle = m_Player.FindAction("Equipment Head Toggle", throwIfNotFound: true);
         m_Player_EquipmentDrop = m_Player.FindAction("Equipment Drop", throwIfNotFound: true);
         m_Player_HuntToggleDebug = m_Player.FindAction("Hunt Toggle (Debug)", throwIfNotFound: true);
         m_Player_PlaceItem = m_Player.FindAction("Place Item", throwIfNotFound: true);
@@ -554,7 +585,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_ExitGame;
     private readonly InputAction m_Player_EditorStopRotateCamera;
     private readonly InputAction m_Player_Interaction;
-    private readonly InputAction m_Player_EquipmentToggle;
+    private readonly InputAction m_Player_EquipmentRightHandToggle;
+    private readonly InputAction m_Player_EquipmentHeadToggle;
     private readonly InputAction m_Player_EquipmentDrop;
     private readonly InputAction m_Player_HuntToggleDebug;
     private readonly InputAction m_Player_PlaceItem;
@@ -569,7 +601,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         public InputAction @ExitGame => m_Wrapper.m_Player_ExitGame;
         public InputAction @EditorStopRotateCamera => m_Wrapper.m_Player_EditorStopRotateCamera;
         public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
-        public InputAction @EquipmentToggle => m_Wrapper.m_Player_EquipmentToggle;
+        public InputAction @EquipmentRightHandToggle => m_Wrapper.m_Player_EquipmentRightHandToggle;
+        public InputAction @EquipmentHeadToggle => m_Wrapper.m_Player_EquipmentHeadToggle;
         public InputAction @EquipmentDrop => m_Wrapper.m_Player_EquipmentDrop;
         public InputAction @HuntToggleDebug => m_Wrapper.m_Player_HuntToggleDebug;
         public InputAction @PlaceItem => m_Wrapper.m_Player_PlaceItem;
@@ -599,9 +632,12 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @Interaction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
                 @Interaction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
                 @Interaction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
-                @EquipmentToggle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
-                @EquipmentToggle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
-                @EquipmentToggle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentToggle;
+                @EquipmentRightHandToggle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentRightHandToggle;
+                @EquipmentRightHandToggle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentRightHandToggle;
+                @EquipmentRightHandToggle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentRightHandToggle;
+                @EquipmentHeadToggle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentHeadToggle;
+                @EquipmentHeadToggle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentHeadToggle;
+                @EquipmentHeadToggle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentHeadToggle;
                 @EquipmentDrop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentDrop;
                 @EquipmentDrop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentDrop;
                 @EquipmentDrop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipmentDrop;
@@ -636,9 +672,12 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
                 @Interaction.started += instance.OnInteraction;
                 @Interaction.performed += instance.OnInteraction;
                 @Interaction.canceled += instance.OnInteraction;
-                @EquipmentToggle.started += instance.OnEquipmentToggle;
-                @EquipmentToggle.performed += instance.OnEquipmentToggle;
-                @EquipmentToggle.canceled += instance.OnEquipmentToggle;
+                @EquipmentRightHandToggle.started += instance.OnEquipmentRightHandToggle;
+                @EquipmentRightHandToggle.performed += instance.OnEquipmentRightHandToggle;
+                @EquipmentRightHandToggle.canceled += instance.OnEquipmentRightHandToggle;
+                @EquipmentHeadToggle.started += instance.OnEquipmentHeadToggle;
+                @EquipmentHeadToggle.performed += instance.OnEquipmentHeadToggle;
+                @EquipmentHeadToggle.canceled += instance.OnEquipmentHeadToggle;
                 @EquipmentDrop.started += instance.OnEquipmentDrop;
                 @EquipmentDrop.performed += instance.OnEquipmentDrop;
                 @EquipmentDrop.canceled += instance.OnEquipmentDrop;
@@ -683,7 +722,8 @@ public class @ControlMappingInputAction : IInputActionCollection, IDisposable
         void OnExitGame(InputAction.CallbackContext context);
         void OnEditorStopRotateCamera(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
-        void OnEquipmentToggle(InputAction.CallbackContext context);
+        void OnEquipmentRightHandToggle(InputAction.CallbackContext context);
+        void OnEquipmentHeadToggle(InputAction.CallbackContext context);
         void OnEquipmentDrop(InputAction.CallbackContext context);
         void OnHuntToggleDebug(InputAction.CallbackContext context);
         void OnPlaceItem(InputAction.CallbackContext context);

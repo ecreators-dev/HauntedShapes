@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1333518104}
   m_LocalRotation: {x: -0, y: -0, z: -1.7659e-17, w: 1}
-  m_LocalPosition: {x: 0.013, y: -0.185, z: -0.0085}
+  m_LocalPosition: {x: -0.003, y: -0.185, z: 0.007}
   m_LocalScale: {x: 0.06028833, y: 0.19247651, z: 0.06028833}
   m_Children:
   - {fileID: 3797876825636350234}
@@ -194,6 +194,7 @@ GameObject:
   - component: {fileID: 6578682946351267861}
   - component: {fileID: 6578682946351267863}
   - component: {fileID: 6578682946351267860}
+  - component: {fileID: 8626428708996467029}
   m_Layer: 0
   m_Name: Dochtlicht
   m_TagString: Untagged
@@ -400,6 +401,19 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
+--- !u!114 &8626428708996467029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578682946351267850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d7d8c824b3f1a47ba6c9248c884558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heatMaximum: 500
 --- !u!1 &6578682946963451621
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,6 +775,7 @@ GameObject:
   - component: {fileID: 3797876825636350234}
   - component: {fileID: 5832430965885714245}
   - component: {fileID: 5066067751626762783}
+  - component: {fileID: 2096149540589912195}
   m_Layer: 0
   m_Name: Candlelight
   m_TagString: Untagged
@@ -776,7 +791,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7994781315661343515}
   m_LocalRotation: {x: -0.0000037084878, y: -0.67571074, z: -0.0000010317223, w: 0.73716694}
-  m_LocalPosition: {x: -0.2, y: 3.29, z: 0.15}
+  m_LocalPosition: {x: 0.23, y: 3.29, z: 0.4}
   m_LocalScale: {x: 4.6721582, y: 1.7561194, z: 4.6721582}
   m_Children:
   - {fileID: 6578682946351267861}
@@ -803,7 +818,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a7dc69f333f89274eb479b734a72fdc9, type: 2}
+  - {fileID: 2100000, guid: ab3fdc4c6ab064e4ca40c8e94ff627af, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -832,4 +847,18 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7994781315661343515}
+  m_Mesh: {fileID: 4300000, guid: ba7e38694bb2ea34e809ba2b135fa626, type: 2}
+--- !u!64 &2096149540589912195
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7994781315661343515}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: ba7e38694bb2ea34e809ba2b135fa626, type: 2}

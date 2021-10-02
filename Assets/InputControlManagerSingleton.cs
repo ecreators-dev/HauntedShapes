@@ -30,7 +30,12 @@ namespace Assets
 				/// <summary>
 				/// Controller: Triangle
 				/// </summary>
-				public bool InteractWithEquipmentButton => inputActions.Player.EquipmentToggle.IsButtonDown();
+				public bool InteractWithEquipmentButton => inputActions.Player.EquipmentRightHandToggle.IsButtonDown();
+				
+				/// <summary>
+				/// Controller: Up Arrow or 1 (Hold)
+				/// </summary>
+				public bool InteractWithEquipmentUpButton => inputActions.Player.EquipmentHeadToggle.IsButtonHold();
 				
 				/// <summary>
 				/// Controller: Cross

@@ -15,6 +15,7 @@ namespace Assets
 				bool StopCameraRotationButton { get; }
 
 				bool InteractWithEquipmentButton { get; }
+				bool InteractWithEquipmentUpButton { get; }
 
 				bool DropEquipmentButton { get; }
 
