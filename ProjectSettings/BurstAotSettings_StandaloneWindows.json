@@ -1,16 +1,3 @@
-{
-  "MonoBehaviour": {
-    "Version": 3,
-    "EnableBurstCompilation": true,
-    "EnableOptimisations": true,
-    "EnableSafetyChecks": false,
-    "EnableDebugInAllBuilds": false,
-    "UsePlatformSDKLinker": false,
-    "CpuMinTargetX32": 0,
-    "CpuMaxTargetX32": 0,
-    "CpuMinTargetX64": 0,
-    "CpuMaxTargetX64": 0,
-    "CpuTargetsX32": 6,
-    "CpuTargetsX64": 72
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a1b3e1d8db4bde9720d498bea2916f1d4ee97073f6930813171757a2a81669b7
+size 389
