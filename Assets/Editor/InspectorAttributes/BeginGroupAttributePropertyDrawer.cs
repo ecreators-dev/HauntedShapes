@@ -1,29 +1,3 @@
-﻿using UnityEditor;
-
-using UnityEngine;
-
-namespace Assets.Script.InspectorAttibutes
-{
-		[CustomPropertyDrawer(typeof(BeginGroupAttribute))]
-		public class BeginGroupAttributePropertyDrawer : PropertyDrawer
-		{
-				private const int V_PROPERTIES_COUNT = 2;
-				private const int Y_GAP = 5;
-				private float singleHeight;
-
-				public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-				{
-						singleHeight = EditorGUI.GetPropertyHeight(property, label, true);
-						return singleHeight * V_PROPERTIES_COUNT + Y_GAP;
-				}
-
-				public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-				{
-						EditorGUI.LabelField(position, label, GUI.skin.horizontalSlider);
-						position.y += (Y_GAP + singleHeight) / V_PROPERTIES_COUNT + Y_GAP;
-						position = EditorGUI.PrefixLabel(position, label, EditorStyles.boldLabel);
-						position.y -= (Y_GAP + singleHeight) / V_PROPERTIES_COUNT;
-						property.boolValue = EditorGUI.Toggle(position, property.boolValue);
-				}
-		}
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8fef5eedd459a9ef8602465b0c3548253294f198d41f1bb3a995f49570555748
+size 1154
